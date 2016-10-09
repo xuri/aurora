@@ -14,7 +14,6 @@ before_script:
   - beanstalkd -d -l 127.0.0.1 -p 11300
 
 go:
-  - 1.5
   - 1.6
   - 1.7
   - tip

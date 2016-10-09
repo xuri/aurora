@@ -76,7 +76,6 @@ func TestIndex(t *testing.T) {
 		http.ListenAndServe(pubConf.Listen, nil)
 	}()
 
-	openPage()
 	time.Sleep(2 * time.Second)
 
 	resp, err = http.PostForm(server+"/tube?server=127.0.0.1:11300&action=addjob",
