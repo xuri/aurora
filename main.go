@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"strings"
 
-	_ "./statik"
+	_ "github.com/Luxurioust/aurora/statik"
 	"github.com/rakyll/statik/fs"
 )
 
