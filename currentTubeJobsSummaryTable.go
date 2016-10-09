@@ -25,7 +25,7 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 		if v != tube {
 			continue
 		}
-		tubeStats := &beanstalk.Tube{bstkConn, v}
+		tubeStats := &beanstalk.Tube{Conn: bstkConn, Name: v}
 		statsMap, err := tubeStats.Stats()
 		if err != nil {
 			continue

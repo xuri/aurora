@@ -29,7 +29,10 @@ func addJob(server string, tube string, data string, priority string, delay stri
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return
 	}
-	bstkTube := &beanstalk.Tube{bstkConn, tube}
+	bstkTube := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	bstkTube.Put([]byte(data), uint32(tubePriority), time.Duration(tubeDelay)*time.Second, time.Duration(tubeTTR)*time.Second)
 	bstkConn.Close()
 }
@@ -57,7 +60,10 @@ func deleteAll(server string, tube string) {
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return
 	}
-	bstkTube := &beanstalk.Tube{bstkConn, tube}
+	bstkTube := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	for {
 		readyJob, _, err := bstkTube.PeekReady()
 		if err != nil {
@@ -94,7 +100,10 @@ func kick(server string, tube string, count string) {
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return
 	}
-	bstkTube := &beanstalk.Tube{bstkConn, tube}
+	bstkTube := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	bstkTube.Kick(bound)
 	bstkConn.Close()
 }
@@ -122,7 +131,10 @@ func pause(server string, tube string, count string) {
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return
 	}
-	bstkTube := &beanstalk.Tube{bstkConn, tube}
+	bstkTube := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	if count == "-1" {
 		bstkTube.Pause(3600 * time.Second) // Pause tube
 		bstkConn.Close()
@@ -149,7 +161,10 @@ func moveReadyJobsTo(server string, tube string, destTube string, destState stri
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return
 	}
-	bstkTube := &beanstalk.Tube{bstkConn, tube}
+	bstkTube := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	switch destState {
 	case "buried":
 		tubeSet := beanstalk.NewTubeSet(bstkConn, tube)
@@ -168,7 +183,10 @@ func moveReadyJobsTo(server string, tube string, destTube string, destState stri
 			bstkConn.Close()
 			return
 		}
-		bstkDestTube := &beanstalk.Tube{bstkConn, destTube}
+		bstkDestTube := &beanstalk.Tube{
+			Conn: bstkConn,
+			Name: destTube,
+		}
 		for {
 			readyJob, readyBody, err := bstkTube.PeekReady()
 			if err != nil {
@@ -194,8 +212,14 @@ func moveBuriedJobsTo(server string, tube string, destTube string, destState str
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return
 	}
-	bstkTube := &beanstalk.Tube{bstkConn, tube}
-	bstkDestTube := &beanstalk.Tube{bstkConn, destTube}
+	bstkTube := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
+	bstkDestTube := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: destTube,
+	}
 	for {
 		buriedJob, buriedBody, err := bstkTube.PeekBuried()
 		if err != nil {
@@ -234,7 +258,10 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 		return currentTubeJobsSummaryTable(server, tube)
 	}
 	result := []SearchResult{}
-	bstkTube := &beanstalk.Tube{bstkConn, tube}
+	bstkTube := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	tubeStat, err := bstkTube.Stats()
 	if err != nil {
 		bstkConn.Close()

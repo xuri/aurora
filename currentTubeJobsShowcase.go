@@ -30,7 +30,10 @@ func currentTubeJobsShowcaseReadySection(server string, tube string) string {
             <div class="clearfix"></div><i>empty</i>`
 	}
 	tubes, _ := bstkConn.ListTubes()
-	tubeStats := &beanstalk.Tube{bstkConn, tube}
+	tubeStats := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	jobID, jobBody, err := tubeStats.PeekReady()
 	if err != nil {
 		bstkConn.Close()
@@ -153,7 +156,10 @@ func currentTubeJobsShowcaseDelayedSection(server string, tube string) string {
             <div class="clearfix"></div><i>empty</i>`
 	}
 	tubes, _ := bstkConn.ListTubes()
-	tubeStats := &beanstalk.Tube{bstkConn, tube}
+	tubeStats := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	jobID, jobBody, err := tubeStats.PeekDelayed()
 	if err != nil {
 		bstkConn.Close()
@@ -276,7 +282,7 @@ func currentTubeJobsShowcaseBuriedSection(server string, tube string) string {
             <div class="clearfix"></div><i>empty</i>`
 	}
 	tubes, _ := bstkConn.ListTubes()
-	tubeStats := &beanstalk.Tube{bstkConn, tube}
+	tubeStats := &beanstalk.Tube{Conn: bstkConn, Name: tube}
 	jobID, jobBody, err := tubeStats.PeekBuried()
 	if err != nil {
 		bstkConn.Close()

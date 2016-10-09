@@ -36,7 +36,7 @@ func Example_put() {
 }
 
 func Example_putOtherTube() {
-	tube := &beanstalk.Tube{conn, "mytube"}
+	tube := &beanstalk.Tube{Conn: conn, Name: "mytube"}
 	id, err := tube.Put([]byte("myjob"), 1, 0, time.Minute)
 	if err != nil {
 		panic(err)

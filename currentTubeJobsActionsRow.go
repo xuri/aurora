@@ -14,7 +14,10 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return ``
 	}
-	tubeStats := &beanstalk.Tube{bstkConn, tube}
+	tubeStats := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	statsMap, _ := tubeStats.Stats()
 	if statsMap["pause-time-left"] == "0" {
 		pauseTimeLeft = fmt.Sprintf(`<a class="btn btn-default btn-sm" href="?server=%s&tube=%s&action=pause&count=-1"
@@ -22,7 +25,7 @@ func currentTubeJobsActionsRow(server string, tube string) string {
             Pause tube</a>`, server, tube, selfConf.TubePauseSeconds)
 	} else {
 		pauseTimeLeft = fmt.Sprintf(`<a class="btn btn-default btn-sm" href="?server=%s&tube=%s&action=pause&count=0"
-           title="Pause seconds left: %d"><i class="glyphicon glyphicon-play"></i> Unpause tube</a>`, server, tube, statsMap["pause-time-left"])
+           title="Pause seconds left: %s"><i class="glyphicon glyphicon-play"></i> Unpause tube</a>`, server, tube, statsMap["pause-time-left"])
 	}
 	bstkConn.Close()
 

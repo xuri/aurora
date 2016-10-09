@@ -211,7 +211,10 @@ func loadSample(server string, tube string, key string) {
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return
 	}
-	bstkTube := &beanstalk.Tube{bstkConn, tube}
+	bstkTube := &beanstalk.Tube{
+		Conn: bstkConn,
+		Name: tube,
+	}
 	bstkTube.Put([]byte(data), uint32(DefaultPriority), time.Duration(DefaultDelay)*time.Second, time.Duration(DefaultTTR)*time.Second)
 	bstkConn.Close()
 	return

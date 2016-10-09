@@ -48,7 +48,10 @@ func getServerTubes(server string) string {
 		th += fmt.Sprintf(`<th name="%s">%s</th>`, v, v)
 	}
 	for _, v := range tubes {
-		tubeStats := &beanstalk.Tube{bstkConn, v}
+		tubeStats := &beanstalk.Tube{
+			Conn: bstkConn,
+			Name: v,
+		}
 		statsMap, err := tubeStats.Stats()
 		if err != nil {
 			continue

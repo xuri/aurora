@@ -139,7 +139,7 @@ func parseFlags() {
 		os.Exit(1)
 	}
 	if *helpPtr == true {
-		fmt.Println("aurora version: 0.1\r\nCopyright (c) 2016 Ri Xu https://xuri.me \r\n\r\nUsage: aurora [OPTIONS] [cmd [arg ...]]\n  -c <filename>   Use config file. (default: aurora.toml)\r\n  -h \t\t  Output this help and exit.\r\n  -v \t\t  Output version and exit.\r\n")
+		fmt.Println("aurora version: 0.1\r\nCopyright (c) 2016 Ri Xu https://xuri.me \r\n\r\nUsage: aurora [OPTIONS] [cmd [arg ...]]\n  -c <filename>   Use config file. (default: aurora.toml)\r\n  -h \t\t  Output this help and exit.\r\n  -v \t\t  Output version and exit.")
 		os.Exit(1)
 	}
 }
