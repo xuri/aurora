@@ -1,0 +1,11 @@
+servers = []
+listen = "127.0.0.1:3000"
+version = "0.1"
+
+[auth]
+  enabled = false
+  password = "password"
+  username = "admin"
+
+[sample]
+  storage = "{\"jobs\":[],\"tubes\":[{\"name\":\"auto\",\"keys\":[]}]}"
