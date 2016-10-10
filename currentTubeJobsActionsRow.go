@@ -7,6 +7,7 @@ import (
 	"github.com/kr/beanstalk"
 )
 
+// currentTubeJobsActionsRow render a section include kick, pause and unpause job button by given server and tube.
 func currentTubeJobsActionsRow(server string, tube string) string {
 	var err error
 	var pauseTimeLeft string
@@ -48,6 +49,7 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 </section>`, server, tube, server, tube, pauseTimeLeft, currentTubeJobsActionsRowSample(server, tube))
 }
 
+// currentTubeJobsActionsRowSample render a dropdown sample list by given server and tube.
 func currentTubeJobsActionsRowSample(server string, tube string) string {
 	var sample string
 	for _, v := range sampleJobs.Tubes {

@@ -7,6 +7,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/Luxurioust/aurora)](https://goreportcard.com/report/github.com/Luxurioust/aurora)
 [![GoDoc](https://godoc.org/github.com/Luxurioust/aurora?status.svg)](https://godoc.org/github.com/Luxurioust/aurora)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/Luxurioust/aurora/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/release/Luxurioust/aurora.svg?label=Release)](https://github.com/Luxurioust/aurora/releases)
 
 ## Overview
 
