@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/rakyll/statik/fs"
 )
@@ -69,6 +70,7 @@ func testSetup() {
 	go func() {
 		http.ListenAndServe(pubConf.Listen, nil)
 	}()
+	time.Sleep(2 * time.Second)
 }
 
 func TestCookie(t *testing.T) {
