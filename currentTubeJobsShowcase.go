@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"html"
-	"strings"
 
 	"github.com/kr/beanstalk"
 )
@@ -95,11 +94,7 @@ func currentTubeJobsShowcaseReadySection(server string, tube string) string {
                                 </div>`, int(jobID), server, tube, server, tube, moveAllReadyTo, server, tube, server, tube, server, tube, int(jobID))
 	}
 	if jobBody != nil {
-		if selfConf.IsDisabledJSONDecode != 1 {
-			jobBodyStr = html.EscapeString(strings.Trim(string(prettyJSON(jobBody)), `'`))
-		} else {
-			jobBodyStr = html.EscapeString(strings.Trim(string(jobBody), `'`))
-		}
+		jobBodyStr = preformat(jobBody)
 	}
 
 	if jobBody != nil {
@@ -221,11 +216,7 @@ func currentTubeJobsShowcaseDelayedSection(server string, tube string) string {
                                 </div>`, int(jobID), server, tube, server, tube, moveAllDelayedTo, server, tube, server, tube, server, tube, int(jobID))
 	}
 	if jobBody != nil {
-		if selfConf.IsDisabledJSONDecode != 1 {
-			jobBodyStr = html.EscapeString(strings.Trim(string(prettyJSON(jobBody)), `'`))
-		} else {
-			jobBodyStr = html.EscapeString(strings.Trim(string(jobBody), `'`))
-		}
+		jobBodyStr = preformat(jobBody)
 	}
 
 	if jobBody != nil {
@@ -340,11 +331,7 @@ func currentTubeJobsShowcaseBuriedSection(server string, tube string) string {
                                 </div>`, int(jobID), server, tube, server, tube, moveAllBuriedTo, server, tube, server, tube, int(jobID))
 	}
 	if jobBody != nil {
-		if selfConf.IsDisabledJSONDecode != 1 {
-			jobBodyStr = html.EscapeString(strings.Trim(string(prettyJSON(jobBody)), `'`))
-		} else {
-			jobBodyStr = html.EscapeString(strings.Trim(string(jobBody), `'`))
-		}
+		jobBodyStr = preformat(jobBody)
 	}
 
 	if jobBody != nil {

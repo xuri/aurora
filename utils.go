@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"html"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -123,6 +124,28 @@ func prettyJSON(b []byte) []byte {
 	return out.Bytes()
 }
 
+// base64Decode provide method get Base64 decode string.
+func base64Decode(b string) string {
+	data, err := base64.StdEncoding.DecodeString(b)
+	if err != nil {
+		return string(b)
+	}
+	return string(data)
+}
+
+// preformat provide method get job body after format with config.
+func preformat(jobBody []byte) string {
+	var job string
+	if selfConf.IsDisabledJSONDecode != 1 {
+		job = string(prettyJSON(jobBody))
+	}
+	if selfConf.IsEnabledBase64Decode != 0 {
+		job = base64Decode(job)
+	}
+	job = html.EscapeString(job)
+	return job
+}
+
 // parseFlags parse flags of program.
 func parseFlags() {
 	configPtr := flag.String("c", "", "Use config file.")
@@ -135,11 +158,11 @@ func parseFlags() {
 		ConfigFile = *configPtr
 	}
 	if *verPtr == true {
-		fmt.Println("aurora version: 0.1")
+		fmt.Println("aurora version: 1.1")
 		os.Exit(1)
 	}
 	if *helpPtr == true {
-		fmt.Println("aurora version: 0.1\r\nCopyright (c) 2016 Ri Xu https://xuri.me \r\n\r\nUsage: aurora [OPTIONS] [cmd [arg ...]]\n  -c <filename>   Use config file. (default: aurora.toml)\r\n  -h \t\t  Output this help and exit.\r\n  -v \t\t  Output version and exit.")
+		fmt.Println("aurora version: 1.1\r\nCopyright (c) 2016 Ri Xu https://xuri.me \r\n\r\nUsage: aurora [OPTIONS] [cmd [arg ...]]\n  -c <filename>   Use config file. (default: aurora.toml)\r\n  -h \t\t  Output this help and exit.\r\n  -v \t\t  Output version and exit.")
 		os.Exit(1)
 	}
 }

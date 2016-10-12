@@ -102,13 +102,13 @@ func tplServerFilter() string {
                                     <div class="tab-pane active" id="binlog">
                                         %s
                                     </div>
-                                    <div class="tab-pane " id="cmd">
+                                    <div class="tab-pane" id="cmd">
                                         %s
                                     </div>
-                                    <div class="tab-pane " id="current">
+                                    <div class="tab-pane" id="current">
                                         %s
                                     </div>
-                                    <div class="tab-pane " id="other">
+                                    <div class="tab-pane" id="other">
                                         %s
                                     </div>
                                 </div>
@@ -182,7 +182,7 @@ func tplTubeFilter() string {
                                     <div class="tab-pane active" id="current">
                                         %s
                                     </div>
-                                    <div class="tab-pane " id="other">
+                                    <div class="tab-pane" id="other">
                                         %s
                                     </div>
                                 </div>

@@ -124,12 +124,15 @@ func dropDownTube(server string, currentTube string) string {
 
 // dropEditSettings render a navigation dropdown menu for set preference.
 func dropEditSettings() string {
-	var isDisabledJSONDecode, isDisabledJobDataHighlight string
+	var isDisabledJSONDecode, isDisabledJobDataHighlight, isEnabledBase64Decode string
 	if selfConf.IsDisabledJSONDecode != 1 {
 		isDisabledJSONDecode = `checked="checked"`
 	}
 	if selfConf.IsDisabledJobDataHighlight != 1 {
 		isDisabledJobDataHighlight = `checked="checked"`
+	}
+	if selfConf.IsEnabledBase64Decode != 0 {
+		isEnabledBase64Decode = `checked="checked"`
 	}
 	return fmt.Sprintf(`<div id="settings" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settings-label" aria-hidden="true">
     <div class="modal-dialog">
@@ -156,21 +159,24 @@ func dropEditSettings() string {
                     </div>
                     <div class="form-group">
                         <label for="focusedInput"><b>Preferred way to deal with job data</b></label>
-
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" id="isDisabledJsonDecode" value="1" %s>
                                 before display: json_decode()
                             </label>
                         </div>
-
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="isEnabledBase64Decode" value="1" %s>
+                                before display: base64_decode()
+                            </label>
+                        </div>
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" id="isDisabledJobDataHighlight" value="1" %s>
                                 after display: enable highlight
                             </label>
                         </div>
-
                     </div>
                 </fieldset>
             </div>
@@ -180,5 +186,5 @@ func dropEditSettings() string {
 
         </div>
     </div>
-</div>`, selfConf.TubePauseSeconds, selfConf.AutoRefreshTimeoutMs, selfConf.SearchResultLimit, isDisabledJSONDecode, isDisabledJobDataHighlight)
+</div>`, selfConf.TubePauseSeconds, selfConf.AutoRefreshTimeoutMs, selfConf.SearchResultLimit, isDisabledJSONDecode, isEnabledBase64Decode, isDisabledJobDataHighlight)
 }

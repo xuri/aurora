@@ -52,6 +52,7 @@ func readCookies(r *http.Request) {
 	selfConf.IsDisabledJSONDecode = readIntCookie(r, `isDisabledJsonDecode`, 0)
 	selfConf.IsDisabledUnserialization = readIntCookie(r, `isDisabledUnserialization`, 0)
 	selfConf.IsDisabledJobDataHighlight = readIntCookie(r, `isDisabledJobDataHighlight`, 0)
+	selfConf.IsEnabledBase64Decode = readIntCookie(r, `isEnabledBase64Decode`, 0)
 	selfConf.TubePauseSeconds = readIntCookie(r, `tubePauseSeconds`, -1)
 	selfConf.AutoRefreshTimeoutMs = readIntCookie(r, `autoRefreshTimeoutMs`, 500)
 	selfConf.SearchResultLimit = readIntCookie(r, `searchResultLimit`, 25)

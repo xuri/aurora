@@ -86,7 +86,6 @@ func tplMain(serverList string, currentServer string) string {
         </div>
         %s
         %s
-        %s
     </div>
     <script>
         var url = "./index?server=";
@@ -100,5 +99,5 @@ func tplMain(serverList string, currentServer string) string {
     %s
     <script src="./js/customer.js"></script>
 </body>
-</html>`, TplHead, dropDownServer(currentServer), TplLinks, serverList, tplTubeFilter(), tplServerFilter(), dropEditSettings(), isDisabledJobDataHighlight)
+</html>`, TplHead, dropDownServer(currentServer), TplLinks, serverList, tplServerFilter(), dropEditSettings(), isDisabledJobDataHighlight)
 }

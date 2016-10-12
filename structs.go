@@ -186,6 +186,7 @@ type SelfConf struct {
 	IsDisabledJSONDecode       int
 	IsDisabledUnserialization  int
 	IsDisabledJobDataHighlight int
+	IsEnabledBase64Decode      int
 	AutoRefreshTimeoutMs       int
 	SearchResultLimit          int
 }
