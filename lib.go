@@ -249,13 +249,17 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 	var err error
 	var bstkConn *beanstalk.Conn
 	var searchLimit int
+	var table = currentTubeJobsSummaryTable(server, tube)
+	if table == `` {
+		return `Tube "` + tube + `" not found or it is empty <br><br><a href="./server?server=` + server + `"> << back </a>`
+	}
 	searchLimit, err = strconv.Atoi(limit)
 	if err != nil {
-		return currentTubeJobsSummaryTable(server, tube)
+		return table
 	}
 
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
-		return currentTubeJobsSummaryTable(server, tube)
+		return table
 	}
 	result := []SearchResult{}
 	bstkTube := &beanstalk.Tube{
@@ -265,23 +269,23 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 	tubeStat, err := bstkTube.Stats()
 	if err != nil {
 		bstkConn.Close()
-		return currentTubeJobsSummaryTable(server, tube)
+		return table
 	}
 	// Get ready stat job total
 	ready, err := strconv.Atoi(tubeStat["current-jobs-ready"])
 	if err != nil {
 		bstkConn.Close()
-		return currentTubeJobsSummaryTable(server, tube)
+		return table
 	}
 	delayed, err := strconv.Atoi(tubeStat["current-jobs-delayed"])
 	if err != nil {
 		bstkConn.Close()
-		return currentTubeJobsSummaryTable(server, tube)
+		return table
 	}
 	buried, err := strconv.Atoi(tubeStat["current-jobs-buried"])
 	if err != nil {
 		bstkConn.Close()
-		return currentTubeJobsSummaryTable(server, tube)
+		return table
 	}
 
 	var readyBegin = uint64(0)
@@ -292,7 +296,7 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 		readyBegin, _, err = bstkTube.PeekReady()
 		if err != nil {
 			bstkConn.Close()
-			return currentTubeJobsSummaryTable(server, tube)
+			return table
 		}
 		result = searchTubeInStats(tube, searchLimit, searchStr, bstkConn, result, readyBegin, ready, "ready")
 	}
@@ -301,7 +305,7 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 		delayedBegin, _, err = bstkTube.PeekDelayed()
 		if err != nil {
 			bstkConn.Close()
-			return currentTubeJobsSummaryTable(server, tube)
+			return table
 		}
 		result = searchTubeInStats(tube, searchLimit, searchStr, bstkConn, result, delayedBegin, delayed, "delayed")
 	}
@@ -310,12 +314,12 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 		buriedBegin, _, err = bstkTube.PeekBuried()
 		if err != nil {
 			bstkConn.Close()
-			return currentTubeJobsSummaryTable(server, tube)
+			return table
 		}
 		result = searchTubeInStats(tube, searchLimit, searchStr, bstkConn, result, buriedBegin, buried, "buried")
 	}
 	bstkConn.Close()
-	return currentTubeJobsSummaryTable(server, tube) + currentTubeSearchResults(server, tube, limit, searchStr, result)
+	return table + currentTubeSearchResults(server, tube, limit, searchStr, result)
 }
 
 // searchTubeInStats search job in tube by given stats.

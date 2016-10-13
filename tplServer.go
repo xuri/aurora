@@ -46,6 +46,7 @@ func tplServer(content string, server string) string {
         <div id='idAllTubesCopy' style="display:none"></div>
         %s
         %s
+        %s
     </div>
     <script>
         function getParameterByName(name, url) {
@@ -69,5 +70,5 @@ func tplServer(content string, server string) string {
     <script src="./js/customer.js"></script>
 </body>
 </html>
-`, TplHead, dropDownServer(server), dropDownTube(server, ""), TplLinks, content, modalClearTubes(server), tplTubeFilter(), dropEditSettings(), isDisabledJobDataHighlight)
+`, TplHead, dropDownServer(server), dropDownTube(server, ""), TplLinks, content, modalClearTubes(server), tplTubeFilter(), dropEditSettings(), checkUpdate(), isDisabledJobDataHighlight)
 }

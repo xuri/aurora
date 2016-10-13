@@ -16,7 +16,7 @@ const (
 	bstk                     = "127.0.0.1:11300"
 	configFileWithSampleJobs = `servers = []
 listen = "127.0.0.1:3000"
-version = "0.1"
+version = 1.2
 [auth]
   enabled = false
   password = "password"

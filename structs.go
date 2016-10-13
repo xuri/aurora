@@ -8,9 +8,9 @@ import (
 
 // Define the default configuration and HTML header template.
 const (
-	ConfigFileTemplate = "servers = []\r\nlisten = \"127.0.0.1:3000\"\r\nversion = \"0.1\"\r\n[auth]\r\nenabled = false\r\npassword = \"password\"\r\nusername = \"admin\"\r\n\r\n[sample]\r\nstorage = \"{}\""
+	ConfigFileTemplate = "servers = []\r\nlisten = \"127.0.0.1:3000\"\r\nversion = 1.2\r\n[auth]\r\nenabled = false\r\npassword = \"password\"\r\nusername = \"admin\"\r\n\r\n[sample]\r\nstorage = \"{}\""
 	DefaultDelay       = 0
-	DefaultPriority    = 1024 // most urgent: 0, least urgent: 4294967295
+	DefaultPriority    = 1024 // most urgent: 0, least urgent: 4294967295.
 	DefaultTTR         = 60   // 1 minute
 	TplHead            = `<head>
         <meta charset="UTF-8"/>
@@ -52,6 +52,8 @@ const (
                             <li><a href="https://github.com/Luxurioust/aurora">Aurora (GitHub)</a></li>
                         </ul>
                     </li>`
+	UpdateURL = `https://api.github.com/repos/Luxurioust/aurora/tags`
+	Version   = 1.2
 )
 
 // Define server and tube stats fields.
@@ -64,7 +66,8 @@ var (
 	pubConf    PubConfig
 	selfConf   SelfConf
 	sampleJobs SampleJobs
-	// Server filter columns
+	updateInfo = "uncheck"
+	// Server filter columns.
 	binlogStatsGroups = []map[string]string{
 		map[string]string{"binlog-current-index": "the index of the current binlog file being written to. If binlog is not active this value will be 0"},
 		map[string]string{"binlog-max-size": "the maximum size in bytes a binlog file is allowed to get before a new binlog file is opened"},
@@ -119,7 +122,7 @@ var (
 		map[string]string{"uptime": "the number of seconds since this server process started running"},
 		map[string]string{"version": "the version string of the server"},
 	}
-	// Tube filter columns
+	// Tube filter columns.
 	tubeStatFields = []map[string]string{
 		map[string]string{"current-jobs-urgent": "number of ready jobs with priority < 1024 in this tube"},
 		map[string]string{"current-jobs-ready": "number of jobs in the ready queue in this tube"},
@@ -145,7 +148,7 @@ type ViewFunc func(http.ResponseWriter, *http.Request)
 type PubConfig struct {
 	Servers []string `toml:"servers"`
 	Listen  string   `toml:"listen"`
-	Version string   `toml:"version"`
+	Version float64  `toml:"version"`
 	Auth    struct {
 		Enabled  bool   `toml:"enabled"`
 		Password string `toml:"password"`
@@ -156,13 +159,13 @@ type PubConfig struct {
 	} `toml:"sample"`
 }
 
-// SampleJobs define beanstalk sample jobs storage struct
+// SampleJobs define beanstalk sample jobs storage struct.
 type SampleJobs struct {
 	Jobs  []SampleJob  `json:"jobs"`
 	Tubes []SampleTube `json:"tubes"`
 }
 
-// SampleJob define beanstalk sample job storage struct
+// SampleJob define beanstalk sample job storage struct.
 type SampleJob struct {
 	Key   string   `json:"key"`
 	Name  string   `json:"name"`
@@ -170,7 +173,7 @@ type SampleJob struct {
 	Data  string   `json:"data"`
 }
 
-// SampleTube define beanstalk sample job's tube storage struct
+// SampleTube define beanstalk sample job's tube storage struct.
 type SampleTube struct {
 	Name string   `json:"name"`
 	Keys []string `json:"keys"`
@@ -208,4 +211,9 @@ type SearchResult struct {
 	ID    uint64
 	State string
 	Data  string
+}
+
+// UpdateTags define the tag of versions control.
+type UpdateTags []struct {
+	Name string `json:"name"`
 }

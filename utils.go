@@ -14,6 +14,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -135,7 +136,7 @@ func base64Decode(b string) string {
 
 // preformat provide method get job body after format with config.
 func preformat(jobBody []byte) string {
-	var job string
+	var job = string(jobBody)
 	if selfConf.IsDisabledJSONDecode != 1 {
 		job = string(prettyJSON(jobBody))
 	}
@@ -158,11 +159,11 @@ func parseFlags() {
 		ConfigFile = *configPtr
 	}
 	if *verPtr == true {
-		fmt.Println("aurora version: 1.1")
+		fmt.Printf("aurora version: %.1f\r\n", Version)
 		os.Exit(1)
 	}
 	if *helpPtr == true {
-		fmt.Println("aurora version: 1.1\r\nCopyright (c) 2016 Ri Xu https://xuri.me \r\n\r\nUsage: aurora [OPTIONS] [cmd [arg ...]]\n  -c <filename>   Use config file. (default: aurora.toml)\r\n  -h \t\t  Output this help and exit.\r\n  -v \t\t  Output version and exit.")
+		fmt.Printf("aurora version: %.1f\r\nCopyright (c) 2016 Ri Xu https://xuri.me \r\n\r\nUsage: aurora [OPTIONS] [cmd [arg ...]]\n  -c <filename>   Use config file. (default: aurora.toml)\r\n  -h \t\t  Output this help and exit.\r\n  -v \t\t  Output version and exit.\r\n", Version)
 		os.Exit(1)
 	}
 }
@@ -215,4 +216,38 @@ func setHeader(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Expires", time.Unix(0, 0).Format(http.TimeFormat))
 	w.Header().Set("Pragma", "no-cache")
 	w.Header().Set("X-Accel-Expires", "0")
+}
+
+// checkUpdate render update notice alert.
+func checkUpdate() string {
+	if updateInfo != "uncheck" {
+		return updateInfo
+	}
+	updateInfo = ""
+	r, err := http.Get(UpdateURL)
+	if err != nil {
+		return updateInfo
+	}
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		r.Body.Close()
+		return updateInfo
+	}
+	r.Body.Close()
+	u := UpdateTags{}
+	err = json.Unmarshal(body, &u)
+	if err != nil {
+		return updateInfo
+	}
+	if len(u) < 1 {
+		return updateInfo
+	}
+	v, err := strconv.ParseFloat(u[0].Name, 64)
+	if err != nil {
+		return updateInfo
+	}
+	if Version < v {
+		updateInfo = fmt.Sprintf(`<br/><div class="alert alert-info" style="position: relative;top:50px;"><span>A new version is available: <b>%.1f</b> Get it from <b><a href="https://github.com/Luxurioust/aurora" target="_blank">GitHub</a></b></span></div>`, v)
+	}
+	return updateInfo
 }

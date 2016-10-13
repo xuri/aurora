@@ -38,5 +38,8 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 	}
 	bstkConn.Close()
 	template := fmt.Sprintf(`<section id="summaryTable"> <div class="row"> <div class="col-sm-12"> <table class="table table-striped table-hover"> <thead> <tr> <th>name</th>%s</tr> </thead> <tbody> %s </tbody> </table> </div> </div> </section>`, th, tr)
+	if tr == `` {
+		return ``
+	}
 	return template
 }

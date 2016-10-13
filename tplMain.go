@@ -53,6 +53,7 @@ func tplMain(serverList string, currentServer string) string {
         <div id="idServers">
         %s
         </div>
+        %s
         <div id="idServersCopy" style="display:none"></div>
         <div id="servers-add" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="servers-add-label" aria-hidden="true">
             <div class="modal-dialog">
@@ -99,5 +100,5 @@ func tplMain(serverList string, currentServer string) string {
     %s
     <script src="./js/customer.js"></script>
 </body>
-</html>`, TplHead, dropDownServer(currentServer), TplLinks, serverList, tplServerFilter(), dropEditSettings(), isDisabledJobDataHighlight)
+</html>`, TplHead, dropDownServer(currentServer), TplLinks, serverList, checkUpdate(), tplServerFilter(), dropEditSettings(), isDisabledJobDataHighlight)
 }
