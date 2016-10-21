@@ -257,7 +257,6 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 	if err != nil {
 		return table
 	}
-
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return table
 	}
@@ -272,51 +271,23 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 		return table
 	}
 	// Get ready stat job total
-	ready, err := strconv.Atoi(tubeStat["current-jobs-ready"])
-	if err != nil {
-		bstkConn.Close()
-		return table
-	}
-	delayed, err := strconv.Atoi(tubeStat["current-jobs-delayed"])
-	if err != nil {
-		bstkConn.Close()
-		return table
-	}
-	buried, err := strconv.Atoi(tubeStat["current-jobs-buried"])
-	if err != nil {
-		bstkConn.Close()
-		return table
-	}
-
-	var readyBegin = uint64(0)
-	var delayedBegin = uint64(0)
-	var buriedBegin = uint64(0)
-
-	if ready > 0 {
-		readyBegin, _, err = bstkTube.PeekReady()
+	statsFilter := []string{"ready", "delayed", "buried"}
+	jobsFilter := []string{"current-jobs-ready", "current-jobs-delayed", "current-jobs-buried"}
+	for k, v := range statsFilter {
+		s, err := strconv.Atoi(tubeStat[jobsFilter[k]])
 		if err != nil {
 			bstkConn.Close()
 			return table
 		}
-		result = searchTubeInStats(tube, searchLimit, searchStr, bstkConn, result, readyBegin, ready, "ready")
-	}
-
-	if delayed > 0 {
-		delayedBegin, _, err = bstkTube.PeekDelayed()
-		if err != nil {
-			bstkConn.Close()
-			return table
+		b := uint64(0)
+		if s > 0 {
+			b, _, err = bstkTube.PeekReady()
+			if err != nil {
+				bstkConn.Close()
+				return table
+			}
+			result = searchTubeInStats(tube, searchLimit, searchStr, bstkConn, result, b, s, v)
 		}
-		result = searchTubeInStats(tube, searchLimit, searchStr, bstkConn, result, delayedBegin, delayed, "delayed")
-	}
-
-	if buried > 0 {
-		buriedBegin, _, err = bstkTube.PeekBuried()
-		if err != nil {
-			bstkConn.Close()
-			return table
-		}
-		result = searchTubeInStats(tube, searchLimit, searchStr, bstkConn, result, buriedBegin, buried, "buried")
 	}
 	bstkConn.Close()
 	return table + currentTubeSearchResults(server, tube, limit, searchStr, result)
@@ -345,7 +316,7 @@ func searchTubeInStats(tube string, limit int, searchStr string, bstkConn *beans
 			continue
 		}
 		body := string(readyBody)
-		if strings.Contains(body, searchStr) == false {
+		if !strings.Contains(body, searchStr) {
 			id++
 			resultCnt++
 			continue

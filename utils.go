@@ -53,9 +53,7 @@ func readConf() error {
 
 // parseConf parse server config in external config file.
 func parseConf() {
-	for _, v := range pubConf.Servers {
-		selfConf.Servers = append(selfConf.Servers, v)
-	}
+	selfConf.Servers = append(selfConf.Servers, pubConf.Servers...)
 }
 
 // removeArrayDuplicates provide a function remove duplicates value elements in a slice.
@@ -65,7 +63,7 @@ func removeArrayDuplicates(elements []string) []string {
 	result := []string{}
 
 	for v := range elements {
-		if encountered[elements[v]] == true {
+		if encountered[elements[v]] {
 			// Do not add duplicate.
 		} else {
 			// Record this element as an encountered element.
@@ -158,11 +156,11 @@ func parseFlags() {
 	} else {
 		ConfigFile = *configPtr
 	}
-	if *verPtr == true {
+	if *verPtr {
 		fmt.Printf("aurora version: %.1f\r\n", Version)
 		os.Exit(1)
 	}
-	if *helpPtr == true {
+	if *helpPtr {
 		fmt.Printf("aurora version: %.1f\r\nCopyright (c) 2016 Ri Xu https://xuri.me \r\n\r\nUsage: aurora [OPTIONS] [cmd [arg ...]]\n  -c <filename>   Use config file. (default: aurora.toml)\r\n  -h \t\t  Output this help and exit.\r\n  -v \t\t  Output version and exit.\r\n", Version)
 		os.Exit(1)
 	}
@@ -170,7 +168,7 @@ func parseFlags() {
 
 // basicAuth provide a simple method to HTTP authenticate.
 func basicAuth(f ViewFunc) ViewFunc {
-	if pubConf.Auth.Enabled == false {
+	if !pubConf.Auth.Enabled {
 		return func(w http.ResponseWriter, r *http.Request) {
 			f(w, r)
 			return

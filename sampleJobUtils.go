@@ -73,7 +73,7 @@ func sampleValidate(server string, data url.Values, w http.ResponseWriter) (stri
 		io.WriteString(w, `{"result":false,"error":"You should give a name with this sample"}`)
 		return sampleName, string(body), errors.New("You should give a name with this sample")
 	}
-	if checkSampleJobs(sampleName) == true {
+	if checkSampleJobs(sampleName) {
 		io.WriteString(w, `{"result":false,"error":"You already have a job with this name"}`)
 		return sampleName, string(body), errors.New("You already have a job with this name")
 	}
@@ -258,7 +258,7 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if checkSampleJobs(name) == true {
+	if checkSampleJobs(name) {
 		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-error">
                     <button type="button" class="close" data-dismiss="alert">×</button>
                     <span> You already have a job with this name</span>

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// handlerMain handle request on router /.
+// handlerMain handle request on router: /
 func handlerMain(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Server", "Go WebServer")
 	w.Header().Set("Content-Type", "text/html")
@@ -15,14 +15,14 @@ func handlerMain(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, tplMain(getServerStatus(), server))
 }
 
-// handlerServerList handle request on router /index
+// handlerServerList handle request on router: /index
 func handlerServerList(w http.ResponseWriter, r *http.Request) {
 	setHeader(w, r)
 	readCookies(r)
 	io.WriteString(w, getServerStatus())
 }
 
-// serversRemove handle request on router /serversRemove
+// serversRemove handle request on router: /serversRemove
 func serversRemove(w http.ResponseWriter, r *http.Request) {
 	setHeader(w, r)
 	readCookies(r)
@@ -32,7 +32,7 @@ func serversRemove(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/public", 301)
 }
 
-// handlerServer handle request on router /server
+// handlerServer handle request on router: /server
 func handlerServer(w http.ResponseWriter, r *http.Request) {
 	setHeader(w, r)
 	readCookies(r)
@@ -51,7 +51,7 @@ func handlerServer(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, tplServer(getServerTubes(server), server))
 }
 
-// handlerTube handle request on router /tube
+// handlerTube handle request on router: /tube
 func handlerTube(w http.ResponseWriter, r *http.Request) {
 	setHeader(w, r)
 	readCookies(r)
@@ -64,6 +64,22 @@ func handlerTube(w http.ResponseWriter, r *http.Request) {
 		addJob(server, r.PostFormValue("tubeName"), r.PostFormValue("tubeData"), r.PostFormValue("tubePriority"), r.PostFormValue("tubeDelay"), r.PostFormValue("tubeTtr"))
 		io.WriteString(w, `{"result":true}`)
 		return
+	case "search":
+		content := searchTube(server, tube, r.URL.Query().Get("limit"), r.URL.Query().Get("searchStr"))
+		io.WriteString(w, tplTube(content, server, tube))
+		return
+	case "addSample":
+		r.ParseForm()
+		addSample(server, r.Form, w)
+		return
+	default:
+		handleRedirect(w, r, server, tube, action, count)
+	}
+}
+
+// handleRedirect handle request with redirect response.
+func handleRedirect(w http.ResponseWriter, r *http.Request, server string, tube string, action string, count string) {
+	switch action {
 	case "kick":
 		kick(server, tube, count)
 		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, tube), 302)
@@ -86,19 +102,9 @@ func handlerTube(w http.ResponseWriter, r *http.Request) {
 	case "deleteJob":
 		deleteJob(server, tube, r.URL.Query().Get("jobid"))
 		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, tube), 302)
-	case "search":
-		content := searchTube(server, tube, r.URL.Query().Get("limit"), r.URL.Query().Get("searchStr"))
-		io.WriteString(w, tplTube(content, server, tube))
-		return
-	case "addSample":
-		r.ParseForm()
-		addSample(server, r.Form, w)
-		return
 	case "loadSample":
 		loadSample(server, tube, r.URL.Query().Get("key"))
 		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, tube), 302)
-	default:
-
 	}
 	io.WriteString(w, tplTube(currentTube(server, tube), server, tube))
 }
@@ -130,8 +136,6 @@ func handlerSample(w http.ResponseWriter, r *http.Request) {
 	case "deleteSample":
 		deleteSamples(r.URL.Query().Get("key"))
 		http.Redirect(w, r, "/sample?action=manageSamples", 301)
-		return
-	default:
 		return
 	}
 }

@@ -26,9 +26,7 @@ func readCookies(r *http.Request) {
 	} else {
 		filters = []string{"current-connections", "current-jobs-buried", "current-jobs-delayed", "current-jobs-ready", "current-jobs-reserved", "current-jobs-urgent", "current-tubes"}
 	}
-	for _, v := range servers {
-		selfConf.Servers = append(selfConf.Servers, v)
-	}
+	selfConf.Servers = append(selfConf.Servers, servers...)
 	// Read Tube Filter in cookies
 	tubeFilter, err := r.Cookie("tubefilter")
 	if err == nil {

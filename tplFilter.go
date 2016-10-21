@@ -4,84 +4,36 @@ import (
 	"fmt"
 )
 
+// tplServerFilterStatsGroups render server filter stats groups checkbox.
+func tplServerFilterStatsGroups() []string {
+	stats := []string{"", "", "", ""}
+	statsGroupsFilter := [][]map[string]string{binlogStatsGroups, cmdStatsGroups, currentStatsGroups, otherStatsGroups}
+	for k, statsGroups := range statsGroupsFilter {
+		for _, statsGroup := range statsGroups {
+			for property, description := range statsGroup {
+				status := ""
+				if checkInSlice(selfConf.Filter, property) {
+					status = `checked="true"`
+				}
+				stats[k] += fmt.Sprintf(`<div class="control-group">
+                 <div class="controls">
+                     <div class="checkbox">
+                         <label>
+                             <input type="checkbox" name="%s" %s>
+                             <b>%s</b>
+                             <br/>%s</label>
+                     </div>
+                 </div>
+             </div>`, property, status, property, description)
+			}
+		}
+	}
+	return stats
+}
+
 // tplServerFilter render modal popup for select server tube stats column.
 func tplServerFilter() string {
-	var binlogs, cmds, currents, others string
-	for _, binlog := range binlogStatsGroups {
-		for property, description := range binlog {
-			status := ""
-			if checkInSlice(selfConf.Filter, property) == true {
-				status = `checked="true"`
-			}
-			binlogs += fmt.Sprintf(`<div class="control-group">
-                 <div class="controls">
-                     <div class="checkbox">
-                         <label>
-                             <input type="checkbox" name="%s" %s>
-                             <b>%s</b>
-                             <br/>%s</label>
-                     </div>
-                 </div>
-             </div>`, property, status, property, description)
-		}
-	}
-
-	for _, cmd := range cmdStatsGroups {
-		for property, description := range cmd {
-			status := ""
-			if checkInSlice(selfConf.Filter, property) == true {
-				status = `checked="true"`
-			}
-			cmds += fmt.Sprintf(`<div class="control-group">
-                 <div class="controls">
-                     <div class="checkbox">
-                         <label>
-                             <input type="checkbox" name="%s" %s>
-                             <b>%s</b>
-                             <br/>%s</label>
-                     </div>
-                 </div>
-             </div>`, property, status, property, description)
-		}
-	}
-
-	for _, current := range currentStatsGroups {
-		for property, description := range current {
-			status := ""
-			if checkInSlice(selfConf.Filter, property) == true {
-				status = `checked="true"`
-			}
-			currents += fmt.Sprintf(`<div class="control-group">
-                 <div class="controls">
-                     <div class="checkbox">
-                         <label>
-                             <input type="checkbox" name="%s" %s>
-                             <b>%s</b>
-                             <br/>%s</label>
-                     </div>
-                 </div>
-             </div>`, property, status, property, description)
-		}
-	}
-
-	for _, other := range otherStatsGroups {
-		for property, description := range other {
-			status := ""
-			if checkInSlice(selfConf.Filter, property) == true {
-				status = `checked="true"`
-			}
-			others += fmt.Sprintf(`<div class="control-group">
-                 <div class="controls">
-                     <div class="checkbox">
-                         <label>
-                             <input type="checkbox" name="%s" %s>
-                             <b>%s</b>
-                             <br/>%s</label>
-                     </div>
-                 </div>
-             </div>`, property, status, property, description)
-		}
-	}
+	stats := tplServerFilterStatsGroups()
 	filter := fmt.Sprintf(`<div id="filterServer" data-cookie="filter" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="servers-add-label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -120,7 +72,7 @@ func tplServerFilter() string {
                     </div>
                 </div>
             </div>
-        </div>`, binlogs, cmds, currents, others)
+        </div>`, stats[0], stats[1], stats[2], stats[3])
 	return filter
 }
 
@@ -133,7 +85,7 @@ func tplTubeFilter() string {
 		}
 		for property, description := range current {
 			status := ""
-			if checkInSlice(selfConf.TubeFilters, property) == true {
+			if checkInSlice(selfConf.TubeFilters, property) {
 				status = `checked="true"`
 			}
 			currents += fmt.Sprintf(`<div class="form-group">
@@ -152,7 +104,7 @@ func tplTubeFilter() string {
 		}
 		for property, description := range other {
 			status := ""
-			if checkInSlice(selfConf.TubeFilters, property) == true {
+			if checkInSlice(selfConf.TubeFilters, property) {
 				status = `checked="true"`
 			}
 			others += fmt.Sprintf(`<div class="form-group">

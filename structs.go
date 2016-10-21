@@ -194,18 +194,6 @@ type SelfConf struct {
 	SearchResultLimit          int
 }
 
-// Server define the server list storage in config file.
-type Server struct {
-	Name                string `json:"name"`
-	CurrentConnections  string `json:"current-connections"`
-	CurrentJobsBuried   string `json:"current-jobs-buried"`
-	CurrentJobsDelayed  string `json:"current-jobs-delayed"`
-	CurrentJobsReady    string `json:"current-jobs-ready"`
-	CurrentJobsReserved string `json:"current-jobs-reserved"`
-	CurrentJobsUrgent   string `json:"current-jobs-urgent"`
-	CurrentTubes        string `json:"urrent-tubes"`
-}
-
 // SearchResult define the search result of jobs in tube.
 type SearchResult struct {
 	ID    uint64
