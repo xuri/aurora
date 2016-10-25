@@ -13,6 +13,7 @@ func tplServer(content string, server string) string {
 <html lang="en-US">
 %s
 <body>
+    %s
     <div class="navbar navbar-fixed-top navbar-default" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -70,5 +71,5 @@ func tplServer(content string, server string) string {
     <script src="./js/customer.js"></script>
 </body>
 </html>
-`, TplHead, dropDownServer(server), dropDownTube(server, ""), TplLinks, content, modalClearTubes(server), tplTubeFilter(), dropEditSettings(), checkUpdate(), isDisabledJobDataHighlight)
+`, TplHead, TplNoScript, dropDownServer(server), dropDownTube(server, ""), TplLinks, content, modalClearTubes(server), tplTubeFilter(), dropEditSettings(), checkUpdate(), isDisabledJobDataHighlight)
 }

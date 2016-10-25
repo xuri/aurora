@@ -52,6 +52,13 @@ const (
                             <li><a href="https://github.com/Luxurioust/aurora">Aurora (GitHub)</a></li>
                         </ul>
                     </li>`
+	TplNoScript = `<noscript>
+        <div class="container">
+            <div class="alert alert-danger" role="alert">
+                Aurora beanstalk console requires JavaScript supports, please refresh after enable browser JavaScript support.
+            </div>
+        </div>
+    </noscript>`
 	UpdateURL = `https://api.github.com/repos/Luxurioust/aurora/tags`
 	Version   = 1.2
 )

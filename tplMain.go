@@ -13,6 +13,7 @@ func tplMain(serverList string, currentServer string) string {
 <html lang="en-US">
 %s
 <body>
+    %s
     <div class="navbar navbar-fixed-top navbar-default" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -100,5 +101,5 @@ func tplMain(serverList string, currentServer string) string {
     %s
     <script src="./js/customer.js"></script>
 </body>
-</html>`, TplHead, dropDownServer(currentServer), TplLinks, serverList, checkUpdate(), tplServerFilter(), dropEditSettings(), isDisabledJobDataHighlight)
+</html>`, TplHead, TplNoScript, dropDownServer(currentServer), TplLinks, serverList, checkUpdate(), tplServerFilter(), dropEditSettings(), isDisabledJobDataHighlight)
 }
