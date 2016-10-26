@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"bytes"
 	"html"
+	"strconv"
 
 	"github.com/kr/beanstalk"
 )
@@ -10,8 +11,12 @@ import (
 // currentTubeJobsActionsRow render a section include kick, pause and unpause job button by given server and tube.
 func currentTubeJobsActionsRow(server string, tube string) string {
 	var err error
-	var pauseTimeLeft string
 	var bstkConn *beanstalk.Conn
+	var buf, pauseTimeLeft bytes.Buffer
+	var pause = strconv.Itoa(selfConf.TubePauseSeconds)
+	if pause == "-1" {
+		pause = "3600"
+	}
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return ``
 	}
@@ -21,37 +26,42 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 	}
 	statsMap, _ := tubeStats.Stats()
 	if statsMap["pause-time-left"] == "0" {
-		pauseTimeLeft = fmt.Sprintf(`<a class="btn btn-default btn-sm" href="?server=%s&tube=%s&action=pause&count=-1"
-           title="Temporarily prevent jobs being reserved from the given tube. Pause for: %d seconds"><i class="glyphicon glyphicon-pause"></i>
-            Pause tube</a>`, server, tube, selfConf.TubePauseSeconds)
+		pauseTimeLeft.WriteString(`<a class="btn btn-default btn-sm" href="?server=`)
+		pauseTimeLeft.WriteString(server)
+		pauseTimeLeft.WriteString(`&tube=`)
+		pauseTimeLeft.WriteString(tube)
+		pauseTimeLeft.WriteString(`&action=pause&count=-1" title="Temporarily prevent jobs being reserved from the given tube. Pause for: `)
+		pauseTimeLeft.WriteString(pause)
+		pauseTimeLeft.WriteString(` seconds"><i class="glyphicon glyphicon-pause"></i> Pause tube</a>`)
 	} else {
-		pauseTimeLeft = fmt.Sprintf(`<a class="btn btn-default btn-sm" href="?server=%s&tube=%s&action=pause&count=0"
-           title="Pause seconds left: %s"><i class="glyphicon glyphicon-play"></i> Unpause tube</a>`, server, tube, statsMap["pause-time-left"])
+		pauseTimeLeft.WriteString(`<a class="btn btn-default btn-sm" href="?server=`)
+		pauseTimeLeft.WriteString(server)
+		pauseTimeLeft.WriteString(`&tube=`)
+		pauseTimeLeft.WriteString(tube)
+		pauseTimeLeft.WriteString(`&action=pause&count=0" title="Pause seconds left: `)
+		pauseTimeLeft.WriteString(statsMap["pause-time-left"])
+		pauseTimeLeft.WriteString(`"><i class="glyphicon glyphicon-play"></i> Unpause tube</a>`)
 	}
 	bstkConn.Close()
-
-	return fmt.Sprintf(`<section id="actionsRow">
-    <b>Actions:</b>&nbsp;
-    <a class="btn btn-default btn-sm" href="?server=%s&tube=%s&action=kick&count=1"><i class="glyphicon glyphicon-forward"></i> Kick 1 job</a>
-    <a class="btn btn-default btn-sm" href="?server=%s&tube=%s&action=kick&count=10"
-       title="To kick more jobs, edit the "count" parameter"><i class="glyphicon glyphicon-fast-forward"></i> Kick 10 job</a>
-       %s
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <div class="btn-group">
-        <a data-toggle="modal" class="btn btn-success btn-sm" href="#" id="addJob"><i class="glyphicon glyphicon-plus-sign glyphicon-white"></i> Add job</a>
-        <button class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            %s
-        </ul>
-    </div>
-</section>`, server, tube, server, tube, pauseTimeLeft, currentTubeJobsActionsRowSample(server, tube))
+	buf.WriteString(`<section id="actionsRow"><b>Actions:</b>&nbsp;<a class="btn btn-default btn-sm" href="?server=`)
+	buf.WriteString(server)
+	buf.WriteString(`&tube=`)
+	buf.WriteString(tube)
+	buf.WriteString(`&action=kick&count=1"><i class="glyphicon glyphicon-forward"></i> Kick 1 job</a> <a class="btn btn-default btn-sm" href="?server=`)
+	buf.WriteString(server)
+	buf.WriteString(`&tube=`)
+	buf.WriteString(tube)
+	buf.WriteString(`&action=kick&count=10" title='To kick more jobs, edit the "count" parameter'><i class="glyphicon glyphicon-fast-forward"></i> Kick 10 job</a> `)
+	buf.WriteString(pauseTimeLeft.String())
+	buf.WriteString(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="btn-group"><a data-toggle="modal" class="btn btn-success btn-sm" href="#" id="addJob"><i class="glyphicon glyphicon-plus-sign glyphicon-white"></i> Add job</a><button class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu">`)
+	buf.WriteString(currentTubeJobsActionsRowSample(server, tube))
+	buf.WriteString(`</ul></div></section>`)
+	return buf.String()
 }
 
 // currentTubeJobsActionsRowSample render a dropdown sample list by given server and tube.
 func currentTubeJobsActionsRowSample(server string, tube string) string {
-	var sample string
+	sample := bytes.Buffer{}
 	for _, v := range sampleJobs.Tubes {
 		if v.Name != tube {
 			continue
@@ -64,12 +74,21 @@ func currentTubeJobsActionsRowSample(server string, tube string) string {
 				if j.Key != k {
 					continue
 				}
-				sample += fmt.Sprintf(`<li><a href="?server=%s&tube=%s&action=loadSample&key=%s">%s</a></li>`, server, tube, j.Key, html.EscapeString(j.Name))
+				sample.WriteString(`<li><a href="?server=`)
+				sample.WriteString(server)
+				sample.WriteString(`&tube=`)
+				sample.WriteString(tube)
+				sample.WriteString(`&action=loadSample&key=`)
+				sample.WriteString(j.Key)
+				sample.WriteString(`">`)
+				sample.WriteString(html.EscapeString(j.Name))
+				sample.WriteString(`</a></li>`)
 			}
 		}
 	}
-	if sample == "" {
+	if sample.String() == "" {
 		return `<li><a href="#">There are no sample jobs</a></li>`
 	}
-	return sample + `<li class="divider"></li><li><a href="./sample?action=manageSamples">Manage samples</a></li>`
+	sample.WriteString(`<li class="divider"></li><li><a href="./sample?action=manageSamples">Manage samples</a></li>`)
+	return sample.String()
 }

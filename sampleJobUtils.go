@@ -16,7 +16,6 @@ import (
 	"strings"
 	"time"
 
-	// "./beanstalk"
 	"github.com/BurntSushi/toml"
 	"github.com/kr/beanstalk"
 )
@@ -312,7 +311,7 @@ func getSampleJobList() string {
                                     </div>`, html.EscapeString(v), serverList)
 		}
 		tr += fmt.Sprintf(`<tr>
-                    <td name="%s" style="line-height: 25px !important;"><a
+                    <td style="line-height: 25px !important;"><a
                                 href="?action=editSample&key=%s">%s</a></td>
                     <td>
                         %s
@@ -323,7 +322,7 @@ func getSampleJobList() string {
                             <a class="btn btn-default btn-sm" href="?action=deleteSample&key=%s"><i class="glyphicon glyphicon-trash"></i> Delete</a>
                         </div>
                     </td>
-                </tr>`, j.Key, j.Key, html.EscapeString(j.Name), td, j.Key, j.Key)
+                </tr>`, j.Key, html.EscapeString(j.Name), td, j.Key, j.Key)
 	}
 
 	return fmt.Sprintf(`<div class="clearfix">

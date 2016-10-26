@@ -73,9 +73,7 @@ func currentTubeJobsShowcaseReadySection(server string, tube string) string {
                                                 <i class="glyphicon glyphicon-arrow-right glyphicon-white"></i> Move all ready to
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><input class="moveJobsNewTubeName" type="text" class="input-medium"
-                                                           data-href="?server=%s&tube=%s&action=moveJobsTo&state=ready&destTube="
-                                                           placeholder="New tube name"/></li>
+                                                <li><input class="moveJobsNewTubeName input-medium" type="text" data-href="?server=%s&tube=%s&action=moveJobsTo&state=ready&destTube=" placeholder="New tube name"/></li>
                                                     %s
                                                 <li class="divider"></li>
                                                 <li>
@@ -195,9 +193,7 @@ func currentTubeJobsShowcaseDelayedSection(server string, tube string) string {
                                                 <i class="glyphicon glyphicon-arrow-right glyphicon-white"></i> Move all delayed to
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><input class="moveJobsNewTubeName" type="text" class="input-medium"
-                                                           data-href="?server=%s&tube=%s&action=moveJobsTo&state=delayed&destTube="
-                                                           placeholder="New tube name"/></li>
+                                                <li><input class="moveJobsNewTubeName input-medium" type="text" data-href="?server=%s&tube=%s&action=moveJobsTo&state=delayed&destTube=" placeholder="New tube name"/></li>
                                                     %s
                                                 <li class="divider"></li>
                                                 <li>
@@ -314,9 +310,7 @@ func currentTubeJobsShowcaseBuriedSection(server string, tube string) string {
                                                 <i class="glyphicon glyphicon-arrow-right glyphicon-white"></i> Move all buried to
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><input class="moveJobsNewTubeName" type="text" class="input-medium"
-                                                           data-href="?server=%s&tube=%s&action=moveJobsTo&state=buried&destTube="
-                                                           placeholder="New tube name"/></li>
+                                                <li><input class="moveJobsNewTubeName input-medium" type="text" data-href="?server=%s&tube=%s&action=moveJobsTo&state=buried&destTube=" placeholder="New tube name"/></li>
                                                     %s
                                             </ul>
                                         </div>

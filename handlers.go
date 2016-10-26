@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"bytes"
 	"io"
 	"net/http"
 )
@@ -79,32 +79,43 @@ func handlerTube(w http.ResponseWriter, r *http.Request) {
 
 // handleRedirect handle request with redirect response.
 func handleRedirect(w http.ResponseWriter, r *http.Request, server string, tube string, action string, count string) {
+	var url bytes.Buffer
+	url.WriteString(`/tube?server=`)
+	url.WriteString(server)
+	url.WriteString(`&tube=`)
 	switch action {
 	case "kick":
 		kick(server, tube, count)
-		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, tube), 302)
+		url.WriteString(tube)
+		http.Redirect(w, r, url.String(), 302)
 	case "kickJob":
 		kickJob(server, tube, r.URL.Query().Get("jobid"))
-		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, tube), 302)
+		url.WriteString(tube)
+		http.Redirect(w, r, url.String(), 302)
 	case "pause":
 		pause(server, tube, count)
-		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, tube), 302)
+		url.WriteString(tube)
+		http.Redirect(w, r, url.String(), 302)
 	case "moveJobsTo":
 		destTube := tube
 		if r.URL.Query().Get("destTube") != "" {
 			destTube = r.URL.Query().Get("destTube")
 		}
 		moveJobsTo(server, tube, destTube, r.URL.Query().Get("state"), r.URL.Query().Get("destState"))
-		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, destTube), 302)
+		url.WriteString(destTube)
+		http.Redirect(w, r, url.String(), 302)
 	case "deleteAll":
 		deleteAll(server, tube)
-		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, tube), 302)
+		url.WriteString(tube)
+		http.Redirect(w, r, url.String(), 302)
 	case "deleteJob":
 		deleteJob(server, tube, r.URL.Query().Get("jobid"))
-		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, tube), 302)
+		url.WriteString(tube)
+		http.Redirect(w, r, url.String(), 302)
 	case "loadSample":
 		loadSample(server, tube, r.URL.Query().Get("key"))
-		http.Redirect(w, r, fmt.Sprintf("/tube?server=%s&tube=%s", server, tube), 302)
+		url.WriteString(tube)
+		http.Redirect(w, r, url.String(), 302)
 	}
 	io.WriteString(w, tplTube(currentTube(server, tube), server, tube))
 }

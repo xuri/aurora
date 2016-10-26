@@ -25,7 +25,7 @@ func tplSampleJobEdit(key string, alert string) string {
 					saveTo += fmt.Sprintf(`<div class="control-group">
                                 <div class="controls">
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" autocomplete="off" name="tubes[%s]" value="1" checked="checked">
+                                        <input type="checkbox" name="tubes[%s]" value="1" checked="checked">
                                         %s
                                     </label>
                                 </div>
@@ -57,7 +57,7 @@ func tplSampleJobEdit(key string, alert string) string {
 			tubeList += fmt.Sprintf(`<div class="control-group">
                                         <div class="controls">
                                             <label class="checkbox-inline">
-                                                <input type="checkbox" autocomplete="off" name="tubes[%s]" value="1" %s>
+                                                <input type="checkbox" name="tubes[%s]" value="1" %s>
                                                 %s
                                             </label>
                                         </div>
@@ -101,7 +101,7 @@ func tplSampleJobEdit(key string, alert string) string {
             </div>
         </fieldset>
         <div class="clearfix">
-            <label class="control-label" for="focusedInput"><b>Available on tubes *</b></label>
+            <label class="control-label"><b>Available on tubes *</b></label>
             <br/>
             %s
             %s

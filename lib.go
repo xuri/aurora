@@ -135,12 +135,16 @@ func pause(server string, tube string, count string) {
 		Conn: bstkConn,
 		Name: tube,
 	}
-	if count == "-1" {
-		bstkTube.Pause(3600 * time.Second) // Pause tube
-		bstkConn.Close()
-		return
+	switch count {
+	case "-1": // Pause tube
+		if selfConf.TubePauseSeconds == -1 {
+			bstkTube.Pause(DefaultTubePauseSeconds * time.Second)
+		} else {
+			bstkTube.Pause(time.Duration(selfConf.TubePauseSeconds) * time.Second)
+		}
+	case "0":
+		bstkTube.Pause(0 * time.Second) // Unpause tube
 	}
-	bstkTube.Pause(0 * time.Second) // Unpause tube
 	bstkConn.Close()
 }
 
@@ -251,7 +255,7 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 	var searchLimit int
 	var table = currentTubeJobsSummaryTable(server, tube)
 	if table == `` {
-		return `Tube "` + tube + `" not found or it is empty <br><br><a href="./server?server=` + server + `"> << back </a>`
+		return `Tube "` + tube + `" not found or it is empty <br><br><a href="./server?server=` + server + `"> &lt;&lt; back </a>`
 	}
 	searchLimit, err = strconv.Atoi(limit)
 	if err != nil {

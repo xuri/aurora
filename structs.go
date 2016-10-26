@@ -8,11 +8,12 @@ import (
 
 // Define the default configuration and HTML header template.
 const (
-	ConfigFileTemplate = "servers = []\r\nlisten = \"127.0.0.1:3000\"\r\nversion = 1.2\r\n[auth]\r\nenabled = false\r\npassword = \"password\"\r\nusername = \"admin\"\r\n\r\n[sample]\r\nstorage = \"{}\""
-	DefaultDelay       = 0
-	DefaultPriority    = 1024 // most urgent: 0, least urgent: 4294967295.
-	DefaultTTR         = 60   // 1 minute
-	TplHead            = `<head>
+	ConfigFileTemplate      = "servers = []\r\nlisten = \"127.0.0.1:3000\"\r\nversion = 1.3\r\n[auth]\r\nenabled = false\r\npassword = \"password\"\r\nusername = \"admin\"\r\n\r\n[sample]\r\nstorage = \"{}\""
+	DefaultDelay            = 0
+	DefaultPriority         = 1024 // most urgent: 0, least urgent: 4294967295.
+	DefaultTTR              = 60   // 1 minute
+	DefaultTubePauseSeconds = 3600
+	TplHead                 = `<head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <!--[if IE]>
@@ -60,7 +61,7 @@ const (
         </div>
     </noscript>`
 	UpdateURL = `https://api.github.com/repos/Luxurioust/aurora/tags`
-	Version   = 1.2
+	Version   = 1.3
 )
 
 // Define server and tube stats fields.
@@ -110,7 +111,7 @@ var (
 		map[string]string{"current-jobs-delayed": "the number of delayed jobs"},
 		map[string]string{"current-jobs-ready": "the number of jobs in the ready queue"},
 		map[string]string{"current-jobs-reserved": "the number of jobs reserved by all clients"},
-		map[string]string{"current-jobs-urgent": "the number of ready jobs with priority < 1024"},
+		map[string]string{"current-jobs-urgent": "the number of ready jobs with priority &lt; 1024"},
 		map[string]string{"current-producers": "the number of open connections that have each issued at least one put command"},
 		map[string]string{"current-tubes": "the number of currently-existing tubes"},
 		map[string]string{"current-waiting": "the number of open connections that have issued a reserve command but not yet received a response"},
@@ -131,7 +132,7 @@ var (
 	}
 	// Tube filter columns.
 	tubeStatFields = []map[string]string{
-		map[string]string{"current-jobs-urgent": "number of ready jobs with priority < 1024 in this tube"},
+		map[string]string{"current-jobs-urgent": "number of ready jobs with priority &lt; 1024 in this tube"},
 		map[string]string{"current-jobs-ready": "number of jobs in the ready queue in this tube"},
 		map[string]string{"current-jobs-reserved": "number of jobs reserved by all clients in this tube"},
 		map[string]string{"current-jobs-delayed": "number of delayed jobs in this tube"},

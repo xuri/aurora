@@ -26,7 +26,13 @@ func readCookies(r *http.Request) {
 	} else {
 		filters = []string{"current-connections", "current-jobs-buried", "current-jobs-delayed", "current-jobs-ready", "current-jobs-reserved", "current-jobs-urgent", "current-tubes"}
 	}
-	selfConf.Servers = append(selfConf.Servers, servers...)
+	for _, v := range servers {
+		_, err := url.ParseRequestURI(v)
+		if err != nil {
+			continue
+		}
+		selfConf.Servers = append(selfConf.Servers, v)
+	}
 	// Read Tube Filter in cookies
 	tubeFilter, err := r.Cookie("tubefilter")
 	if err == nil {
@@ -46,7 +52,6 @@ func readCookies(r *http.Request) {
 	selfConf.Servers = removeArrayDuplicates(removeArrayEmpty(selfConf.Servers))
 	selfConf.Filter = filters
 	selfConf.TubeFilters = tubeFilters
-	selfConf.TubePauseSeconds = readIntCookie(r, `tubePauseSeconds`, 3600)
 	selfConf.IsDisabledJSONDecode = readIntCookie(r, `isDisabledJsonDecode`, 0)
 	selfConf.IsDisabledUnserialization = readIntCookie(r, `isDisabledUnserialization`, 0)
 	selfConf.IsDisabledJobDataHighlight = readIntCookie(r, `isDisabledJobDataHighlight`, 0)

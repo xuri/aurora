@@ -208,7 +208,7 @@ func randToken() string {
 
 // setHeader provide common method set HTTP header response.
 func setHeader(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Server", "Go WebServer")
+	w.Header().Set("Server", "WebServer")
 	w.Header().Set("Content-Type", "text/html")
 	w.Header().Set("Cache-Control", "no-cache, private, max-age=0")
 	w.Header().Set("Expires", time.Unix(0, 0).Format(http.TimeFormat))

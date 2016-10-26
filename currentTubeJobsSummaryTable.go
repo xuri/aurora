@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"bytes"
 
 	"github.com/kr/beanstalk"
 )
@@ -9,17 +9,25 @@ import (
 // currentTubeJobsSummaryTable constructs a tube job table based on the given server and tube conf.
 func currentTubeJobsSummaryTable(server string, tube string) string {
 	var err error
-	var th, tr string
+	var th, tr, td, template bytes.Buffer
 	var bstkConn *beanstalk.Conn
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		for _, v := range selfConf.TubeFilters {
-			th += fmt.Sprintf(`<th name="%s">%s</th>`, v, v)
+			th.WriteString(`<th>`)
+			th.WriteString(v)
+			th.WriteString(`</th>`)
 		}
-		return fmt.Sprintf(`<section id="summaryTable"> <div class="row"> <div class="col-sm-12"> <table class="table table-striped table-hover"> <thead> <tr> <th>name</th>%s</tr> </thead> <tbody> </tbody> </table> </div> </div> </section>`, th)
+		buf := bytes.Buffer{}
+		buf.WriteString(`<section id="summaryTable"><div class="row"><div class="col-sm-12"><table class="table table-striped table-hover"><thead><tr><th>name</th>`)
+		buf.WriteString(th.String())
+		buf.WriteString(`</tr></thead><tbody></tbody></table></div></div></section>`)
+		return buf.String()
 	}
 	tubes, _ := bstkConn.ListTubes()
 	for _, v := range selfConf.TubeFilters {
-		th += fmt.Sprintf(`<th name="%s">%s</th>`, v, v)
+		th.WriteString(`<th>`)
+		th.WriteString(v)
+		th.WriteString(`</th>`)
 	}
 	for _, v := range tubes {
 		if v != tube {
@@ -30,16 +38,26 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 		if err != nil {
 			continue
 		}
-		var td string
 		for _, stats := range selfConf.TubeFilters {
-			td += fmt.Sprintf(`<td>%s</td>`, statsMap[stats])
+			td.WriteString(`<td>`)
+			td.WriteString(statsMap[stats])
+			td.WriteString(`</td>`)
 		}
-		tr += fmt.Sprintf(`<tr><td name="pause-time-left">%s</td>%s</tr>`, v, td)
+		tr.WriteString(`<tr><td>`)
+		tr.WriteString(v)
+		tr.WriteString(`</td>`)
+		tr.WriteString(td.String())
+		tr.WriteString(`</tr>`)
+		td.Reset()
 	}
 	bstkConn.Close()
-	template := fmt.Sprintf(`<section id="summaryTable"> <div class="row"> <div class="col-sm-12"> <table class="table table-striped table-hover"> <thead> <tr> <th>name</th>%s</tr> </thead> <tbody> %s </tbody> </table> </div> </div> </section>`, th, tr)
-	if tr == `` {
+	template.WriteString(`<section id="summaryTable"><div class="row"><div class="col-sm-12"><table class="table table-striped table-hover"><thead><tr><th>name</th>`)
+	template.WriteString(th.String())
+	template.WriteString(`</tr></thead><tbody> `)
+	template.WriteString(tr.String())
+	template.WriteString(`</tbody></table></div></div></section>`)
+	if tr.String() == `` {
 		return ``
 	}
-	return template
+	return template.String()
 }
