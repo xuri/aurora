@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -28,7 +29,8 @@ func readCookies(r *http.Request) {
 	}
 	for _, v := range servers {
 		_, err := url.ParseRequestURI(v)
-		if err != nil {
+		// Server address should be a valid URL or dotted decimal IPv4 or IPv6 form.
+		if err != nil && net.ParseIP(strings.Split(v, `:`)[0]) == nil {
 			continue
 		}
 		selfConf.Servers = append(selfConf.Servers, v)
