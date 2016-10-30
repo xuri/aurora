@@ -349,7 +349,7 @@ $(document).ready(
 
             function addSampleJob() {
                 if (!$('#addsamplename').val() || $('input[name^=tube]:checked').length < 1) {
-                    $('#sampleSaveAlert span').text('Required fields are marked *');
+                    $('#sampleSaveAlert span').html("<strong>Error!</strong> Required fields are marked *");
                     $('#sampleSaveAlert').fadeIn('fast');
                     return;
                 }

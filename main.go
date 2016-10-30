@@ -44,7 +44,11 @@ func main() {
 	http.HandleFunc("/sample", basicAuth(handlerSample))
 
 	go func() {
-		http.ListenAndServe(pubConf.Listen, nil)
+		err = http.ListenAndServe(pubConf.Listen, nil)
+		if err != nil {
+			fmt.Println("Cant start server:", err)
+			os.Exit(1)
+		}
 	}()
 
 	openPage()

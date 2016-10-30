@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"html"
 	"io"
 	"io/ioutil"
@@ -225,14 +224,14 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 	var key = randToken()
 	var name, body string
 	var tubes []string
-	alert := `<div class="alert alert-error">
+	alert := `<div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">×</button>
                     <span> Required fields are not set</span>
                 </div>`
 
 	err = readConf()
 	if err != nil {
-		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-error">
+		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">×</button>
                     <span> Read config error</span>
                 </div>`), server))
@@ -258,7 +257,7 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 	}
 
 	if checkSampleJobs(name) {
-		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-error">
+		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">×</button>
                     <span> You already have a job with this name</span>
                 </div>`), server))
@@ -272,7 +271,7 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 	})
 	err = saveSample()
 	if err != nil {
-		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-error">
+		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert">×</button>
                     <span> Save sample job error</span>
                 </div>`), server))
@@ -290,59 +289,43 @@ func editSample(server string, f url.Values, key string, w http.ResponseWriter, 
 // getSampleJobList render a table of sample job.
 func getSampleJobList() string {
 	if len(sampleJobs.Jobs) == 0 {
-		return "There are no saved jobs."
+		return `<div class="clearfix"><div class="pull-left">There are no saved jobs.</div><div class="pull-right"><a href="?action=newSample" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"></i> Add job to samples</a></div></div>`
 	}
-	var tr string
+	var tr, td, serverList, buf bytes.Buffer
 	for _, j := range sampleJobs.Jobs {
-		var td string
 		for _, v := range j.Tubes {
-			var serverList string
 			for _, s := range selfConf.Servers {
-				serverList += fmt.Sprintf(`<li><a href="./tube?server=%s&tube=%s&action=loadSample&key=%s&redirect=%s">%s</a></li>`, s, v, j.Key, url.QueryEscape(`tube?action=manageSamples`), s)
+				serverList.WriteString(`<li><a href="./tube?server=`)
+				serverList.WriteString(s)
+				serverList.WriteString(`&tube=`)
+				serverList.WriteString(`&action=loadSample&key=`)
+				serverList.WriteString(j.Key)
+				serverList.WriteString(`&redirect=`)
+				serverList.WriteString(url.QueryEscape(`tube?action=manageSamples`))
+				serverList.WriteString(`">`)
+				serverList.WriteString(s)
+				serverList.WriteString(`</a></li>`)
 			}
-			td += fmt.Sprintf(` <div class="btn-group">
-                                        <a class="btn btn-default  btn-sm" href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-forward"></i> %s</a>
-                                        <button class="btn btn-default  btn-sm dropdown-toggle" data-toggle="dropdown">
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            %s
-                                        </ul>
-                                    </div>`, html.EscapeString(v), serverList)
+			td.WriteString(` <div class="btn-group"><a class="btn btn-default btn-sm" href="#" data-toggle="dropdown"><i class="glyphicon glyphicon-forward"></i> `)
+			td.WriteString(html.EscapeString(v))
+			td.WriteString(`</a><button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu">`)
+			td.WriteString(serverList.String())
+			td.WriteString(`</ul></div>`)
 		}
-		tr += fmt.Sprintf(`<tr>
-                    <td style="line-height: 25px !important;"><a
-                                href="?action=editSample&key=%s">%s</a></td>
-                    <td>
-                        %s
-                    </td>
-                    <td>
-                        <div class="pull-right">
-                            <a class="btn btn-default btn-sm" href="?action=editSample&key=%s"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
-                            <a class="btn btn-default btn-sm" href="?action=deleteSample&key=%s"><i class="glyphicon glyphicon-trash"></i> Delete</a>
-                        </div>
-                    </td>
-                </tr>`, j.Key, html.EscapeString(j.Name), td, j.Key, j.Key)
+		tr.WriteString(`<tr><td style="line-height: 25px !important;"><a href="?action=editSample&key=`)
+		tr.WriteString(j.Key)
+		tr.WriteString(`">`)
+		tr.WriteString(html.EscapeString(j.Name))
+		tr.WriteString(`</a></td><td>`)
+		tr.WriteString(td.String())
+		tr.WriteString(`</td><td><div class="pull-right"><a class="btn btn-default btn-sm" href="?action=editSample&key=`)
+		tr.WriteString(j.Key)
+		tr.WriteString(`"><i class="glyphicon glyphicon-pencil"></i> Edit</a> <a class="btn btn-default btn-sm" href="?action=deleteSample&key=`)
+		tr.WriteString(j.Key)
+		tr.WriteString(`"><i class="glyphicon glyphicon-trash"></i> Delete</a></div></td></tr>`)
 	}
-
-	return fmt.Sprintf(`<div class="clearfix">
-        <div class="pull-right">
-            <a href="?action=newSample" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"></i> Add job to samples</a>
-        </div>
-    </div>
-    <section id="summaryTable">
-        <table class="table table-striped table-hover">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Kick job to tubes</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-				%s
-            </tbody>
-        </table>
-    </section>
-`, tr)
+	buf.WriteString(`<div class="clearfix"><div class="pull-right"><a href="?action=newSample" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"></i> Add job to samples</a></div></div><section id="summaryTable"><table class="table table-striped table-hover"><thead><tr><th>Name</th><th>Kick job to tubes</th><th></th></tr></thead><tbody>`)
+	buf.WriteString(tr.String())
+	buf.WriteString(`</tbody></table></section>`)
+	return buf.String()
 }
