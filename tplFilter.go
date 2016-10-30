@@ -1,13 +1,11 @@
 package main
 
-import (
-	"bytes"
-	"fmt"
-)
+import "bytes"
 
 // tplServerFilterStatsGroups render server filter stats groups checkbox.
 func tplServerFilterStatsGroups() []string {
 	stats := []string{"", "", "", ""}
+	buf := bytes.Buffer{}
 	statsGroupsFilter := [][]map[string]string{binlogStatsGroups, cmdStatsGroups, currentStatsGroups, otherStatsGroups}
 	for k, statsGroups := range statsGroupsFilter {
 		for _, statsGroup := range statsGroups {
@@ -16,16 +14,17 @@ func tplServerFilterStatsGroups() []string {
 				if checkInSlice(selfConf.Filter, property) {
 					status = `checked`
 				}
-				stats[k] += fmt.Sprintf(`<div class="control-group">
-                 <div class="controls">
-                     <div class="checkbox">
-                         <label>
-                             <input type="checkbox" name="%s" %s>
-                             <b>%s</b>
-                             <br/>%s</label>
-                     </div>
-                 </div>
-             </div>`, property, status, property, description)
+				buf.Reset()
+				buf.WriteString(`<div class="control-group"><div class="controls"><div class="checkbox"><label><input type="checkbox" name="`)
+				buf.WriteString(property)
+				buf.WriteString(`" `)
+				buf.WriteString(status)
+				buf.WriteString(`><b>`)
+				buf.WriteString(property)
+				buf.WriteString(`</b><br/>`)
+				buf.WriteString(description)
+				buf.WriteString(`</label></div></div></div>`)
+				stats[k] += buf.String()
 			}
 		}
 	}
@@ -50,7 +49,7 @@ func tplServerFilter() string {
 
 // tplTubeFilter render a modal popup for select job stats of tube.
 func tplTubeFilter() string {
-	var currents, others string
+	var buf, currents, others bytes.Buffer
 	for k, current := range tubeStatFields {
 		if k > 7 {
 			continue
@@ -60,13 +59,15 @@ func tplTubeFilter() string {
 			if checkInSlice(selfConf.TubeFilters, property) {
 				status = `checked`
 			}
-			currents += fmt.Sprintf(`<div class="form-group">
-                    <div class="checkbox">
-                        <label class="checkbox">
-                            <input type="checkbox" name="%s" %s><b>%s</b>
-                            <br/>%s</label>
-                    </div>
-                </div>`, property, status, property, description)
+			currents.WriteString(`<div class="form-group"><div class="checkbox"><label class="checkbox"><input type="checkbox" name="`)
+			currents.WriteString(property)
+			currents.WriteString(`" `)
+			currents.WriteString(status)
+			currents.WriteString(`><b>`)
+			currents.WriteString(property)
+			currents.WriteString(`</b><br/>`)
+			currents.WriteString(description)
+			currents.WriteString(`</label></div></div>`)
 		}
 	}
 
@@ -79,45 +80,21 @@ func tplTubeFilter() string {
 			if checkInSlice(selfConf.TubeFilters, property) {
 				status = `checked`
 			}
-			others += fmt.Sprintf(`<div class="form-group">
-                    <div class="checkbox">
-                        <label class="checkbox">
-                            <input type="checkbox" name="%s" %s><b>%s</b>
-                            <br/>%s</label>
-                    </div>
-                </div>`, property, status, property, description)
+			others.WriteString(`<div class="form-group"><div class="checkbox"><label class="checkbox"><input type="checkbox" name="`)
+			others.WriteString(property)
+			others.WriteString(`" `)
+			others.WriteString(status)
+			others.WriteString(`><b>`)
+			others.WriteString(property)
+			others.WriteString(`</b><br/>`)
+			others.WriteString(description)
+			others.WriteString(`</label></div></div>`)
 		}
 	}
-
-	return fmt.Sprintf(`<div id="filter" data-cookie="tubefilter" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="filter-columns-label">Filter columns</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="tabbable">
-                                <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#current" data-toggle="tab">current</a></li>
-                                    <li><a href="#other" data-toggle="tab">other</a></li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="current">
-                                        %s
-                                    </div>
-                                    <div class="tab-pane" id="other">
-                                        %s
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>`, currents, others)
+	buf.WriteString(`<div id="filter" data-cookie="tubefilter" class="modal fade" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h4 class="modal-title" id="filter-columns-label">Filter columns</h4></div><div class="modal-body"><form><div class="tabbable"><ul class="nav nav-tabs"><li class="active"><a href="#current" data-toggle="tab">current</a></li><li><a href="#other" data-toggle="tab">other</a></li></ul><div class="tab-content"><div class="tab-pane active" id="current">`)
+	buf.WriteString(currents.String())
+	buf.WriteString(`</div><div class="tab-pane" id="other">`)
+	buf.WriteString(others.String())
+	buf.WriteString(`</div></div></div></form></div><div class="modal-footer"><button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Close</button></div></div></div></div>`)
+	return buf.String()
 }

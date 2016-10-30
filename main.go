@@ -34,11 +34,9 @@ func main() {
 
 	// handle static files include HTML, CSS and JavaScripts.
 	http.Handle("/", http.StripPrefix("/", http.FileServer(statikFS)))
-
 	http.HandleFunc("/public", basicAuth(handlerMain))
 	http.HandleFunc("/index", basicAuth(handlerServerList))
 	http.HandleFunc("/serversRemove", basicAuth(serversRemove))
-
 	http.HandleFunc("/server", basicAuth(handlerServer))
 	http.HandleFunc("/tube", basicAuth(handlerTube))
 	http.HandleFunc("/sample", basicAuth(handlerSample))

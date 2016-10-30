@@ -43,7 +43,7 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 		pauseTimeLeft.WriteString(`"><i class="glyphicon glyphicon-play"></i> Unpause tube</a>`)
 	}
 	bstkConn.Close()
-	buf.WriteString(`<section id="actionsRow"><b>Actions:</b>&nbsp;<a class="btn btn-default btn-sm" href="?server=`)
+	buf.WriteString(`<section id="actionsRow"><b>Actions:</b> &nbsp;<a class="btn btn-default btn-sm" href="?server=`)
 	buf.WriteString(server)
 	buf.WriteString(`&tube=`)
 	buf.WriteString(tube)
@@ -53,7 +53,7 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 	buf.WriteString(tube)
 	buf.WriteString(`&action=kick&count=10" title='To kick more jobs, edit the "count" parameter'><i class="glyphicon glyphicon-fast-forward"></i> Kick 10 job</a> `)
 	buf.WriteString(pauseTimeLeft.String())
-	buf.WriteString(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="btn-group"><a data-toggle="modal" class="btn btn-success btn-sm" href="#" id="addJob"><i class="glyphicon glyphicon-plus-sign glyphicon-white"></i> Add job</a><button class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu">`)
+	buf.WriteString(` &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <div class="btn-group"><a data-toggle="modal" class="btn btn-success btn-sm" href="#" id="addJob"><i class="glyphicon glyphicon-plus-sign glyphicon-white"></i> Add job</a><button class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu">`)
 	buf.WriteString(currentTubeJobsActionsRowSample(server, tube))
 	buf.WriteString(`</ul></div></section>`)
 	return buf.String()
