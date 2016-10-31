@@ -1,8 +1,6 @@
 package main
 
-import (
-	"bytes"
-)
+import "bytes"
 
 // tplSampleJobsManage render sample job manage list page.
 func tplSampleJobsManage(sampleList string, currentServer string) string {

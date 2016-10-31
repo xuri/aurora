@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -70,7 +71,7 @@ var (
 )
 
 func testSetup() {
-	time.Sleep(10 * time.Second) // Wait Beanstalk server ready.
+	time.Sleep(20 * time.Second) // Wait Beanstalk server ready.
 	selfDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		return
@@ -273,6 +274,46 @@ func TestCurrentTubeJobsActionsRow(t *testing.T) {
 	}
 
 	return
+}
+
+func TestMoveReadyJobsTo(t *testing.T) {
+	once.Do(testSetup)
+	moveReadyJobsTo(bstk, `default`, `aurora_test_1`, `ready`)
+}
+
+func TestSearchTube(t *testing.T) {
+	once.Do(testSetup)
+	searchTube(bstk, `default`, `not_int`, `ready`)
+	searchTube(bstk, `aurora_test_2`, `1`, `ready`)
+}
+
+func TestAddSample(t *testing.T) {
+	once.Do(testSetup)
+	var resp *http.Response
+	var err error
+
+	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addjob",
+		url.Values{"tubeName": {"default"}, "tubeData": {"test"}})
+	if err != nil {
+		t.Log(err)
+	}
+	resp.Body.Close()
+	time.Sleep(time.Second)
+	form := url.Values{}
+	form.Add(`name`, `sample_job_1`)
+	form.Add(`jobdata`, `sample_job_body`)
+	form.Add(`action`, `actionNewSample`)
+	form.Add(`tubes[default]`, `1`)
+	form.Add(`addsamplejobid`, `6`)
+	req, err := http.NewRequest("POST", server+`/sample?action=actionNewSample`, strings.NewReader(form.Encode()))
+	if err != nil {
+		t.Log(err)
+	}
+	var client = &http.Client{}
+	_, err = client.Do(req)
+	if err != nil {
+		t.Log(err)
+	}
 }
 
 func createFile(path string) {
