@@ -18,7 +18,7 @@ const (
 	bstk                     = "127.0.0.1:11300"
 	configFileWithSampleJobs = `servers = []
 listen = "127.0.0.1:3000"
-version = 1.3
+version = 1.2
 [auth]
   enabled = false
   password = "password"
@@ -100,28 +100,23 @@ func testSetup() {
 
 func TestIndex(t *testing.T) {
 	once.Do(testSetup)
-
 	var resp *http.Response
 	var err error
-
 	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addjob",
 		url.Values{"tubeName": {"aurora_test"}, "tubeData": {"test"}})
 	if err != nil {
 		t.Log(err)
 	}
-
 	resp, err = http.PostForm(server+"/tube?server=not_exist_server_addr&action=addjob",
 		url.Values{"tubeName": {"aurora_test"}, "tubeData": {"test"}})
 	if err != nil {
 		t.Log(err)
 	}
-
 	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
 		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {"test_sample_1"}, "tubes[aurora_test]": {"1"}})
 	if err != nil {
 		t.Log(err)
 	}
-
 	for _, v := range urls {
 		req, err := http.NewRequest("GET", server+v, nil)
 		if err != nil {
@@ -135,14 +130,12 @@ func TestIndex(t *testing.T) {
 			t.Log(err)
 		}
 	}
-
 	resp, err = http.PostForm(server+"/server?server="+bstk+"&action=clearTubes",
 		url.Values{"default": {"1"}})
 	if err != nil {
 		t.Log(err)
 	}
 	defer resp.Body.Close()
-
 	return
 }
 
@@ -152,7 +145,6 @@ func TestCookie(t *testing.T) {
 	var req *http.Request
 	var cookie http.Cookie
 	var client = &http.Client{}
-
 	req, err = http.NewRequest("GET", server+urls[1], nil)
 	if err != nil {
 		t.Log(err)
@@ -164,7 +156,6 @@ func TestCookie(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-
 	req, err = http.NewRequest("GET", server+urls[1], nil)
 	if err != nil {
 		t.Log(err)
@@ -176,7 +167,6 @@ func TestCookie(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-
 	req, err = http.NewRequest("GET", server+urls[1], nil)
 	if err != nil {
 		t.Log(err)
@@ -188,7 +178,6 @@ func TestCookie(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-
 	// Test readIntCookie
 	req, err = http.NewRequest("GET", server+urls[1], nil)
 	if err != nil {
@@ -201,7 +190,6 @@ func TestCookie(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-
 	// Test removeServerInCookie
 	req, err = http.NewRequest("GET", server+urls[4], nil)
 	if err != nil {
@@ -214,7 +202,6 @@ func TestCookie(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-
 	req, err = http.NewRequest("GET", server+urls[14], nil)
 	if err != nil {
 		t.Log(err)
@@ -226,18 +213,15 @@ func TestCookie(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-
 	return
 }
 
 func TestCurrentTubeJobsActionsRow(t *testing.T) {
 	once.Do(testSetup)
-
 	var err error
 	var req *http.Request
 	var cookie http.Cookie
 	var client = &http.Client{}
-
 	selfDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		return
@@ -246,9 +230,7 @@ func TestCurrentTubeJobsActionsRow(t *testing.T) {
 	os.Remove(selfConf)
 	createFile(selfConf)
 	writeFile(selfConf, configFileWithSampleJobs)
-
 	readConf()
-
 	req, err = http.NewRequest("GET", server+urls[6], nil)
 	if err != nil {
 		t.Log(err)
@@ -260,7 +242,6 @@ func TestCurrentTubeJobsActionsRow(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-
 	req, err = http.NewRequest("GET", server+urls[6], nil)
 	if err != nil {
 		t.Log(err)
@@ -272,7 +253,6 @@ func TestCurrentTubeJobsActionsRow(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-
 	return
 }
 
@@ -291,7 +271,6 @@ func TestAddSample(t *testing.T) {
 	once.Do(testSetup)
 	var resp *http.Response
 	var err error
-
 	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addjob",
 		url.Values{"tubeName": {"default"}, "tubeData": {"test"}})
 	if err != nil {
@@ -314,6 +293,43 @@ func TestAddSample(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
+}
+
+func TestPrettyJSON(t *testing.T) {
+	once.Do(testSetup)
+	prettyJSON([]byte(`{}`))
+}
+
+func TestBase64Decode(t *testing.T) {
+	once.Do(testSetup)
+	base64Decode(`dGVzdA==`)
+	base64Decode(`test`)
+}
+
+func TestRemoveServerInConfig(t *testing.T) {
+	once.Do(testSetup)
+	removeServerInConfig(bstk)
+}
+
+func TestCheckUpdate(t *testing.T) {
+	once.Do(testSetup)
+	checkUpdate()
+}
+
+func TestSaveSample(t *testing.T) {
+	once.Do(testSetup)
+	saveSample()
+}
+
+func TestAddSampleTube(t *testing.T) {
+	once.Do(testSetup)
+	addSampleTube(`aurora_test_2`, `test`)
+}
+
+func TestDeleteSamples(t *testing.T) {
+	once.Do(testSetup)
+	deleteSamples(``)
+	deleteSamples(`test`)
 }
 
 func createFile(path string) {
