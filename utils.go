@@ -158,11 +158,11 @@ func parseFlags() {
 	}
 	if *verPtr {
 		fmt.Printf("aurora version: %.1f\r\n", Version)
-		os.Exit(1)
+		os.Exit(0)
 	}
 	if *helpPtr {
 		fmt.Printf("aurora version: %.1f\r\nCopyright (c) 2016 Ri Xu https://xuri.me \r\n\r\nUsage: aurora [OPTIONS] [cmd [arg ...]]\n  -c <filename>   Use config file. (default: aurora.toml)\r\n  -h \t\t  Output this help and exit.\r\n  -v \t\t  Output version and exit.\r\n", Version)
-		os.Exit(1)
+		os.Exit(0)
 	}
 }
 
