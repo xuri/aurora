@@ -277,18 +277,17 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 	// Get ready stat job total
 	statsFilter := []string{"ready", "delayed", "buried"}
 	jobsFilter := []string{"current-jobs-ready", "current-jobs-delayed", "current-jobs-buried"}
+	peek := []func() (id uint64, body []byte, err error){bstkTube.PeekReady, bstkTube.PeekDelayed, bstkTube.PeekBuried}
 	for k, v := range statsFilter {
 		s, err := strconv.Atoi(tubeStat[jobsFilter[k]])
 		if err != nil {
-			bstkConn.Close()
-			return table
+			continue
 		}
 		b := uint64(0)
 		if s > 0 {
-			b, _, err = bstkTube.PeekReady()
+			b, _, err = peek[k]()
 			if err != nil {
-				bstkConn.Close()
-				return table
+				continue
 			}
 			result = searchTubeInStats(tube, searchLimit, searchStr, bstkConn, result, b, s, v)
 		}

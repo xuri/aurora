@@ -19,7 +19,6 @@ aurora is a web-based Beanstalk queue server console written in Go and works on 
 - Simple installation (distributed as a single binary)
 - Zero dependencies
 - Common list of servers in config for all users + optional Basic Auth
-- Each user can add its own personal Beanstalk server
 - Full list of available tubes
 - Complete statistics about jobs in tubes
 - Realtime auto-update with highlighting of changed values
@@ -40,15 +39,20 @@ operating systems are available.
 
 Contributions are welcome! Open a pull request to fix a bug, or open an issue to discuss a new feature or change.
 
+## Todo
+
+- Filter the tubes by name in the overview
+- Logout support when Basic Auth has been enabled
+- Custom job content hightlight display theme support
+- Cookies control, each user can add its own personal Beanstalk server
+- Statistics overview, display all statistics in an overview page from the server
+
 ## Credits
 
-Client for beanstalk use [kr/beanstalk](https://github.com/kr/beanstalk)
-
-TOML parser use [BurntSushi/toml](https://github.com/BurntSushi/toml)
-
-Web UI originally by [ptrofimov/beanstalk_console](https://github.com/ptrofimov/beanstalk_console)
-
-The logo is originally by [Ali Irawan](http://www.solusiteknologi.co.id/using-supervisord-beanstalkd-laravel/). This artwork is an adaptation.
+- Client for beanstalk use [kr/beanstalk](https://github.com/kr/beanstalk)
+- TOML parser use [BurntSushi/toml](https://github.com/BurntSushi/toml)
+- Web UI originally by [ptrofimov/beanstalk_console](https://github.com/ptrofimov/beanstalk_console)
+- The logo is originally by [Ali Irawan](http://www.solusiteknologi.co.id/using-supervisord-beanstalkd-laravel/). This artwork is an adaptation.
 
 ## Licenses
 

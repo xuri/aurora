@@ -8,7 +8,7 @@ import (
 
 // Define the default configuration and HTML header template.
 const (
-	ConfigFileTemplate      = "servers = []\r\nlisten = \"127.0.0.1:3000\"\r\nversion = 1.4\r\n[auth]\r\nenabled = false\r\npassword = \"password\"\r\nusername = \"admin\"\r\n\r\n[sample]\r\nstorage = \"{}\""
+	ConfigFileTemplate      = "servers = []\r\nlisten = \"127.0.0.1:3000\"\r\nversion = 1.5\r\n\r\n[auth]\r\nenabled = false\r\npassword = \"password\"\r\nusername = \"admin\"\r\n\r\n[sample]\r\nstorage = \"{}\""
 	DefaultDelay            = 0
 	DefaultPriority         = 1024 // most urgent: 0, least urgent: 4294967295.
 	DefaultTTR              = 60   // 1 minute
@@ -61,7 +61,7 @@ const (
         </div>
     </noscript>`
 	UpdateURL = `https://api.github.com/repos/Luxurioust/aurora/tags`
-	Version   = 1.4
+	Version   = 1.5
 )
 
 // Define server and tube stats fields.
