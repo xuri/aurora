@@ -40,7 +40,7 @@ func main() {
 	http.HandleFunc("/server", basicAuth(handlerServer))
 	http.HandleFunc("/tube", basicAuth(handlerTube))
 	http.HandleFunc("/sample", basicAuth(handlerSample))
-
+	http.HandleFunc("/statistics", basicAuth(handlerStatistics))
 	go func() {
 		err = http.ListenAndServe(pubConf.Listen, nil)
 		if err != nil {
@@ -48,7 +48,7 @@ func main() {
 			os.Exit(1)
 		}
 	}()
-
+	go statistic()
 	openPage()
 	handleSignals()
 }

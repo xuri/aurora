@@ -18,15 +18,15 @@ const (
 	bstk                     = "127.0.0.1:11300"
 	configFileWithSampleJobs = `servers = []
 listen = "127.0.0.1:3000"
-version = 1.2
+version = 1.4
+
 [auth]
   enabled = false
   password = "password"
   username = "admin"
 
 [sample]
-  storage = "{\"jobs\":[{\"key\":\"97ec882fd75855dfa1b4bd00d4a367d4\",\"name\":\"sample_1\",\"tubes\":[\"default\"],\"data\":\"aurora_test_sample_job\"},{\"key\":\"d44782912092260cec11275b73f78434\",\"name\":\"sample_2\",\"tubes\":[\"aurora_test\"],\"data\":\"aurora_test_sample_job\"},{\"key\":\"5def7a2daf5e0292bed42db9f0017c94\",\"name\":\"sample_3\",\"tubes\":[\"default\",\"aurora_test\"],\"data\":\"aurora_test_sample_job\"}],\"tubes\":[{\"name\":\"default\",\"keys\":[\"97ec882fd75855dfa1b4bd00d4a367d4\",\"5def7a2daf5e0292bed42db9f0017c94\"]},{\"name\":\"aurora_test\",\"keys\":[\"d44782912092260cec11275b73f78434\",\"5def7a2daf5e0292bed42db9f0017c94\"]}]}"
-`
+  storage = "{\"jobs\":[{\"key\":\"97ec882fd75855dfa1b4bd00d4a367d4\",\"name\":\"sample_1\",\"tubes\":[\"default\"],\"data\":\"aurora_test_sample_job\"},{\"key\":\"d44782912092260cec11275b73f78434\",\"name\":\"sample_2\",\"tubes\":[\"aurora_test\"],\"data\":\"aurora_test_sample_job\"},{\"key\":\"5def7a2daf5e0292bed42db9f0017c94\",\"name\":\"sample_3\",\"tubes\":[\"default\",\"aurora_test\"],\"data\":\"aurora_test_sample_job\"}],\"tubes\":[{\"name\":\"default\",\"keys\":[\"97ec882fd75855dfa1b4bd00d4a367d4\",\"5def7a2daf5e0292bed42db9f0017c94\"]},{\"name\":\"aurora_test\",\"keys\":[\"d44782912092260cec11275b73f78434\",\"5def7a2daf5e0292bed42db9f0017c94\"]}]}"`
 )
 
 var (
@@ -330,6 +330,7 @@ func TestDeleteSamples(t *testing.T) {
 	once.Do(testSetup)
 	deleteSamples(``)
 	deleteSamples(`test`)
+	t.SkipNow()
 }
 
 func createFile(path string) {

@@ -224,17 +224,10 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 	var key = randToken()
 	var name, body string
 	var tubes []string
-	alert := `<div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <span> Required fields are not set</span>
-                </div>`
-
+	alert := `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Required fields are not set</span></div>`
 	err = readConf()
 	if err != nil {
-		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <span> Read config error</span>
-                </div>`), server))
+		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Read config error</span></div>`), server))
 		return
 	}
 	for k, v := range f {
@@ -257,10 +250,7 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 	}
 
 	if checkSampleJobs(name) {
-		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <span> You already have a job with this name</span>
-                </div>`), server))
+		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> You already have a job with this name</span></div>`), server))
 		return
 	}
 	sampleJobs.Jobs = append(sampleJobs.Jobs, SampleJob{
@@ -271,10 +261,7 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 	})
 	err = saveSample()
 	if err != nil {
-		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <span> Save sample job error</span>
-                </div>`), server))
+		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Save sample job error</span></div>`), server))
 		return
 	}
 	http.Redirect(w, r, "/sample?action=manageSamples", 301)

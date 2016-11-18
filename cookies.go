@@ -33,6 +33,11 @@ func readCookies(r *http.Request) {
 		if err != nil && net.ParseIP(strings.Split(v, `:`)[0]) == nil {
 			continue
 		}
+		// Server port should be an integer.
+		_, err = strconv.Atoi(strings.Split(v, `:`)[1])
+		if err != nil {
+			continue
+		}
 		selfConf.Servers = append(selfConf.Servers, v)
 	}
 	// Read Tube Filter in cookies

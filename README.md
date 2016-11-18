@@ -25,6 +25,7 @@ aurora is a web-based Beanstalk queue server console written in Go and works on 
 - You can view jobs in ready/delayed/buried states in every tube
 - You can add/kick/delete jobs in every tube
 - You can select multiple tubes by regExp and clear them
+- You can set statistics overview graph for every tube
 - You can move jobs between tubes
 - Ability to Pause tubes
 - Search jobs data field
@@ -32,8 +33,7 @@ aurora is a web-based Beanstalk queue server console written in Go and works on 
 
 ## Installation
 
-[Precompiled binaries](https://github.com/Luxurioust/aurora/releases) for supported 
-operating systems are available.
+[Precompiled binaries](https://github.com/Luxurioust/aurora/releases) for supported operating systems are available.
 
 ## Contributing
 
@@ -45,7 +45,6 @@ Contributions are welcome! Open a pull request to fix a bug, or open an issue to
 - Logout support when Basic Auth has been enabled
 - Custom job content hightlight display theme support
 - Cookies control, each user can add its own personal Beanstalk server
-- Statistics overview, display all statistics in an overview page from the server
 
 ## Credits
 

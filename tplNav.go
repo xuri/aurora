@@ -180,18 +180,17 @@ func dropEditSettings() string {
 	if selfConf.IsEnabledBase64Decode != 0 {
 		isEnabledBase64Decode = `checked="checked"`
 	}
-	buf.WriteString(`<div id="settings" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settings-label" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h4 class="modal-title" id="settings-label">Settings</h4></div><div class="modal-body"><fieldset><div class="form-group"><label for="tubePauseSeconds"><b>Tube pause seconds</b> (<i>-1</i> means the default: <i>3600</i>, <i>0</i> is reserved for
-                            un-pause)</label><input class="form-control focused" id="tubePauseSeconds" type="text" value="`)
+	buf.WriteString(`<div id="settings" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settings-label" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h4 class="modal-title" id="settings-label">Settings</h4></div><div class="modal-body"><fieldset><div class="form-group"><label for="tubePauseSeconds"><b>Tube pause seconds</b> (<i>-1</i> means the default: <i>3600</i>, <i>0</i> is reserved for un-pause)</label><input class="form-control focused" id="tubePauseSeconds" type="number" value="`)
 	buf.WriteString(strconv.Itoa(selfConf.TubePauseSeconds))
-	buf.WriteString(`"></div><div class="form-group"><label><b>Auto-refresh interval in milliseconds</b> (Default: <i>500</i>)</label><input class="form-control focused" id="autoRefreshTimeoutMs" type="text" value="`)
+	buf.WriteString(`"></div><div class="form-group"><label><b>Auto-refresh interval in milliseconds</b> (Default: <i>500</i>)</label><input class="form-control focused" id="autoRefreshTimeoutMs" type="number" value="`)
 	buf.WriteString(strconv.Itoa(selfConf.AutoRefreshTimeoutMs))
-	buf.WriteString(`"></div><div class="form-group"><label><b>Search result limits</b> (Default: <i>25</i>)</label><input class="form-control focused" id="searchResultLimit" type="text" value="`)
+	buf.WriteString(`"></div><div class="form-group"><label><b>Search result limits</b> (Default: <i>25</i>)</label><input class="form-control focused" id="searchResultLimit" type="number" value="`)
 	buf.WriteString(strconv.Itoa(selfConf.SearchResultLimit))
 	buf.WriteString(`"></div><div class="form-group"><label><b>Preferred way to deal with job data</b></label><div class="checkbox"><label><input type="checkbox" id="isDisabledJsonDecode" value="1" `)
 	buf.WriteString(isDisabledJSONDecode)
-	buf.WriteString(`>before display: json_decode()</label></div><div class="checkbox"><label><input type="checkbox" id="isEnabledBase64Decode" value="1" `)
+	buf.WriteString(`>before display: JSON decode</label></div><div class="checkbox"><label><input type="checkbox" id="isEnabledBase64Decode" value="1" `)
 	buf.WriteString(isEnabledBase64Decode)
-	buf.WriteString(`>before display: base64_decode()</label></div><div class="checkbox"><label><input type="checkbox" id="isDisabledJobDataHighlight" value="1" `)
+	buf.WriteString(`>before display: Base64 decode</label></div><div class="checkbox"><label><input type="checkbox" id="isDisabledJobDataHighlight" value="1" `)
 	buf.WriteString(isDisabledJobDataHighlight)
 	buf.WriteString(`>after display: enable highlight</label></div></div></fieldset></div><div class="modal-footer"><button class="btn" data-dismiss="modal" aria-hidden="true">Close</button></div></div></div></div>`)
 	return buf.String()

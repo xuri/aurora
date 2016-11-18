@@ -120,7 +120,7 @@ func handleRedirect(w http.ResponseWriter, r *http.Request, server string, tube 
 	io.WriteString(w, tplTube(currentTube(server, tube), server, tube))
 }
 
-// handlerSample handle request on router /sample
+// handlerSample handle request on router: /sample
 func handlerSample(w http.ResponseWriter, r *http.Request) {
 	setHeader(w, r)
 	readCookies(r)
@@ -149,4 +149,26 @@ func handlerSample(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/sample?action=manageSamples", 301)
 		return
 	}
+}
+
+// handlerStatistics handle request on router: /statistics
+func handlerStatistics(w http.ResponseWriter, r *http.Request) {
+	setHeader(w, r)
+	readCookies(r)
+	action := r.URL.Query().Get("action")
+	server := r.URL.Query().Get("server")
+	tube := r.URL.Query().Get("tube")
+	switch action {
+	case "preference":
+		io.WriteString(w, tplStatisticSetting(tplStatisticEdit("")))
+		return
+	case "save":
+		r.ParseForm()
+		statisticPreferenceSave(r.Form, w, r)
+		return
+	case "reloader":
+		io.WriteString(w, statisticWaitress(server, tube))
+		return
+	}
+	io.WriteString(w, tplStatistic(server, tube))
 }

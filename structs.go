@@ -1,9 +1,11 @@
 package main
 
 import (
+	"container/list"
 	"io"
 	"net/http"
 	"os"
+	"sync"
 )
 
 // Define the default configuration and HTML header template.
@@ -70,10 +72,16 @@ var (
 	// Stdout is the io.Writer to which executed commands write standard output.
 	Stdout io.Writer = os.Stdout
 	// Stderr is the io.Writer to which executed commands write standard error.
-	Stderr     io.Writer = os.Stderr
-	pubConf    PubConfig
-	selfConf   SelfConf
-	sampleJobs SampleJobs
+	Stderr               io.Writer = os.Stderr
+	pubConf              PubConfig
+	selfConf             SelfConf
+	sampleJobs           SampleJobs
+	statisticsDataServer = make(map[string]map[string]map[string]*list.List)
+	statisticsData       = StatisticsData{
+		new(sync.RWMutex),
+		statisticsDataServer,
+	}
+	notify     = make(chan bool, 1)
 	updateInfo = "uncheck"
 	// Server filter columns.
 	binlogStatsGroups = []map[string]string{
@@ -146,6 +154,12 @@ var (
 		map[string]string{"pause-time-left": "number of seconds until the tube is un-paused"},
 		map[string]string{"total-jobs": "cumulative count of jobs created in this tube in the current beanstalkd process"},
 	}
+	statisticsFields = []map[string]string{
+		map[string]string{"ready": "current-jobs-ready"},
+		map[string]string{"delayed": "current-jobs-delayed"},
+		map[string]string{"reserved": "current-jobs-reserved"},
+		map[string]string{"buried": "current-jobs-buried"},
+	}
 	jobStatsOrder = []string{"id", "tube", "state", "pri", "age", "delay", "ttr", "time-left", "file", "reserves", "timeouts", "releases", "buries", "kicks"}
 )
 
@@ -187,7 +201,13 @@ type SampleTube struct {
 	Keys []string `json:"keys"`
 }
 
-// SelfConf define fields storage in cookies.
+// StatisticsData define the data struct for storage statistics data.
+type StatisticsData struct {
+	*sync.RWMutex
+	Server map[string]map[string]map[string]*list.List
+}
+
+// SelfConf define fields storage in cookies and statistics parameter storage in RAM.
 type SelfConf struct {
 	Filter                     []string
 	Servers                    []string
@@ -200,6 +220,8 @@ type SelfConf struct {
 	IsEnabledBase64Decode      int
 	AutoRefreshTimeoutMs       int
 	SearchResultLimit          int
+	StatisticsCollection       int
+	StatisticsFrequency        int
 }
 
 // SearchResult define the search result of jobs in tube.

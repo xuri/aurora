@@ -17,6 +17,9 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 			th.WriteString(v)
 			th.WriteString(`</th>`)
 		}
+		if currentTubeStatisticCheck(server, tube) {
+			th.WriteString(`<th> </th>`)
+		}
 		buf := bytes.Buffer{}
 		buf.WriteString(`<section id="summaryTable"><div class="row"><div class="col-sm-12"><table class="table table-striped table-hover"><thead><tr><th>name</th>`)
 		buf.WriteString(th.String())
@@ -28,6 +31,9 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 		th.WriteString(`<th>`)
 		th.WriteString(v)
 		th.WriteString(`</th>`)
+	}
+	if currentTubeStatisticCheck(server, tube) {
+		th.WriteString(`<th> </th>`)
 	}
 	for _, v := range tubes {
 		if v != tube {
@@ -46,6 +52,13 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 		tr.WriteString(`<tr><td>`)
 		tr.WriteString(v)
 		tr.WriteString(`</td>`)
+		if currentTubeStatisticCheck(server, tube) {
+			td.WriteString(`<td><a class="btn btn-xs btn-default" title="Statistics overview" href="./statistics?server=`)
+			td.WriteString(server)
+			td.WriteString(`&tube=`)
+			td.WriteString(v)
+			td.WriteString(`"><span class="glyphicon glyphicon-stats"> </span></a></td>`)
+		}
 		tr.WriteString(td.String())
 		tr.WriteString(`</tr>`)
 		td.Reset()
@@ -60,4 +73,20 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 		return ``
 	}
 	return template.String()
+}
+
+// currentTubeStatisticCheck provide a method to confirm that the current tube statistics are available.
+func currentTubeStatisticCheck(server string, tube string) bool {
+	if selfConf.StatisticsCollection == 0 {
+		return false
+	}
+	s, ok := statisticsData.Server[server]
+	if !ok {
+		return false
+	}
+	_, ok = s[tube]
+	if !ok {
+		return false
+	}
+	return true
 }
