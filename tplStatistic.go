@@ -33,6 +33,6 @@ func tplStatistic(server string, tube string) string {
 	buf.WriteString(server)
 	buf.WriteString(`&tube=`)
 	buf.WriteString(tube)
-	buf.WriteString(`",function(data){var obj={};var seriesData=[];obj=jQuery.parseJSON(data);for(var prop in obj){seriesData.push({label:prop,data:$.map(obj[prop],function(i,j){return [[new Date(i[0],i[1],i[2],i[3],i[4],i[5]).getTime(),i[6]]];})});}var plot=$.plot($("#placeholder"),seriesData,options);plot.setData(seriesData);plot.draw();});}var updateInterval=1;$("#updateInterval").val(updateInterval).change(function(){var v=$(this).val();if(v&&!isNaN(+v)){updateInterval=+v;if(updateInterval<1){updateInterval=1}$(this).val(""+updateInterval)}});function update(){getRandomData();setTimeout(update,updateInterval*1000)};update();</script></body></html>`)
+	buf.WriteString(`",function(data){var obj={};var seriesData=[];obj=jQuery.parseJSON(data);for(var prop in obj){seriesData.push({label:prop,data:$.map(obj[prop],function(i,j){return [[new Date(Date.UTC(i[0],i[1]-1,i[2],i[3],i[4],i[5])).getTime(),i[6]]];})});}var plot=$.plot($("#placeholder"),seriesData,options);plot.setData(seriesData);plot.draw();});}var updateInterval=1;$("#updateInterval").val(updateInterval).change(function(){var v=$(this).val();if(v&&!isNaN(+v)){updateInterval=+v;if(updateInterval<1){updateInterval=1}$(this).val(""+updateInterval)}});function update(){getRandomData();setTimeout(update,updateInterval*1000)};update();</script></body></html>`)
 	return buf.String()
 }

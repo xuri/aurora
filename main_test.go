@@ -15,7 +15,7 @@ import (
 
 const (
 	server                   = "http://127.0.0.1:3000"
-	bstk                     = "127.0.0.1:11300"
+	bstk                     = bstk
 	configFileWithSampleJobs = `servers = []
 listen = "127.0.0.1:3000"
 version = 1.4
@@ -36,7 +36,7 @@ var (
 		"/public",                                                                                                                          // Server list
 		"/server?server=" + bstk,                                                                                                           // Server status
 		"/index?server=&action=reloader&tplMain=ajax&tplBlock=serversList",                                                                 // Reload server status
-		"/serversRemove?action=serversRemove&removeServer=" + "127.0.0.1:11300",                                                            // Remove server
+		"/serversRemove?action=serversRemove&removeServer=" + bstk,                                                                         // Remove server
 		"/server?server=" + bstk + "&action=reloader&tplMain=ajax&tplBlock=allTubes",                                                       // Reload tube status
 		"/tube?server=" + bstk + "&tube=default",                                                                                           // Tube status
 		"/tube?server=" + bstk + "&tube=default1",                                                                                          // Tube status with no exits tube
@@ -93,9 +93,11 @@ func testSetup() {
 	http.HandleFunc("/server", basicAuth(handlerServer))
 	http.HandleFunc("/tube", basicAuth(handlerTube))
 	http.HandleFunc("/sample", basicAuth(handlerSample))
+	http.HandleFunc("/statistics", basicAuth(handlerStatistics))
 	go func() {
 		http.ListenAndServe(pubConf.Listen, nil)
 	}()
+	go statistic()
 }
 
 func TestIndex(t *testing.T) {
@@ -324,12 +326,81 @@ func TestSaveSample(t *testing.T) {
 func TestAddSampleTube(t *testing.T) {
 	once.Do(testSetup)
 	addSampleTube(`aurora_test_2`, `test`)
+	getSampleJobList()
+	loadSample(bstk, `default`, `97ec882fd75855dfa1b4bd00d4a367d4`)
+	deleteSamples(`97ec882fd75855dfa1b4bd00d4a367d4`)
 }
 
 func TestDeleteSamples(t *testing.T) {
 	once.Do(testSetup)
 	deleteSamples(``)
 	deleteSamples(`test`)
+}
+
+func TestClearTubes(t *testing.T) {
+	once.Do(testSetup)
+	modalClearTubes("")
+}
+
+func TestRunCmd(t *testing.T) {
+	once.Do(testSetup)
+	err := runCmd(`date`)
+	if err != nil {
+		t.Log(err)
+	}
+}
+
+func TestStatistic(t *testing.T) {
+	once.Do(testSetup)
+	var resp *http.Response
+	var err error
+	var testURLs = []string{"/statistics?action=preference", "/statistics", "/statistics?action=reloader"}
+	resp, err = http.PostForm(server+"/statistics?action=save",
+		url.Values{"frequency": {"1"}, "collection": {"10"}, "tubes[" + bstk + ":default]": {"1"}})
+	if err != nil {
+		t.Log(err)
+	}
+	time.Sleep(10 * time.Second)
+	tplStatistic(bstk, "default")
+	statisticWaitress(bstk, "default")
+	tplStatisticEdit("")
+	tplStatisticSetting("")
+	for _, v := range testURLs {
+		req, err := http.NewRequest("GET", server+v, nil)
+		if err != nil {
+			t.Log(err)
+		}
+		cookie := http.Cookie{Name: "beansServers", Value: `127.0.0.1%3A11300%3B127.0.0.1%3A11300%3B127.0.0.1%3A11301%3B`}
+		req.AddCookie(&cookie)
+		var client = &http.Client{}
+		_, err = client.Do(req)
+		if err != nil {
+			t.Log(err)
+		}
+	}
+	currentTubeJobsSummaryTable(bstk, "default")
+	resp, err = http.PostForm(server+"/statistics?action=save",
+		url.Values{"frequency": {"-1"}, "collection": {"-1"}, "tubes[127.0.0.1:default]": {"1"}})
+	if err != nil {
+		t.Log(err)
+	}
+	time.Sleep(10 * time.Second)
+	for _, v := range testURLs {
+		req, err := http.NewRequest("GET", server+v, nil)
+		if err != nil {
+			t.Log(err)
+		}
+		cookie := http.Cookie{Name: "beansServers", Value: `127.0.0.1%3A11300%3B127.0.0.1%3A11300%3B127.0.0.1%3A11301%3B`}
+		req.AddCookie(&cookie)
+		var client = &http.Client{}
+		_, err = client.Do(req)
+		if err != nil {
+			t.Log(err)
+		}
+	}
+	defer resp.Body.Close()
+	statisticCashier("not_int", "", []string{})
+	statisticCashier("1", "not_int", []string{})
 	t.SkipNow()
 }
 

@@ -85,8 +85,5 @@ func currentTubeStatisticCheck(server string, tube string) bool {
 		return false
 	}
 	_, ok = s[tube]
-	if !ok {
-		return false
-	}
-	return true
+	return ok
 }
