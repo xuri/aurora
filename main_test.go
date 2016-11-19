@@ -119,6 +119,31 @@ func TestIndex(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
+	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {""}, "tubes[aurora_test]": {"1"}})
+	if err != nil {
+		t.Log(err)
+	}
+	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+		url.Values{"tube": {"default"}, "addsamplejobid": {"1"}, "addsamplename": {"sample_1"}, "tubes[aurora_test]": {"1"}})
+	if err != nil {
+		t.Log(err)
+	}
+	resp, err = http.PostForm(server+"/tube?server=not_exist_server_addr&action=addSample",
+		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {"sample_2"}, "tubes[default]": {"1"}})
+	if err != nil {
+		t.Log(err)
+	}
+	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {""}, "addsamplename": {"sample_2"}, "tubes[aurora_test]": {"1"}})
+	if err != nil {
+		t.Log(err)
+	}
+	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"not_int"}, "addsamplename": {"sample_2"}, "tubes[aurora_test]": {"1"}})
+	if err != nil {
+		t.Log(err)
+	}
 	for _, v := range urls {
 		req, err := http.NewRequest("GET", server+v, nil)
 		if err != nil {
@@ -305,7 +330,7 @@ func TestPrettyJSON(t *testing.T) {
 func TestBase64Decode(t *testing.T) {
 	once.Do(testSetup)
 	base64Decode(`dGVzdA==`)
-	base64Decode(`test`)
+	base64Decode(`test-%?s`)
 }
 
 func TestRemoveServerInConfig(t *testing.T) {
@@ -327,8 +352,38 @@ func TestAddSampleTube(t *testing.T) {
 	once.Do(testSetup)
 	addSampleTube(`aurora_test_2`, `test`)
 	getSampleJobList()
+	getSampleJobNameByKey(`97ec882fd75855dfa1b4bd00d4a367d4`)
+	loadSample(``, `default`, `97ec882fd75855dfa1b4bd00d4a367d4`)
 	loadSample(bstk, `default`, `97ec882fd75855dfa1b4bd00d4a367d4`)
 	deleteSamples(`97ec882fd75855dfa1b4bd00d4a367d4`)
+}
+
+func TestBasicAuth(t *testing.T) {
+	once.Do(testSetup)
+	var err error
+	var req *http.Request
+	var client = &http.Client{}
+	pubConf.Auth.Enabled = true
+	http.HandleFunc("/test", basicAuth(handlerMain))
+	req, err = http.NewRequest("GET", server+"/test", nil)
+	if err != nil {
+		t.Log(err)
+	}
+	client = &http.Client{}
+	_, err = client.Do(req)
+	if err != nil {
+		t.Log(err)
+	}
+	req, err = http.NewRequest("GET", server+"/test", nil)
+	if err != nil {
+		t.Log(err)
+	}
+	req.SetBasicAuth(`admin`, `password`)
+	client = &http.Client{}
+	_, err = client.Do(req)
+	if err != nil {
+		t.Log(err)
+	}
 }
 
 func TestDeleteSamples(t *testing.T) {

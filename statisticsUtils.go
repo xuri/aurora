@@ -100,7 +100,6 @@ func statistic() {
 			case <-notify:
 				break NOTIFY
 			case <-tick:
-				statisticsData.Lock()
 				for k, v := range statisticsData.Server {
 					for t := range v {
 						if selfConf.StatisticsCollection == 0 {
@@ -112,7 +111,6 @@ func statistic() {
 						}
 					}
 				}
-				statisticsData.Unlock()
 			}
 		}
 	}
@@ -141,6 +139,7 @@ func statisticAgent(server string, tube string) error {
 			if err != nil {
 				continue
 			}
+			statisticsData.Lock()
 			_, ok := statisticsData.Server[server][tube][k]
 			if !ok {
 				statisticsData.Server[server][tube][k] = list.New()
@@ -150,6 +149,7 @@ func statisticAgent(server string, tube string) error {
 				statisticsData.Server[server][tube][k].Remove(front)
 			}
 			statisticsData.Server[server][tube][k].PushFront([]int{t.Year(), int(t.Month()), t.Day(), t.Hour(), t.Minute(), t.Second(), stats})
+			statisticsData.Unlock()
 		}
 	}
 	bstkConn.Close()
@@ -160,7 +160,6 @@ func statisticAgent(server string, tube string) error {
 func statisticWaitress(server string, tube string) string {
 	var buf, b, s, l bytes.Buffer
 	b.WriteString(`{`)
-	statisticsData.Lock()
 	for _, field := range statisticsFields {
 		for k := range field {
 			b.WriteString(`"`)
@@ -186,7 +185,6 @@ func statisticWaitress(server string, tube string) string {
 			b.WriteString(`],`)
 		}
 	}
-	statisticsData.Unlock()
 	buf.WriteString(strings.TrimSuffix(b.String(), `,`))
 	buf.WriteString(`}`)
 	return buf.String()
