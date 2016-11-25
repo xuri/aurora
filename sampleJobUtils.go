@@ -267,7 +267,7 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 	http.Redirect(w, r, "/sample?action=manageSamples", 301)
 }
 
-// newSample provide method to update a sample job.
+// editSample provide method to update a sample job.
 func editSample(server string, f url.Values, key string, w http.ResponseWriter, r *http.Request) {
 	deleteSamples(key)
 	newSample(server, f, w, r)

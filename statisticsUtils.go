@@ -160,6 +160,7 @@ func statisticAgent(server string, tube string) error {
 func statisticWaitress(server string, tube string) string {
 	var buf, b, s, l bytes.Buffer
 	b.WriteString(`{`)
+	statisticsData.RLock()
 	for _, field := range statisticsFields {
 		for k := range field {
 			b.WriteString(`"`)
@@ -185,6 +186,7 @@ func statisticWaitress(server string, tube string) string {
 			b.WriteString(`],`)
 		}
 	}
+	statisticsData.RUnlock()
 	buf.WriteString(strings.TrimSuffix(b.String(), `,`))
 	buf.WriteString(`}`)
 	return buf.String()

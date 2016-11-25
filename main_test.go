@@ -18,7 +18,7 @@ const (
 	bstk                     = "127.0.0.1:11300"
 	configFileWithSampleJobs = `servers = []
 listen = "127.0.0.1:3000"
-version = 1.4
+version = 1.5
 
 [auth]
   enabled = false
@@ -322,6 +322,26 @@ func TestAddSample(t *testing.T) {
 	}
 }
 
+func TestEditSample(t *testing.T) {
+	once.Do(testSetup)
+	req, err := http.NewRequest("GET", server+`/sample?action=editSample&key=d44782912092260cec11275b73f78434`, nil)
+	if err != nil {
+		t.Log(err)
+	}
+	cookie := http.Cookie{Name: "beansServers", Value: `127.0.0.1%3A11300%3B127.0.0.1%3A11300%3B127.0.0.1%3A11301%3B`}
+	req.AddCookie(&cookie)
+	var client = &http.Client{}
+	_, err = client.Do(req)
+	if err != nil {
+		t.Log(err)
+	}
+}
+
+func TestGetServerTubes(t *testing.T) {
+	once.Do(testSetup)
+	getServerTubes("")
+}
+
 func TestPrettyJSON(t *testing.T) {
 	once.Do(testSetup)
 	prettyJSON([]byte(`{}`))
@@ -331,6 +351,12 @@ func TestBase64Decode(t *testing.T) {
 	once.Do(testSetup)
 	base64Decode(`dGVzdA==`)
 	base64Decode(`test-%?s`)
+}
+
+func TestDropEditSettings(t *testing.T) {
+	once.Do(testSetup)
+	selfConf.IsEnabledBase64Decode = 1
+	dropEditSettings()
 }
 
 func TestRemoveServerInConfig(t *testing.T) {
@@ -456,6 +482,8 @@ func TestStatistic(t *testing.T) {
 	defer resp.Body.Close()
 	statisticCashier("not_int", "", []string{})
 	statisticCashier("1", "not_int", []string{})
+	selfConf.StatisticsFrequency = -1
+	tplStatisticEdit("")
 	t.SkipNow()
 }
 
