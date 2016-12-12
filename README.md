@@ -43,6 +43,7 @@ Contributions are welcome! Open a pull request to fix a bug, or open an issue to
 
 ## Todo
 
+- Handle 404 error page
 - Filter the tubes by name in the overview
 - Logout support when Basic Auth has been enabled
 - Custom job content hightlight display theme support

@@ -487,6 +487,16 @@ func TestStatistic(t *testing.T) {
 	t.SkipNow()
 }
 
+func TestMain(t *testing.T) {
+	once.Do(testSetup)
+	go func() {
+		openPage()
+		handleSignals()
+	}()
+	time.Sleep(5 * time.Second)
+	t.SkipNow()
+}
+
 func createFile(path string) {
 	// Detect if file exists
 	var _, err = os.Stat(path)

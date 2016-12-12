@@ -87,7 +87,7 @@ func currentTubeJobsActionsRowSample(server string, tube string) string {
 		}
 	}
 	if sample.String() == "" {
-		return `<li><a href="#">There are no sample jobs</a></li>`
+		return `<li><a href="javascript:void(0);">There are no sample jobs</a></li>`
 	}
 	sample.WriteString(`<li class="divider"></li><li><a href="./sample?action=manageSamples">Manage samples</a></li>`)
 	return sample.String()

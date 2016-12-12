@@ -15,7 +15,7 @@ import (
 )
 
 // main function defines the entry point for the program
-// if read cong file or init fail, the application will be exit.
+// if read config file or init failed, the application will be exit.
 func main() {
 	parseFlags()
 	var err error
