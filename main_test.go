@@ -252,11 +252,7 @@ func TestCurrentTubeJobsActionsRow(t *testing.T) {
 	var req *http.Request
 	var cookie http.Cookie
 	var client = &http.Client{}
-	selfDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		return
-	}
-	selfConf := selfDir + string(os.PathSeparator) + `aurora.toml`
+	selfConf := `.` + string(os.PathSeparator) + `aurora.toml`
 	os.Remove(selfConf)
 	createFile(selfConf)
 	writeFile(selfConf, configFileWithSampleJobs)
