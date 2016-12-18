@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"html"
+	"sort"
 
 	"github.com/kr/beanstalk"
 )
@@ -42,6 +43,7 @@ func tplSampleJobEdit(key string, alert string) string {
 			continue
 		}
 		tubes, _ := bstkConn.ListTubes()
+		sort.Strings(tubes)
 		bstkConn.Close()
 		for _, v := range tubes {
 			var checked string

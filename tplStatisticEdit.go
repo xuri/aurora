@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"sort"
 	"strconv"
 
 	"github.com/kr/beanstalk"
@@ -23,6 +24,7 @@ func tplStatisticEdit(alert string) string {
 			continue
 		}
 		tubes, _ := bstkConn.ListTubes()
+		sort.Strings(tubes)
 		bstkConn.Close()
 		for _, v := range tubes {
 			var checked string

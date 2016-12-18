@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"sort"
 	"strconv"
 
 	"github.com/kr/beanstalk"
@@ -69,6 +70,7 @@ func getServerTubes(server string) string {
 		return buf.String()
 	}
 	tubes, _ := bstkConn.ListTubes()
+	sort.Strings(tubes)
 	for _, v := range tubes {
 		tubeStats := &beanstalk.Tube{
 			Conn: bstkConn,
@@ -148,6 +150,7 @@ func dropDownTube(server string, currentTube string) string {
 		return ul.String()
 	}
 	tubes, _ := bstkConn.ListTubes()
+	sort.Strings(tubes)
 	for _, v := range tubes {
 		ul.WriteString(`<li><a href="./tube?server=`)
 		ul.WriteString(server)

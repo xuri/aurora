@@ -57,6 +57,9 @@ func main() {
 func openPage() {
 	url := fmt.Sprintf("http://%v", pubConf.Listen)
 	fmt.Println("To view beanstalk console open", url, "in browser")
+	if !pubConf.OpenPage.Enabled {
+		return
+	}
 	var err error
 	switch runtime.GOOS {
 	case "linux":

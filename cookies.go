@@ -4,6 +4,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -57,6 +58,7 @@ func readCookies(r *http.Request) {
 	}
 
 	selfConf.Servers = removeArrayDuplicates(removeArrayEmpty(selfConf.Servers))
+	sort.Strings(selfConf.Servers)
 	selfConf.Filter = filters
 	selfConf.TubeFilters = tubeFilters
 	selfConf.IsDisabledJSONDecode = readIntCookie(r, `isDisabledJsonDecode`, 0)
