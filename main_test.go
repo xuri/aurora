@@ -20,6 +20,9 @@ const (
 listen = "127.0.0.1:3000"
 version = 1.5
 
+[openpage]
+enabled = true
+
 [auth]
   enabled = false
   password = "password"
@@ -492,6 +495,11 @@ func TestMain(t *testing.T) {
 	go func() {
 		openPage()
 		handleSignals()
+	}()
+	time.Sleep(5 * time.Second)
+	pubConf.OpenPage.Enabled = false
+	go func() {
+		openPage()
 	}()
 	time.Sleep(5 * time.Second)
 	t.SkipNow()
