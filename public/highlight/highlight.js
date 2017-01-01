@@ -534,7 +534,7 @@ function() {
     }
     if (is_old_IE && block.tagName == 'CODE' && block.parentNode.tagName == 'PRE') {
       // This is for backwards compatibility only. IE needs this strange
-      // hack becasue it cannot just cleanly replace <code> block contents.
+      // hack because it cannot just cleanly replace <code> block contents.
       pre = block.parentNode;
       var container = document.createElement('div');
       container.innerHTML = '<pre><code>' + result.value + '</code></pre>';

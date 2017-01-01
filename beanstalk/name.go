@@ -4,7 +4,7 @@ import (
 	"errors"
 )
 
-// Characters allowed in a name in the beanstalkd protocol.
+// NameChars defined characters allowed in a name in the beanstalkd protocol.
 const NameChars = `\-+/;.$_()0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`
 
 // NameError indicates that a name was malformed and the specific error
