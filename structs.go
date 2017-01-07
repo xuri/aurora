@@ -29,7 +29,7 @@ var (
 	selfConf             SelfConf
 	Stderr               io.Writer = os.Stderr // Stderr is the io.Writer to which executed commands write standard error.
 	Stdout               io.Writer = os.Stdout // Stdout is the io.Writer to which executed commands write standard output.
-	ConfigFile                     = `.` + string(os.PathSeparator) + `aurora.toml`
+	ConfigFile                     = `aurora.toml`
 	statisticsData                 = StatisticsData{new(sync.RWMutex), statisticsDataServer}
 	statisticsDataServer           = make(map[string]map[string]map[string]*list.List)
 	notify                         = make(chan bool, 1)

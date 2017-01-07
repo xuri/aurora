@@ -24,12 +24,8 @@ import (
 // readConf read external config file when program startup.
 func readConf() error {
 	buf := new(bytes.Buffer)
-	selfDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		return err
-	}
 	if _, err := os.Stat(ConfigFile); os.IsNotExist(err) {
-		err := ioutil.WriteFile(selfDir+string(os.PathSeparator)+ConfigFile, []byte(ConfigFileTemplate), 0644)
+		err := ioutil.WriteFile(ConfigFile, []byte(ConfigFileTemplate), 0644)
 		if err != nil {
 			return err
 		}
@@ -152,7 +148,11 @@ func parseFlags() {
 	helpPtr := flag.Bool("h", false, "Output this help and exit.")
 	flag.Parse()
 	if *configPtr == "" {
-		ConfigFile = `.` + string(os.PathSeparator) + `aurora.toml`
+		selfDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+		if err != nil {
+			os.Exit(0)
+		}
+		ConfigFile = selfDir + string(os.PathSeparator) + `aurora.toml`
 	} else {
 		ConfigFile = *configPtr
 	}
