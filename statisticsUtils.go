@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kr/beanstalk"
+	"github.com/Luxurioust/aurora/beanstalk"
 )
 
 // statisticPreferenceSave provide method to save statistics preference settings.

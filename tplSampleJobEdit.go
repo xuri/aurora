@@ -5,7 +5,7 @@ import (
 	"html"
 	"sort"
 
-	"github.com/kr/beanstalk"
+	"github.com/Luxurioust/aurora/beanstalk"
 )
 
 // tplSampleJobEdit render a sample job edit form.

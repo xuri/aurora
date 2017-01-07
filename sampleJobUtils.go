@@ -16,7 +16,7 @@ import (
 	"time"
 
 	"github.com/BurntSushi/toml"
-	"github.com/kr/beanstalk"
+	"github.com/Luxurioust/aurora/beanstalk"
 )
 
 // addSample provide a function to add sample job by parse form with POST method.

@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/kr/beanstalk"
+	"github.com/Luxurioust/aurora/beanstalk"
 )
 
 // tplStatisticEdit provide method to render the statistics preference page.

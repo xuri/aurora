@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/kr/beanstalk"
+	"github.com/Luxurioust/aurora/beanstalk"
 )
 
 // getServerStatus render a server stats table.

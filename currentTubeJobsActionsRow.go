@@ -5,7 +5,7 @@ import (
 	"html"
 	"strconv"
 
-	"github.com/kr/beanstalk"
+	"github.com/Luxurioust/aurora/beanstalk"
 )
 
 // currentTubeJobsActionsRow render a section include kick, pause and unpause job button by given server and tube.

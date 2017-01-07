@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 
-	"github.com/kr/beanstalk"
+	"github.com/Luxurioust/aurora/beanstalk"
 )
 
 // currentTubeJobsSummaryTable constructs a tube job table based on the given server and tube conf.

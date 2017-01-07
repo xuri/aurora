@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"html"
 
-	"github.com/kr/beanstalk"
+	"github.com/Luxurioust/aurora/beanstalk"
 )
 
 func modalAddSample(server string, tube string) string {

@@ -5,7 +5,7 @@ import (
 	"html"
 	"strconv"
 
-	"github.com/kr/beanstalk"
+	"github.com/Luxurioust/aurora/beanstalk"
 )
 
 // currentTubeJobsShowcase return a section include three stats of job,
