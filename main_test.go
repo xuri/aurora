@@ -18,7 +18,7 @@ const (
 	bstk                     = "127.0.0.1:11300"
 	configFileWithSampleJobs = `servers = []
 listen = "127.0.0.1:3000"
-version = 1.6
+version = 1.7
 
 [openpage]
 enabled = true

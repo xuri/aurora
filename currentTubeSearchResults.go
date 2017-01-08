@@ -17,14 +17,18 @@ func currentTubeSearchResults(server string, tube string, limit string, searchSt
 		buf.WriteString(`</b>`)
 		return buf.String()
 	}
-	for _, job := range result {
+	for k, job := range result {
 		tr.WriteString(`<tr><td>`)
 		tr.WriteString(strconv.Itoa(int(job.ID)))
 		tr.WriteString(`</td><td>`)
 		tr.WriteString(job.State)
 		tr.WriteString(`</td><td class="ellipsize">`)
 		tr.WriteString(html.EscapeString(job.Data))
-		tr.WriteString(`</td><td><div class="dropdown btn-group-xs"><button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"> Actions <span class="caret"></span></button><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1"><li role="presentation"><a role="menuitem" class="addSample" data-jobid="`)
+		tr.WriteString(`</td><td><div class="dropdown btn-group-xs"><button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu`)
+		tr.WriteString(strconv.Itoa(k))
+		tr.WriteString(`" data-toggle="dropdown" aria-expanded="true"> Actions <span class="caret"></span></button><ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu`)
+		tr.WriteString(strconv.Itoa(k))
+		tr.WriteString(`"><li role="presentation"><a role="menuitem" class="addSample" data-jobid="`)
 		tr.WriteString(strconv.Itoa(int(job.ID)))
 		tr.WriteString(`" href="?server=`)
 		tr.WriteString(server)
