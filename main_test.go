@@ -29,7 +29,7 @@ enabled = true
   username = "admin"
 
 [sample]
-  storage = "{\"jobs\":[{\"key\":\"97ec882fd75855dfa1b4bd00d4a367d4\",\"name\":\"sample_1\",\"tubes\":[\"default\"],\"data\":\"aurora_test_sample_job\"},{\"key\":\"d44782912092260cec11275b73f78434\",\"name\":\"sample_2\",\"tubes\":[\"aurora_test\"],\"data\":\"aurora_test_sample_job\"},{\"key\":\"5def7a2daf5e0292bed42db9f0017c94\",\"name\":\"sample_3\",\"tubes\":[\"default\",\"aurora_test\"],\"data\":\"aurora_test_sample_job\"}],\"tubes\":[{\"name\":\"default\",\"keys\":[\"97ec882fd75855dfa1b4bd00d4a367d4\",\"5def7a2daf5e0292bed42db9f0017c94\"]},{\"name\":\"aurora_test\",\"keys\":[\"d44782912092260cec11275b73f78434\",\"5def7a2daf5e0292bed42db9f0017c94\"]}]}"`
+  storage = "{\"jobs\":[{\"key\":\"97ec882fd75855dfa1b4bd00d4a367d4\",\"name\":\"sample_1\",\"tubes\":[\"default\"],\"data\":\"aurora_test_sample_job\",\"ttr\":60},{\"key\":\"d44782912092260cec11275b73f78434\",\"name\":\"sample_2\",\"tubes\":[\"aurora_test\"],\"data\":\"aurora_test_sample_job\",\"ttr\":60},{\"key\":\"5def7a2daf5e0292bed42db9f0017c94\",\"name\":\"sample_3\",\"tubes\":[\"default\",\"aurora_test\"],\"data\":\"aurora_test_sample_job\",\"ttr\":60}],\"tubes\":[{\"name\":\"default\",\"keys\":[\"97ec882fd75855dfa1b4bd00d4a367d4\",\"5def7a2daf5e0292bed42db9f0017c94\"]},{\"name\":\"aurora_test\",\"keys\":[\"d44782912092260cec11275b73f78434\",\"5def7a2daf5e0292bed42db9f0017c94\"]}]}"`
 )
 
 var (
@@ -74,7 +74,7 @@ var (
 )
 
 func testSetup() {
-	time.Sleep(20 * time.Second) // Wait Beanstalk server ready.
+	time.Sleep(1 * time.Second) // Wait Beanstalk server ready.
 	selfDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		return
@@ -123,27 +123,32 @@ func TestIndex(t *testing.T) {
 		t.Log(err)
 	}
 	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
-		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {""}, "tubes[aurora_test]": {"1"}})
+		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {"test_sample_1"}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
 	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
-		url.Values{"tube": {"default"}, "addsamplejobid": {"1"}, "addsamplename": {"sample_1"}, "tubes[aurora_test]": {"1"}})
+		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {""}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
+	if err != nil {
+		t.Log(err)
+	}
+	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+		url.Values{"tube": {"default"}, "addsamplejobid": {"1"}, "addsamplename": {"sample_1"}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
 	resp, err = http.PostForm(server+"/tube?server=not_exist_server_addr&action=addSample",
-		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {"sample_2"}, "tubes[default]": {"1"}})
+		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {"sample_2"}, "tubes[default]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
 	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
-		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {""}, "addsamplename": {"sample_2"}, "tubes[aurora_test]": {"1"}})
+		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {""}, "addsamplename": {"sample_2"}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
 	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
-		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"not_int"}, "addsamplename": {"sample_2"}, "tubes[aurora_test]": {"1"}})
+		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"not_int"}, "addsamplename": {"sample_2"}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
@@ -310,6 +315,7 @@ func TestAddSample(t *testing.T) {
 	form.Add(`action`, `actionNewSample`)
 	form.Add(`tubes[default]`, `1`)
 	form.Add(`addsamplejobid`, `6`)
+	form.Add(`ttr`, `60`)
 	req, err := http.NewRequest("POST", server+`/sample?action=actionNewSample`, strings.NewReader(form.Encode()))
 	if err != nil {
 		t.Log(err)
@@ -484,6 +490,17 @@ func TestStatistic(t *testing.T) {
 	selfConf.StatisticsFrequency = -1
 	tplStatisticEdit("")
 	t.SkipNow()
+}
+
+func TestReadConf(t *testing.T) {
+	once.Do(testSetup)
+	selfDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		return
+	}
+	selfConf := selfDir + string(os.PathSeparator) + `aurora.toml`
+	os.Remove(selfConf)
+	readConf()
 }
 
 func TestMain(t *testing.T) {
