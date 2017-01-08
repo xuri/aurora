@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -24,6 +23,7 @@ func addSample(server string, data url.Values, w http.ResponseWriter) {
 	var err error
 	var key = randToken()
 	var sampleName, body string
+	var sampleTTR int
 	var tubes []string
 
 	err = readConf()
@@ -31,14 +31,14 @@ func addSample(server string, data url.Values, w http.ResponseWriter) {
 		return
 	}
 
-	sampleName, body, err = sampleValidate(server, data, w)
+	sampleName, sampleTTR, body, err = sampleValidate(server, data, w)
 	if err != nil {
 		return
 	}
 
 	for k := range data { // range over map
 		switch k {
-		case "action", "tube", "addsamplejobid", "addsamplename", "server":
+		case "action", "tube", "addsamplejobid", "addsamplename", "addsamplettr", "server":
 			continue
 		default:
 			t := strings.TrimSuffix(strings.TrimPrefix(k, `tubes[`), `]`)
@@ -51,6 +51,7 @@ func addSample(server string, data url.Values, w http.ResponseWriter) {
 		Name:  sampleName,
 		Tubes: tubes,
 		Data:  body,
+		TTR:   sampleTTR,
 	})
 
 	err = saveSample()
@@ -62,40 +63,53 @@ func addSample(server string, data url.Values, w http.ResponseWriter) {
 }
 
 // sampleValidate validate sample job if exists.
-func sampleValidate(server string, data url.Values, w http.ResponseWriter) (string, string, error) {
+func sampleValidate(server string, data url.Values, w http.ResponseWriter) (string, int, string, error) {
 	var bstkConn *beanstalk.Conn
 	var sampleName string
+	var sampleTTR = DefaultTTR
 	var body []byte
+	var err error
 	sampleName = data.Get("addsamplename")
 	if sampleName == "" {
 		io.WriteString(w, `{"result":false,"error":"You should give a name with this sample"}`)
-		return sampleName, string(body), errors.New("You should give a name with this sample")
+		return sampleName, sampleTTR, string(body), errors.New("You should give a name with this sample")
 	}
 	if checkSampleJobs(sampleName) {
 		io.WriteString(w, `{"result":false,"error":"You already have a job with this name"}`)
-		return sampleName, string(body), errors.New("You already have a job with this name")
+		return sampleName, sampleTTR, string(body), errors.New("You already have a job with this name")
 	}
 	ID := data.Get("addsamplejobid")
 	if ID == "" {
 		io.WriteString(w, `{"result":false,"error":"Job ID for add sample is empty"}`)
-		return sampleName, string(body), errors.New("Job ID for add sample is empty")
+		return sampleName, sampleTTR, string(body), errors.New("Job ID for add sample is empty")
 	}
 	jobID, err := strconv.Atoi(ID)
 	if err != nil {
 		io.WriteString(w, `{"result":false,"error":"Retrieve beanstalk job ID error"}`)
-		return sampleName, string(body), errors.New("Retrieve beanstalk job ID error")
+		return sampleName, sampleTTR, string(body), errors.New("Retrieve beanstalk job ID error")
 	}
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		io.WriteString(w, `{"result":false,"error":"Connect to beanstal server fail"}`)
-		return sampleName, string(body), errors.New("Connect to beanstal server fail")
+		return sampleName, sampleTTR, string(body), errors.New("Connect to beanstal server fail")
 	}
 	body, err = bstkConn.Peek(uint64(jobID))
 	if err != nil {
 		io.WriteString(w, `{"result":false,"error":"Read beanstalk job content fail"}`)
-		return sampleName, string(body), errors.New("Read beanstalk job content fail")
+		return sampleName, sampleTTR, string(body), errors.New("Read beanstalk job content fail")
+	}
+	// Read beanstalk job TTR in job ID.
+	jobStats, err := bstkConn.StatsJob(uint64(jobID))
+	if err != nil {
+		io.WriteString(w, `{"result":false,"error":"Read beanstalk job stats fail"}`)
+		return sampleName, sampleTTR, string(body), errors.New("Read beanstalk job stats fail")
+	}
+	sampleTTR, err = strconv.Atoi(jobStats["ttr"])
+	if err != nil {
+		io.WriteString(w, `{"result":false,"error":"Read beanstalk job TTR fail"}`)
+		return sampleName, sampleTTR, string(body), errors.New("Read beanstalk job TTR fail")
 	}
 	bstkConn.Close()
-	return sampleName, string(body), nil
+	return sampleName, sampleTTR, string(body), nil
 }
 
 // addSampleTube provide a method add a sample job tube in global config variable.
@@ -134,17 +148,14 @@ func saveSample() error {
 	if err := toml.NewEncoder(buf).Encode(pubConf); err != nil {
 		return err
 	}
-	selfDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		return err
-	}
+
 	if _, err := os.Stat(ConfigFile); os.IsNotExist(err) {
-		err := ioutil.WriteFile(selfDir+string(os.PathSeparator)+ConfigFile, buf.Bytes(), 0644)
+		err := ioutil.WriteFile(ConfigFile, buf.Bytes(), 0644)
 		if err != nil {
 			return err
 		}
 	}
-	file, err := os.OpenFile(selfDir+string(os.PathSeparator)+ConfigFile, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0666)
+	file, err := os.OpenFile(ConfigFile, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0666)
 	if err != nil {
 		return err
 	}
@@ -173,6 +184,18 @@ func getSampleJobNameByKey(key string) string {
 			continue
 		}
 		data = j.Name
+	}
+	return data
+}
+
+// getSampleJobTtrByKey return sample job TTR by given key.
+func getSampleJobTtrByKey(key string) int {
+	var data = DefaultTTR
+	for _, j := range sampleJobs.Jobs {
+		if j.Key != key {
+			continue
+		}
+		data = j.TTR
 	}
 	return data
 }
@@ -213,7 +236,7 @@ func loadSample(server string, tube string, key string) {
 		Conn: bstkConn,
 		Name: tube,
 	}
-	bstkTube.Put([]byte(data), uint32(DefaultPriority), time.Duration(DefaultDelay)*time.Second, time.Duration(DefaultTTR)*time.Second)
+	bstkTube.Put([]byte(data), uint32(DefaultPriority), time.Duration(DefaultDelay)*time.Second, time.Duration(getSampleJobTtrByKey(key))*time.Second)
 	bstkConn.Close()
 	return
 }
@@ -222,7 +245,8 @@ func loadSample(server string, tube string, key string) {
 func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Request) {
 	var err error
 	var key = randToken()
-	var name, body string
+	var name, body, ttr string
+	var sampleTTR int
 	var tubes []string
 	alert := `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Required fields are not set</span></div>`
 	err = readConf()
@@ -236,6 +260,8 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 			body = v[0]
 		case "name":
 			name = v[0]
+		case "ttr":
+			ttr = v[0]
 		case "action", "key":
 			continue
 		default:
@@ -244,13 +270,17 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 			addSampleTube(t, key)
 		}
 	}
-	if len(tubes) == 0 || name == "" || body == "" {
+	if len(tubes) == 0 || name == "" || body == "" || ttr == "" {
 		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", alert), server))
 		return
 	}
-
 	if checkSampleJobs(name) {
 		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> You already have a job with this name</span></div>`), server))
+		return
+	}
+	sampleTTR, err = strconv.Atoi(ttr)
+	if err != nil {
+		io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> You should give a correct TTR with this sample</span></div>`), server))
 		return
 	}
 	sampleJobs.Jobs = append(sampleJobs.Jobs, SampleJob{
@@ -258,6 +288,7 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 		Name:  name,
 		Tubes: tubes,
 		Data:  body,
+		TTR:   sampleTTR,
 	})
 	err = saveSample()
 	if err != nil {
@@ -310,6 +341,7 @@ func getSampleJobList() string {
 		tr.WriteString(`"><i class="glyphicon glyphicon-pencil"></i> Edit</a> <a class="btn btn-default btn-sm" href="?action=deleteSample&key=`)
 		tr.WriteString(j.Key)
 		tr.WriteString(`"><i class="glyphicon glyphicon-trash"></i> Delete</a></div></td></tr>`)
+		td.Reset()
 	}
 	buf.WriteString(`<div class="clearfix"><div class="pull-right"><a href="?action=newSample" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"></i> Add job to samples</a></div></div><section id="summaryTable"><table class="table table-striped table-hover"><thead><tr><th>Name</th><th>Kick job to tubes</th><th></th></tr></thead><tbody>`)
 	buf.WriteString(tr.String())

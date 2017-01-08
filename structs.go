@@ -147,6 +147,7 @@ type SampleJob struct {
 	Name  string   `json:"name"`
 	Tubes []string `json:"tubes"`
 	Data  string   `json:"data"`
+	TTR   int      `json:"ttr"`
 }
 
 // SampleTube define beanstalk sample job's tube storage struct.

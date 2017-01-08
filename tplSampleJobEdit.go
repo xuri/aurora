@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"html"
 	"sort"
+	"strconv"
 
 	"github.com/Luxurioust/aurora/beanstalk"
 )
@@ -11,15 +12,17 @@ import (
 // tplSampleJobEdit render a sample job edit form.
 func tplSampleJobEdit(key string, alert string) string {
 	var err error
-	var buf, action, title, name, savedTo, saveTo, data, ST, tubeList bytes.Buffer
+	var buf, action, title, name, savedTo, saveTo, data, ST, tubeList, TTR bytes.Buffer
 	if key == "" {
 		action.WriteString(`?action=actionNewSample`)
 		title.WriteString(`<h4 class="text-info">New sample job</h4>`)
+		TTR.WriteString(strconv.Itoa(DefaultTTR))
 	} else {
 		action.WriteString(`?action=actionEditSample&key=`)
 		action.WriteString(key)
 		name.WriteString(html.EscapeString(getSampleJobNameByKey(key)))
 		data.WriteString(html.EscapeString(getSampleJobDataByKey(key)))
+		TTR.WriteString(strconv.Itoa(getSampleJobTtrByKey(key)))
 		title.WriteString(`<h4 class="text-info">Edit: `)
 		title.WriteString(name.String())
 		title.WriteString(`</h4>`)
@@ -83,6 +86,10 @@ func tplSampleJobEdit(key string, alert string) string {
 	buf.WriteString(alert)
 	buf.WriteString(`<div class="control-group"><label class="control-label" for="addsamplename"><b>Name *</b></label><div class="controls form-group"><input class="form-control input-sm focused" id="addsamplename" name="name" type="text" style="width: 15em;" required="" value="`)
 	buf.WriteString(name.String())
+	buf.WriteString(`" autocomplete="off"></div><label class="control-label" for="addsamplettr"><b>TTR (Default: <i>`)
+	buf.WriteString(strconv.Itoa(DefaultTTR))
+	buf.WriteString(`</i>) *</b></label><div class="controls form-group"><input class="form-control input-sm" id="addsamplettr" name="ttr" type="number" style="width: 15em;" required="" value="`)
+	buf.WriteString(TTR.String())
 	buf.WriteString(`" autocomplete="off"></div></div></fieldset><div class="clearfix"><label class="control-label"><b>Available on tubes *</b></label><br/>`)
 	buf.WriteString(savedTo.String())
 	buf.WriteString(ST.String())
