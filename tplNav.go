@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"net/url"
 	"sort"
 	"strconv"
 
@@ -88,7 +89,7 @@ func getServerTubes(server string) string {
 		tr.WriteString(`<tr><td><a href="tube?server=`)
 		tr.WriteString(server)
 		tr.WriteString(`&tube=`)
-		tr.WriteString(v)
+		tr.WriteString(url.QueryEscape(v))
 		tr.WriteString(`">`)
 		tr.WriteString(v)
 		tr.WriteString(`</a></td>`)
@@ -155,7 +156,7 @@ func dropDownTube(server string, currentTube string) string {
 		ul.WriteString(`<li><a href="./tube?server=`)
 		ul.WriteString(server)
 		ul.WriteString(`&tube=`)
-		ul.WriteString(v)
+		ul.WriteString(url.QueryEscape(v))
 		ul.WriteString(`">`)
 		ul.WriteString(v)
 		ul.WriteString(`</a></li>`)

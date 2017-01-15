@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"net/url"
 
 	"github.com/Luxurioust/aurora/beanstalk"
 )
@@ -56,7 +57,7 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 			td.WriteString(`<td><a class="btn btn-xs btn-default" title="Statistics overview" href="./statistics?server=`)
 			td.WriteString(server)
 			td.WriteString(`&tube=`)
-			td.WriteString(v)
+			td.WriteString(url.QueryEscape(v))
 			td.WriteString(`"><span class="glyphicon glyphicon-stats"> </span></a></td>`)
 		}
 		tr.WriteString(td.String())

@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"html"
+	"net/url"
 	"strconv"
 
 	"github.com/Luxurioust/aurora/beanstalk"
@@ -29,7 +30,7 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 		pauseTimeLeft.WriteString(`<a class="btn btn-default btn-sm" href="?server=`)
 		pauseTimeLeft.WriteString(server)
 		pauseTimeLeft.WriteString(`&tube=`)
-		pauseTimeLeft.WriteString(tube)
+		pauseTimeLeft.WriteString(url.QueryEscape(tube))
 		pauseTimeLeft.WriteString(`&action=pause&count=-1" title="Temporarily prevent jobs being reserved from the given tube. Pause for: `)
 		pauseTimeLeft.WriteString(pause)
 		pauseTimeLeft.WriteString(` seconds"><i class="glyphicon glyphicon-pause"></i> Pause tube</a>`)
@@ -37,7 +38,7 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 		pauseTimeLeft.WriteString(`<a class="btn btn-default btn-sm" href="?server=`)
 		pauseTimeLeft.WriteString(server)
 		pauseTimeLeft.WriteString(`&tube=`)
-		pauseTimeLeft.WriteString(tube)
+		pauseTimeLeft.WriteString(url.QueryEscape(tube))
 		pauseTimeLeft.WriteString(`&action=pause&count=0" title="Pause seconds left: `)
 		pauseTimeLeft.WriteString(statsMap["pause-time-left"])
 		pauseTimeLeft.WriteString(`"><i class="glyphicon glyphicon-play"></i> Unpause tube</a>`)
@@ -46,11 +47,11 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 	buf.WriteString(`<section id="actionsRow"><b>Actions:</b> &nbsp;<a class="btn btn-default btn-sm" href="?server=`)
 	buf.WriteString(server)
 	buf.WriteString(`&tube=`)
-	buf.WriteString(tube)
+	buf.WriteString(url.QueryEscape(tube))
 	buf.WriteString(`&action=kick&count=1"><i class="glyphicon glyphicon-forward"></i> Kick 1 job</a> <a class="btn btn-default btn-sm" href="?server=`)
 	buf.WriteString(server)
 	buf.WriteString(`&tube=`)
-	buf.WriteString(tube)
+	buf.WriteString(url.QueryEscape(tube))
 	buf.WriteString(`&action=kick&count=10" title='To kick more jobs, edit the "count" parameter'><i class="glyphicon glyphicon-fast-forward"></i> Kick 10 job</a> `)
 	buf.WriteString(pauseTimeLeft.String())
 	buf.WriteString(` &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <div class="btn-group"><a data-toggle="modal" class="btn btn-success btn-sm" href="#" id="addJob"><i class="glyphicon glyphicon-plus-sign glyphicon-white"></i> Add job</a><button class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu">`)
@@ -77,7 +78,7 @@ func currentTubeJobsActionsRowSample(server string, tube string) string {
 				sample.WriteString(`<li><a href="?server=`)
 				sample.WriteString(server)
 				sample.WriteString(`&tube=`)
-				sample.WriteString(tube)
+				sample.WriteString(url.QueryEscape(tube))
 				sample.WriteString(`&action=loadSample&key=`)
 				sample.WriteString(j.Key)
 				sample.WriteString(`">`)

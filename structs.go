@@ -10,7 +10,7 @@ import (
 
 // Define the default configuration and HTML header template.
 const (
-	ConfigFileTemplate      = "servers = []\r\nlisten = \"127.0.0.1:3000\"\r\nversion = 1.9\r\n\r\n[openpage]\r\nenabled = true\r\n\r\n[auth]\r\nenabled = false\r\npassword = \"password\"\r\nusername = \"admin\"\r\n\r\n[sample]\r\nstorage = \"{}\""
+	ConfigFileTemplate      = "servers = []\r\nlisten = \"127.0.0.1:3000\"\r\nversion = 2.0\r\n\r\n[openpage]\r\nenabled = true\r\n\r\n[auth]\r\nenabled = false\r\npassword = \"password\"\r\nusername = \"admin\"\r\n\r\n[sample]\r\nstorage = \"{}\""
 	DefaultDelay            = 0
 	DefaultPriority         = 1024 // most urgent: 0, least urgent: 4294967295.
 	DefaultTTR              = 60   // 1 minute
@@ -19,7 +19,7 @@ const (
 	TplLinks                = `<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Links <span class="caret"></span></a><ul class="dropdown-menu"><li><a href="https://github.com/kr/beanstalkd">Beanstalk (GitHub)</a></li><li><a href="https://github.com/Luxurioust/aurora">Aurora (GitHub)</a></li></ul></li>`
 	TplNoScript             = `<noscript><div class="container"><div class="alert alert-danger" role="alert">Aurora beanstalk console requires JavaScript supports, please refresh after enable browser JavaScript support.</div></div></noscript>`
 	UpdateURL               = `https://api.github.com/repos/Luxurioust/aurora/tags`
-	Version                 = 1.9
+	Version                 = 2.0
 )
 
 // Define server and tube stats fields.

@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"html"
+	"net/url"
 	"strconv"
 
 	"github.com/Luxurioust/aurora/beanstalk"
@@ -63,9 +64,9 @@ func currentTubeJobsShowcaseSections(server string, tube string) string {
 			m.WriteString(`<li><a href="?server=`)
 			m.WriteString(server)
 			m.WriteString(`&tube=`)
-			m.WriteString(tube)
+			m.WriteString(url.QueryEscape(tube))
 			m.WriteString(`&action=moveJobsTo&destTube=`)
-			m.WriteString(v)
+			m.WriteString(url.QueryEscape(v))
 			m.WriteString(`&state=`)
 			m.WriteString(stat)
 			m.WriteString(`">`)
@@ -78,13 +79,13 @@ func currentTubeJobsShowcaseSections(server string, tube string) string {
 			b.WriteString(`" href="?server=`)
 			b.WriteString(server)
 			b.WriteString(`&tube=`)
-			b.WriteString(tube)
+			b.WriteString(url.QueryEscape(tube))
 			b.WriteString(`&action=addSample"><i class="glyphicon glyphicon-plus glyphicon-white"></i> Add to samples</a> <div class="btn-group"> <button class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown"> <i class="glyphicon glyphicon-arrow-right glyphicon-white"></i> Move all `)
 			b.WriteString(stat)
 			b.WriteString(` to </button><ul class="dropdown-menu"><li><input class="moveJobsNewTubeName input-medium" type="text" data-href="?server=`)
 			b.WriteString(server)
 			b.WriteString(`&tube=`)
-			b.WriteString(tube)
+			b.WriteString(url.QueryEscape(tube))
 			b.WriteString(`&action=moveJobsTo&state=`)
 			b.WriteString(stat)
 			b.WriteString(`&destTube=" placeholder="New tube name"/></li>`)
@@ -92,13 +93,13 @@ func currentTubeJobsShowcaseSections(server string, tube string) string {
 			b.WriteString(`<li class="divider"></li><li><a href="?server=`)
 			b.WriteString(server)
 			b.WriteString(`&tube=`)
-			b.WriteString(tube)
+			b.WriteString(url.QueryEscape(tube))
 			b.WriteString(`&action=moveJobsTo&destState=buried&state=`)
 			b.WriteString(stat)
 			b.WriteString(`">Buried</a></li></ul></div> <a class="btn btn-sm btn-danger" href="?server=`)
 			b.WriteString(server)
 			b.WriteString(`&tube=`)
-			b.WriteString(tube)
+			b.WriteString(url.QueryEscape(tube))
 			b.WriteString(`&state=`)
 			b.WriteString(stat)
 			b.WriteString(`&action=deleteAll&count=1" onclick="return confirm('This process might hang a while on tubes with lots of jobs. Are you sure you want to continue?');"><i class="glyphicon glyphicon-trash glyphicon-white"></i> Delete all `)
@@ -106,7 +107,7 @@ func currentTubeJobsShowcaseSections(server string, tube string) string {
 			b.WriteString(` jobs</a> <a class="btn btn-sm btn-danger" href="?server=`)
 			b.WriteString(server)
 			b.WriteString(`&tube=`)
-			b.WriteString(tube)
+			b.WriteString(url.QueryEscape(tube))
 			b.WriteString(`&state=`)
 			b.WriteString(stat)
 			b.WriteString(`&action=deleteJob&jobid=`)

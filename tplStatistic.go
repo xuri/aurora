@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"html"
+	"net/url"
 )
 
 // tplStatistics render a statistics overview graphs with Flot by given server and tube.
@@ -32,7 +33,7 @@ func tplStatistic(server string, tube string) string {
 	buf.WriteString(`<script src="./js/libs/flot/jquery.flot.js"></script><script src="./js/libs/flot/jquery.flot.resize.js"></script><script src="./js/libs/flot/jquery.flot.tooltip.min.js"></script><script type="text/javascript">var options={series: {shadowSize:4,lines:{show:true},points:{show:true,radius:1}},colors:["#00C851","#ffbb33","#33b5e5","#ff4444"],grid:{hoverable:true},xaxis:{mode:"time",timeformat:"%y-%m-%d %H:%M:%S"},yaxis:{min:0,tickDecimals:0},tooltip:true,tooltipOpts:{content:"%x.1 %s jobs: %y.4"}};function getRandomData(){$.get("./statistics?action=reloader&server=`)
 	buf.WriteString(server)
 	buf.WriteString(`&tube=`)
-	buf.WriteString(tube)
+	buf.WriteString(url.QueryEscape(tube))
 	buf.WriteString(`",function(data){var obj={};var seriesData=[];obj=jQuery.parseJSON(data);for(var prop in obj){seriesData.push({label:prop,data:$.map(obj[prop],function(i,j){return [[new Date(Date.UTC(i[0],i[1]-1,i[2],i[3],i[4],i[5])).getTime(),i[6]]];})});}var plot=$.plot($("#placeholder"),seriesData,options);plot.setData(seriesData);plot.draw();});}var updateInterval=1;$("#updateInterval").val(updateInterval).change(function(){var v=$(this).val();if(v&&!isNaN(+v)){updateInterval=+v;if(updateInterval<1){updateInterval=1}$(this).val(""+updateInterval)}});function update(){getRandomData();setTimeout(update,updateInterval*1000)};update();</script></body></html>`)
 	return buf.String()
 }

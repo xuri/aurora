@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"html"
+	"net/url"
 	"strconv"
 )
 
@@ -33,11 +34,11 @@ func currentTubeSearchResults(server string, tube string, limit string, searchSt
 		tr.WriteString(`" href="?server=`)
 		tr.WriteString(server)
 		tr.WriteString(`&tube=`)
-		tr.WriteString(tube)
+		tr.WriteString(url.QueryEscape(tube))
 		tr.WriteString(`&action=addSample"><i class="glyphicon glyphicon-plus glyphicon-white"></i> Add to samples </a></li><li role="presentation"><a role="menuitem" href="?server=`)
 		tr.WriteString(server)
 		tr.WriteString(`&tube=`)
-		tr.WriteString(tube)
+		tr.WriteString(url.QueryEscape(tube))
 		tr.WriteString(`&state=`)
 		tr.WriteString(job.State)
 		tr.WriteString(`&action=deleteJob&jobid=`)
@@ -45,7 +46,7 @@ func currentTubeSearchResults(server string, tube string, limit string, searchSt
 		tr.WriteString(`"><i class="glyphicon glyphicon-remove glyphicon-white"></i> Delete</a> </li><li role="presentation"><a role="menuitem" href="?server=`)
 		tr.WriteString(server)
 		tr.WriteString(`&tube=`)
-		tr.WriteString(tube)
+		tr.WriteString(url.QueryEscape(tube))
 		tr.WriteString(`&state=`)
 		tr.WriteString(job.State)
 		tr.WriteString(`&action=kickJob&jobid=`)
@@ -55,7 +56,7 @@ func currentTubeSearchResults(server string, tube string, limit string, searchSt
 	buf.WriteString(`<section id="actionsRow"><a class="btn btn-default btn-sm" href="?server=`)
 	buf.WriteString(server)
 	buf.WriteString(`&tube=`)
-	buf.WriteString(tube)
+	buf.WriteString(url.QueryEscape(tube))
 	buf.WriteString(`"><i class="glyphicon glyphicon-backward"></i>  &nbsp;Back to tube</a></section><section id="searchResult"><div class="row"><div class="col-sm-12"><table class="table table-striped table-hover" style="table-layout:fixed;"><thead><tr><th class="col-md-1">id</th><th class="col-md-1">state</th><th>data</th><th class="col-md-1">action</th></tr></thead><tbody>`)
 	buf.WriteString(tr.String())
 	buf.WriteString(`</tbody></table></div></div>First `)
