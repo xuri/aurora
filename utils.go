@@ -52,7 +52,8 @@ func parseConf() {
 	selfConf.Servers = append(selfConf.Servers, pubConf.Servers...)
 }
 
-// removeArrayDuplicates provide a function remove duplicates value elements in a slice.
+// removeArrayDuplicates provide a function remove duplicates value elements in
+// a slice.
 func removeArrayDuplicates(elements []string) []string {
 	// Use map to record duplicates as we find them.
 	encountered := map[string]bool{}
@@ -83,7 +84,8 @@ func removeArrayEmpty(s []string) []string {
 	return r
 }
 
-// removeServerInConfig provide a method to remove property in config by given field.
+// removeServerInConfig provide a method to remove property in config by given
+// field.
 func removeServerInConfig(server string) {
 	for k, v := range selfConf.Servers {
 		if v == server {
@@ -100,7 +102,8 @@ func runCmd(prog string, args ...string) error {
 	return cmd.Run()
 }
 
-// checkInSlice return bool type value to check if exits in slice by given string.
+// checkInSlice return bool type value to check if exits in slice by given
+// string.
 func checkInSlice(list []string, value string) bool {
 	set := make(map[string]bool)
 	for _, v := range list {

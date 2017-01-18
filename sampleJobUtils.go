@@ -18,7 +18,8 @@ import (
 	"github.com/Luxurioust/aurora/beanstalk"
 )
 
-// addSample provide a function to add sample job by parse form with POST method.
+// addSample provide a function to add sample job by parse form with POST
+// method.
 func addSample(server string, data url.Values, w http.ResponseWriter) {
 	var err error
 	var key = randToken()
@@ -112,7 +113,8 @@ func sampleValidate(server string, data url.Values, w http.ResponseWriter) (stri
 	return sampleName, sampleTTR, string(body), nil
 }
 
-// addSampleTube provide a method add a sample job tube in global config variable.
+// addSampleTube provide a method add a sample job tube in global config
+// variable.
 func addSampleTube(tube string, key string) {
 	for k, v := range sampleJobs.Tubes {
 		if v.Name == tube {

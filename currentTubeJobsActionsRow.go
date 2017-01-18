@@ -9,7 +9,8 @@ import (
 	"github.com/Luxurioust/aurora/beanstalk"
 )
 
-// currentTubeJobsActionsRow render a section include kick, pause and unpause job button by given server and tube.
+// currentTubeJobsActionsRow render a section include kick, pause and unpause
+// job button by given server and tube.
 func currentTubeJobsActionsRow(server string, tube string) string {
 	var err error
 	var bstkConn *beanstalk.Conn
@@ -60,7 +61,8 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 	return buf.String()
 }
 
-// currentTubeJobsActionsRowSample render a dropdown sample list by given server and tube.
+// currentTubeJobsActionsRowSample render a dropdown sample list by given server
+// and tube.
 func currentTubeJobsActionsRowSample(server string, tube string) string {
 	sample := bytes.Buffer{}
 	for _, v := range sampleJobs.Tubes {

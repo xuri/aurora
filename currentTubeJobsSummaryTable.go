@@ -7,7 +7,8 @@ import (
 	"github.com/Luxurioust/aurora/beanstalk"
 )
 
-// currentTubeJobsSummaryTable constructs a tube job table based on the given server and tube conf.
+// currentTubeJobsSummaryTable constructs a tube job table based on the given
+// server and tube conf.
 func currentTubeJobsSummaryTable(server string, tube string) string {
 	var err error
 	var th, tr, td, template bytes.Buffer
@@ -76,7 +77,8 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 	return template.String()
 }
 
-// currentTubeStatisticCheck provide a method to confirm that the current tube statistics are available.
+// currentTubeStatisticCheck provide a method to confirm that the current tube
+// statistics are available.
 func currentTubeStatisticCheck(server string, tube string) bool {
 	if selfConf.StatisticsCollection == 0 {
 		return false

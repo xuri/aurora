@@ -6,7 +6,8 @@ import (
 	"net/url"
 )
 
-// tplStatistics render a statistics overview graphs with Flot by given server and tube.
+// tplStatistics render a statistics overview graphs with Flot by given server
+// and tube.
 func tplStatistic(server string, tube string) string {
 	buf := bytes.Buffer{}
 	buf.WriteString(`<!DOCTYPE html><html lang="en-US">`)

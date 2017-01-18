@@ -9,9 +9,9 @@ import (
 	"github.com/Luxurioust/aurora/beanstalk"
 )
 
-// currentTubeJobsShowcase return a section include three stats of job,
-// call currentTubeJobsShowcaseSections function and get that return value
-// based on the given server and tube config.
+// currentTubeJobsShowcase return a section include three stats of job, call
+// currentTubeJobsShowcaseSections function and get that return value based on
+// the given server and tube config.
 func currentTubeJobsShowcase(server string, tube string) string {
 	var buf bytes.Buffer
 	buf.WriteString(`<section class="jobsShowcase">`)
@@ -20,8 +20,8 @@ func currentTubeJobsShowcase(server string, tube string) string {
 	return buf.String()
 }
 
-// currentTubeJobsShowcaseSections constructs a tube job in ready, delayed
-// and buried stats table based on the given server and tube config.
+// currentTubeJobsShowcaseSections constructs a tube job in ready, delayed and
+// buried stats table based on the given server and tube config.
 func currentTubeJobsShowcaseSections(server string, tube string) string {
 	stats := []string{"ready", "delayed", "buried"}
 	var err error

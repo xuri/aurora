@@ -88,7 +88,9 @@ func deleteAll(server string, tube string) {
 	bstkConn.Close()
 }
 
-// kick takes up to bound jobs from the holding area and moves them into the ready queue, then returns the number of jobs moved. Jobs will be taken in the order in which they were last buried.
+// kick takes up to bound jobs from the holding area and moves them into the
+// ready queue, then returns the number of jobs moved. Jobs will be taken in the
+// order in which they were last buried.
 func kick(server string, tube string, count string) {
 	var err error
 	var bound int
@@ -248,7 +250,8 @@ func clearTubes(server string, data url.Values) {
 	}
 }
 
-// searchTube search job by given search string in ready, delayed and buried stats.
+// searchTube search job by given search string in ready, delayed and buried
+// stats.
 func searchTube(server string, tube string, limit string, searchStr string) string {
 	var err error
 	var bstkConn *beanstalk.Conn

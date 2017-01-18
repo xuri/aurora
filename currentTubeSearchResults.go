@@ -7,7 +7,8 @@ import (
 	"strconv"
 )
 
-// currentTubeSearchResults constructs a search result table by given server, tube, search result limit and search content.
+// currentTubeSearchResults constructs a search result table by given server,
+// tube, search result limit and search content.
 func currentTubeSearchResults(server string, tube string, limit string, searchStr string, result []SearchResult) string {
 	var buf, tr bytes.Buffer
 	if len(result) == 0 {

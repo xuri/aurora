@@ -7,6 +7,7 @@ import (
 	"github.com/Luxurioust/aurora/beanstalk"
 )
 
+// modalAddSample render add sample popup window.
 func modalAddSample(server string, tube string) string {
 	var err error
 	var tubeList, buf bytes.Buffer

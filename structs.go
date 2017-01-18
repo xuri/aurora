@@ -162,7 +162,8 @@ type StatisticsData struct {
 	Server map[string]map[string]map[string]*list.List
 }
 
-// SelfConf define fields storage in cookies and statistics parameter storage in RAM.
+// SelfConf define fields storage in cookies and statistics parameter storage in
+// RAM.
 type SelfConf struct {
 	Filter                     []string
 	Servers                    []string

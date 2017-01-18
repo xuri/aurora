@@ -13,7 +13,8 @@ import (
 	"github.com/Luxurioust/aurora/beanstalk"
 )
 
-// statisticPreferenceSave provide method to save statistics preference settings.
+// statisticPreferenceSave provide method to save statistics preference
+// settings.
 func statisticPreferenceSave(f url.Values, w http.ResponseWriter, r *http.Request) {
 	var err error
 	var collection, frequency string
@@ -50,7 +51,9 @@ func statisticPreferenceSave(f url.Values, w http.ResponseWriter, r *http.Reques
 	return
 }
 
-// statisticCashier validate collection and frequency parameter and send notify to statistic Goroutine that the configuration of statistics preference settings has changed.
+// statisticCashier validate collection and frequency parameter and send notify
+// to statistic Goroutine that the configuration of statistics preference
+// settings has changed.
 func statisticCashier(collection string, frequency string, tubes []string) error {
 	c, err := strconv.Atoi(collection)
 	if err != nil {
@@ -90,7 +93,8 @@ func statisticCashier(collection string, frequency string, tubes []string) error
 	return nil
 }
 
-// statistic provide method to control statisticAgent collect the statistics data in a Goroutine.
+// statistic provide method to control statisticAgent collect the statistics
+// data in a Goroutine.
 func statistic() {
 	for {
 		tick := time.Tick(time.Duration(selfConf.StatisticsFrequency) * time.Second)

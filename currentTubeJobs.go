@@ -2,7 +2,9 @@ package main
 
 import "bytes"
 
-// currentTubeJobs call currentTubeJobsSummaryTable, currentTubeJobsActionsRow and currentTubeJobsShowcase functions by given server and tube config, and merge these functions return value.
+// currentTubeJobs call currentTubeJobsSummaryTable, currentTubeJobsActionsRow
+// and currentTubeJobsShowcase functions by given server and tube config, and
+// merge these functions return value.
 func currentTubeJobs(server string, tube string) string {
 	var table = currentTubeJobsSummaryTable(server, tube)
 	buf := bytes.Buffer{}
