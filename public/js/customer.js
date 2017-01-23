@@ -173,7 +173,7 @@ $(document).ready(
                         if ($(this).val().length > 0) {
                             console.log($(this).data('href') + encodeURIComponent($(this).val()));
                         }
-                        document.location.replace($(this).data('href') + ($(this).val()));
+                        document.location.replace($(this).data('href') + encodeURIComponent($(this).val()));
                     }
                 });
                 $(document).on('click', '#addServer', function () {

@@ -45,3 +45,8 @@ ol.inside, ul.inside {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+input.moveJobsNewTubeName {
+    margin: 3px 20px;
+    padding: 0 5px;
+}
