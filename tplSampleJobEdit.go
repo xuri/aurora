@@ -82,7 +82,7 @@ func tplSampleJobEdit(key string, alert string) string {
 	buf.WriteString(action.String())
 	buf.WriteString(`" method="POST"><div class="clearfix form-group"><div class="pull-left">`)
 	buf.WriteString(title.String())
-	buf.WriteString(`</div><div class="pull-right"><a href="./sample?action=manageSamples" class="btn btn-default btn-small"><i class="glyphicon glyphicon-list"></i> Manage samples</a></div></div><div class="form-group"><fieldset>`)
+	buf.WriteString(`</div><div class="pull-right"><a href="./sample?action=manageSamples" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-list"></i> Manage samples</a></div></div><div class="form-group"><fieldset>`)
 	buf.WriteString(alert)
 	buf.WriteString(`<div class="control-group"><label class="control-label" for="addsamplename"><b>Name *</b></label><div class="controls form-group"><input class="form-control input-sm focused" id="addsamplename" name="name" type="text" style="width: 15em;" required="" value="`)
 	buf.WriteString(name.String())
