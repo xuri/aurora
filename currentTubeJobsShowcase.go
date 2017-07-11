@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/Luxurioust/aurora/beanstalk"
+	"github.com/xuri/aurora/beanstalk"
 )
 
 // currentTubeJobsShowcase return a section include three stats of job, call

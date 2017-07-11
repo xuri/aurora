@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/Luxurioust/aurora/beanstalk"
+	"github.com/xuri/aurora/beanstalk"
 )
 
 // currentTubeJobsActionsRow render a section include kick, pause and unpause

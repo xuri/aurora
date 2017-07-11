@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"html"
 
-	"github.com/Luxurioust/aurora/beanstalk"
+	"github.com/xuri/aurora/beanstalk"
 )
 
 // modalAddSample render add sample popup window.

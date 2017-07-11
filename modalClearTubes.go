@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"html"
 
-	"github.com/Luxurioust/aurora/beanstalk"
+	"github.com/xuri/aurora/beanstalk"
 )
 
 // modalClearTubes render modal popup for delete job in tubes.

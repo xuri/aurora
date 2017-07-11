@@ -10,8 +10,8 @@ import (
 	"runtime"
 	"strings"
 
-	_ "github.com/Luxurioust/aurora/statik"
 	"github.com/rakyll/statik/fs"
+	_ "github.com/xuri/aurora/statik"
 )
 
 // main function defines the entry point for the program if read config file or

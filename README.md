@@ -2,18 +2,18 @@
 
 # aurora
 
-[![Build Status](https://travis-ci.org/Luxurioust/aurora.svg?branch=master)](https://travis-ci.org/Luxurioust/aurora)
-[![Code Coverage](https://codecov.io/gh/Luxurioust/aurora/branch/master/graph/badge.svg)](https://codecov.io/gh/Luxurioust/aurora)
-[![Downloads](https://img.shields.io/github/downloads/Luxurioust/aurora/total.svg)](https://github.com/Luxurioust/aurora/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Luxurioust/aurora)](https://goreportcard.com/report/github.com/Luxurioust/aurora)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/Luxurioust/aurora/blob/master/LICENSE)
-[![Release](https://img.shields.io/github/release/Luxurioust/aurora.svg?label=Release)](https://github.com/Luxurioust/aurora/releases)
+[![Build Status](https://travis-ci.org/xuri/aurora.svg?branch=master)](https://travis-ci.org/xuri/aurora)
+[![Code Coverage](https://codecov.io/gh/xuri/aurora/branch/master/graph/badge.svg)](https://codecov.io/gh/xuri/aurora)
+[![Downloads](https://img.shields.io/github/downloads/xuri/aurora/total.svg)](https://github.com/xuri/aurora/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/xuri/aurora)](https://goreportcard.com/report/github.com/xuri/aurora)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/xuri/aurora/blob/master/LICENSE)
+[![Release](https://img.shields.io/github/release/xuri/aurora.svg?label=Release)](https://github.com/xuri/aurora/releases)
 
 ## Overview
 
 aurora is a web-based Beanstalk queue server console written in Go and works on macOS, Linux and Windows machines. Main idea behind using Go for backend development is to utilize ability of the compiler to produce zero-dependency binaries for multiple platforms. aurora was created as an attempt to build very simple and portable application to work with local or remote Beanstalk server.
 
-[See application screenshots](https://github.com/Luxurioust/aurora/wiki)
+[See application screenshots](https://github.com/xuri/aurora/wiki)
 
 ## Features
 
@@ -35,7 +35,7 @@ aurora is a web-based Beanstalk queue server console written in Go and works on 
 
 ## Installation
 
-[Precompiled binaries](https://github.com/Luxurioust/aurora/releases) for supported operating systems are available.
+[Precompiled binaries](https://github.com/xuri/aurora/releases) for supported operating systems are available.
 
 ## Contributing
 
@@ -58,4 +58,4 @@ Contributions are welcome! Open a pull request to fix a bug, or open an issue to
 
 ## Licenses
 
-This program is under the terms of the MIT License. See [LICENSE](https://github.com/Luxurioust/aurora/blob/master/LICENSE) for the full license text.
+This program is under the terms of the MIT License. See [LICENSE](https://github.com/xuri/aurora/blob/master/LICENSE) for the full license text.

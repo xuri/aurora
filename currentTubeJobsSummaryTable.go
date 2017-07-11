@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"net/url"
 
-	"github.com/Luxurioust/aurora/beanstalk"
+	"github.com/xuri/aurora/beanstalk"
 )
 
 // currentTubeJobsSummaryTable constructs a tube job table based on the given

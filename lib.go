@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Luxurioust/aurora/beanstalk"
+	"github.com/xuri/aurora/beanstalk"
 )
 
 // addJob puts a job into tube by given config.

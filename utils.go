@@ -248,7 +248,7 @@ func checkUpdate() string {
 		return updateInfo
 	}
 	if Version < v {
-		updateInfo = fmt.Sprintf(`<br/><div class="alert alert-info" style="position: relative;top:50px;"><span>You are currently running version %.1f of aurora. A new version is available: <b>%.1f</b> Get it from <b><a href="https://github.com/Luxurioust/aurora" target="_blank">GitHub</a></b></span></div>`, Version, v)
+		updateInfo = fmt.Sprintf(`<br/><div class="alert alert-info" style="position: relative;top:50px;"><span>You are currently running version %.1f of aurora. A new version is available: <b>%.1f</b> Get it from <b><a href="https://github.com/xuri/aurora" target="_blank">GitHub</a></b></span></div>`, Version, v)
 	}
 	return updateInfo
 }
