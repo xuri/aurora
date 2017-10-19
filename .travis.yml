@@ -1,6 +1,8 @@
 language: go
 
-install:
+sudo: required
+
+before_install:
   # Queue (Beanstalkd)
   - sudo apt-get update -qq
   - sudo apt-get install -qq beanstalkd
@@ -8,9 +10,8 @@ install:
   - go get github.com/rakyll/statik
   - go get github.com/rakyll/statik/fs
   - go get -d -t -v ./... && go build -v ./...
-
-before_script:
-  - beanstalkd -l 127.0.0.1 -p 11300
+  - beanstalkd -v
+  - beanstalkd -l 127.0.0.1 -p 11300 &
 
 go:
   - 1.6.x
