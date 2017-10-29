@@ -27,7 +27,7 @@ func getServerStatus() string {
 		}
 		s, _ := bstkConn.Stats()
 		bstkConn.Close()
-		td.WriteString(`<tr><td><a href="/server?server=`)
+		td.WriteString(`<tr><td><a href="server?server=`)
 		td.WriteString(addr)
 		td.WriteString(`">`)
 		td.WriteString(addr)
