@@ -19,7 +19,7 @@ const (
 	TplLinks                = `<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Links <span class="caret"></span></a><ul class="dropdown-menu"><li><a href="https://github.com/kr/beanstalkd" target="_blank">Beanstalk (GitHub)</a></li><li><a href="https://github.com/xuri/aurora" target="_blank">Aurora (GitHub)</a></li></ul></li>`
 	TplNoScript             = `<noscript><div class="container"><div class="alert alert-danger" role="alert">Aurora beanstalk console requires JavaScript supports, please refresh after enable browser JavaScript support.</div></div></noscript>`
 	UpdateURL               = `https://api.github.com/repos/xuri/aurora/tags`
-	Version                 = 2.1
+	Version                 = 2.2
 )
 
 // Define server and tube stats fields.
