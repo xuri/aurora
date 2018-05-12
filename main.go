@@ -62,7 +62,7 @@ func openPage() {
 	}
 	var err error
 	switch runtime.GOOS {
-	case "linux":
+	case "linux", "freebsd", "openbsd", "netbsd":
 		err = runCmd("xdg-open", url)
 	case "darwin":
 		err = runCmd("open", url)
