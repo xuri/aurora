@@ -33,7 +33,7 @@ func addJob(server string, tube string, data string, priority string, delay stri
 		Conn: bstkConn,
 		Name: tube,
 	}
-	bstkTube.Put([]byte(data), uint32(tubePriority), time.Duration(tubeDelay)*time.Second, time.Duration(tubeTTR)*time.Second)
+	_, _ = bstkTube.Put([]byte(data), uint32(tubePriority), time.Duration(tubeDelay)*time.Second, time.Duration(tubeTTR)*time.Second)
 	bstkConn.Close()
 }
 
@@ -49,7 +49,7 @@ func deleteJob(server string, tube string, jobID string) {
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return
 	}
-	bstkConn.Delete(uint64(id))
+	_ = bstkConn.Delete(uint64(id))
 	bstkConn.Close()
 }
 
@@ -69,21 +69,21 @@ func deleteAll(server string, tube string) {
 		if err != nil {
 			break
 		}
-		bstkConn.Delete(readyJob)
+		_ = bstkConn.Delete(readyJob)
 	}
 	for {
 		buriedJob, _, err := bstkTube.PeekBuried()
 		if err != nil {
 			break
 		}
-		bstkConn.Delete(buriedJob)
+		_ = bstkConn.Delete(buriedJob)
 	}
 	for {
 		delayedJob, _, err := bstkTube.PeekDelayed()
 		if err != nil {
 			break
 		}
-		bstkConn.Delete(delayedJob)
+		_ = bstkConn.Delete(delayedJob)
 	}
 	bstkConn.Close()
 }
@@ -106,7 +106,7 @@ func kick(server string, tube string, count string) {
 		Conn: bstkConn,
 		Name: tube,
 	}
-	bstkTube.Kick(bound)
+	_, _ = bstkTube.Kick(bound)
 	bstkConn.Close()
 }
 
@@ -122,7 +122,7 @@ func kickJob(server string, tube string, id string) {
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return
 	}
-	bstkConn.KickJob(uint64(bound))
+	_ = bstkConn.KickJob(uint64(bound))
 	bstkConn.Close()
 }
 
@@ -140,12 +140,12 @@ func pause(server string, tube string, count string) {
 	switch count {
 	case "-1": // Pause tube
 		if selfConf.TubePauseSeconds == -1 {
-			bstkTube.Pause(DefaultTubePauseSeconds * time.Second)
+			_ = bstkTube.Pause(DefaultTubePauseSeconds * time.Second)
 		} else {
-			bstkTube.Pause(time.Duration(selfConf.TubePauseSeconds) * time.Second)
+			_ = bstkTube.Pause(time.Duration(selfConf.TubePauseSeconds) * time.Second)
 		}
 	case "0":
-		bstkTube.Pause(0 * time.Second) // Unpause tube
+		_ = bstkTube.Pause(0 * time.Second) // Unpause tube
 	}
 	bstkConn.Close()
 }
@@ -286,7 +286,7 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 		if err != nil {
 			continue
 		}
-		b := uint64(0)
+		var b uint64
 		if s > 0 {
 			b, _, err = peek[k]()
 			if err != nil {

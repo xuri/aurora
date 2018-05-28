@@ -35,9 +35,12 @@ func readConf() error {
 	if err != nil {
 		return err
 	}
-	io.Copy(buf, tomlData)
+	_, err = io.Copy(buf, tomlData)
+	if err != nil {
+		return err
+	}
 	tomlData.Close()
-	if _, err := toml.Decode(string(buf.Bytes()), &pubConf); err != nil {
+	if _, err := toml.Decode(buf.String(), &pubConf); err != nil {
 		return err
 	}
 	if err := json.Unmarshal([]byte(pubConf.Sample.Storage), &sampleJobs); err != nil {
@@ -174,7 +177,6 @@ func basicAuth(f ViewFunc) ViewFunc {
 	if !pubConf.Auth.Enabled {
 		return func(w http.ResponseWriter, r *http.Request) {
 			f(w, r)
-			return
 		}
 	}
 	return func(w http.ResponseWriter, r *http.Request) {

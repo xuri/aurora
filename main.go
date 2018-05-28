@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"runtime"
 	"strings"
+	"syscall"
 
 	"github.com/rakyll/statik/fs"
 	_ "github.com/xuri/aurora/statik"
@@ -18,8 +19,7 @@ import (
 // init failed, the application will be exit.
 func main() {
 	parseFlags()
-	var err error
-	err = readConf()
+	err := readConf()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -80,6 +80,6 @@ func openPage() {
 // handleSignals handle kill signal.
 func handleSignals() {
 	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt, os.Kill)
+	signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 	<-c
 }

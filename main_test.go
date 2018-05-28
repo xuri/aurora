@@ -79,6 +79,8 @@ func testSetup() {
 	if err != nil {
 		return
 	}
+	readConf()
+	saveSample()
 	selfConf := selfDir + string(os.PathSeparator) + `aurora.toml`
 	createFile(selfConf)
 	writeFile(selfConf, ConfigFileTemplate)

@@ -22,7 +22,7 @@ func statisticPreferenceSave(f url.Values, w http.ResponseWriter, r *http.Reques
 	alert := `<div class="alert alert-danger" id="sfsa"><button type="button" class="close" onclick="$('#sfsa').fadeOut('fast');">×</button><span> Required fields are not set correct</span></div>`
 	err = readConf()
 	if err != nil {
-		io.WriteString(w, tplStatisticSetting(tplStatisticEdit(`<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><span> Read config error</span></div>`)))
+		_, _ = io.WriteString(w, tplStatisticSetting(tplStatisticEdit(`<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">×</button><span> Read config error</span></div>`)))
 		return
 	}
 	for k, v := range f {
@@ -39,16 +39,15 @@ func statisticPreferenceSave(f url.Values, w http.ResponseWriter, r *http.Reques
 		}
 	}
 	if len(tubes) == 0 || collection == "" || frequency == "" {
-		io.WriteString(w, tplStatisticSetting(tplStatisticEdit(alert)))
+		_, _ = io.WriteString(w, tplStatisticSetting(tplStatisticEdit(alert)))
 		return
 	}
 	err = statisticCashier(collection, frequency, tubes)
 	if err != nil {
-		io.WriteString(w, tplStatisticSetting(tplStatisticEdit(`<div class="alert alert-danger" id="sfsa"><button type="button" class="close" onclick="$('#sfsa').fadeOut('fast');">×</button><span> Save statistics preference error</span></div>`)))
+		_, _ = io.WriteString(w, tplStatisticSetting(tplStatisticEdit(`<div class="alert alert-danger" id="sfsa"><button type="button" class="close" onclick="$('#sfsa').fadeOut('fast');">×</button><span> Save statistics preference error</span></div>`)))
 		return
 	}
-	io.WriteString(w, tplStatisticSetting(tplStatisticEdit(`<div class="alert alert-success" id="sfsa"><button type="button" class="close" onclick="$('#sfsa').fadeOut('fast');">×</button><span> Statistics preference saved</span></div>`)))
-	return
+	_, _ = io.WriteString(w, tplStatisticSetting(tplStatisticEdit(`<div class="alert alert-success" id="sfsa"><button type="button" class="close" onclick="$('#sfsa').fadeOut('fast');">×</button><span> Statistics preference saved</span></div>`)))
 }
 
 // statisticCashier validate collection and frequency parameter and send notify

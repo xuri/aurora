@@ -12,8 +12,7 @@ import (
 func tplStatisticEdit(alert string) string {
 	var err error
 	var buf, savedTo, ST, tubeList bytes.Buffer
-	var frequency int
-	frequency = selfConf.StatisticsFrequency
+	frequency := selfConf.StatisticsFrequency
 	if frequency < 1 {
 		frequency = 300
 	}

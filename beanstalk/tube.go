@@ -100,8 +100,5 @@ func (t *Tube) Pause(d time.Duration) error {
 		return err
 	}
 	_, err = t.Conn.readResp(r, false, "PAUSED")
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

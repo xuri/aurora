@@ -63,6 +63,7 @@ func (c *Conn) Close() error {
 func (c *Conn) cmd(t *Tube, ts *TubeSet, body []byte, op string, args ...interface{}) (req, error) {
 	r := req{c.c.Next(), op}
 	c.c.StartRequest(r.id)
+	defer c.c.EndRequest(r.id)
 	err := c.adjustTubes(t, ts)
 	if err != nil {
 		return req{}, err
@@ -79,7 +80,6 @@ func (c *Conn) cmd(t *Tube, ts *TubeSet, body []byte, op string, args ...interfa
 	if err != nil {
 		return req{}, ConnError{c, op, err}
 	}
-	c.c.EndRequest(r.id)
 	return r, nil
 }
 
