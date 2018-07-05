@@ -19,6 +19,15 @@ go:
   - 1.8.x
   - 1.9.x
 
+os:
+  - linux
+  - osx
+
+env:
+  matrix:
+    - GOARCH=amd64
+    - GOARCH=386
+
 script:
   - go vet ./...
   - go test -v -coverprofile=coverage.txt -covermode=atomic
