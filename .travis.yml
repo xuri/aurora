@@ -14,10 +14,6 @@ before_install:
   - beanstalkd -l 127.0.0.1 -p 11300 &
 
 go:
-  - 1.6.x
-  - 1.7.x
-  - 1.8.x
-  - 1.9.x
   - 1.10.x
   - 1.11.x
 
