@@ -1,3 +1,9 @@
+// Copyright 2016 - 2018 The aurora Authors. All rights reserved. Use of this
+// source code is governed by a MIT license that can be found in the LICENSE
+// file.
+//
+// Package statik embed a directory of static files into Go binary to be later
+// served from an http.FileSystem.
 package statik
 
 import (

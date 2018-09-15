@@ -35,9 +35,9 @@ enabled = true
 var (
 	once sync.Once
 	urls = []string{
-		"/",                                                                                                                                // Static files server
-		"/public",                                                                                                                          // Server list
-		"/server?server=" + bstk,                                                                                                           // Server status
+		"/",                      // Static files server
+		"/public",                // Server list
+		"/server?server=" + bstk, // Server status
 		"/index?server=&action=reloader&tplMain=ajax&tplBlock=serversList",                                                                 // Reload server status
 		"/serversRemove?action=serversRemove&removeServer=" + bstk,                                                                         // Remove server
 		"/server?server=" + bstk + "&action=reloader&tplMain=ajax&tplBlock=allTubes",                                                       // Reload tube status
@@ -62,14 +62,14 @@ var (
 		"/tube?server=not_exist_server_addr&tube=aurora_test&action=moveJobsTo&destTube=aurora_test&state=buried",                          // Move job from buried to ready state with no exits server
 		"/sample?action=manageSamples",                                                                                                     // Manage sample jobs
 		"/tube?server=" + bstk + "&tube=auto&action=loadSample&key=xxx&redirect=tube?action=manageSamples",                                 // Kick job to tubes
-		"/sample?action=newSample",                                                                                                         // New sample job
-		"/sample?action=editSample&key=xxx",                                                                                                // Edit sample job
-		"/tube?server=" + bstk + "&tube=default&state=ready&action=deleteJob&jobid=1",                                                      // Delete a job
-		"/tube?server=" + bstk + "&tube=default&state=ready&action=deleteJob&jobid=badID",                                                  // Delete a no exists job
-		"/tube?server=not_exist_server_addr&tube=default&state=ready&action=deleteJob&jobid=1",                                             // Delete a job with no exits server
-		"/tube?server=" + bstk + "&tube=default&state=ready&action=deleteAll&count=1",                                                      // Delete all jobs in empty tube
-		"/tube?server=" + bstk + "&tube=aurora_test&state=ready&action=deleteAll&count=1",                                                  // Delete all jobs
-		"/tube?server=not_exist_server_addr&tube=default&state=ready&action=deleteAll&count=1",                                             // Delete all jobs with no exits server
+		"/sample?action=newSample",          // New sample job
+		"/sample?action=editSample&key=xxx", // Edit sample job
+		"/tube?server=" + bstk + "&tube=default&state=ready&action=deleteJob&jobid=1",          // Delete a job
+		"/tube?server=" + bstk + "&tube=default&state=ready&action=deleteJob&jobid=badID",      // Delete a no exists job
+		"/tube?server=not_exist_server_addr&tube=default&state=ready&action=deleteJob&jobid=1", // Delete a job with no exits server
+		"/tube?server=" + bstk + "&tube=default&state=ready&action=deleteAll&count=1",          // Delete all jobs in empty tube
+		"/tube?server=" + bstk + "&tube=aurora_test&state=ready&action=deleteAll&count=1",      // Delete all jobs
+		"/tube?server=not_exist_server_addr&tube=default&state=ready&action=deleteAll&count=1", // Delete all jobs with no exits server
 	}
 )
 

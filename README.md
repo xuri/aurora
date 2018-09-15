@@ -51,7 +51,7 @@ Contributions are welcome! Open a pull request to fix a bug, or open an issue to
 
 ## Credits
 
-- Client for beanstalk use [kr/beanstalk](https://github.com/kr/beanstalk)
+- Client for beanstalk use [beanstalkd/go-beanstalk](https://github.com/beanstalkd/go-beanstalk)
 - TOML parser use [BurntSushi/toml](https://github.com/BurntSushi/toml)
 - Web UI originally by [ptrofimov/beanstalk_console](https://github.com/ptrofimov/beanstalk_console)
 - The logo is originally by [Ali Irawan](http://www.solusiteknologi.co.id/using-supervisord-beanstalkd-laravel/). This artwork is an adaptation.

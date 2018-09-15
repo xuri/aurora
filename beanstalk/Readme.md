@@ -1,10 +1,10 @@
 # Beanstalk
 
-Go client for [beanstalkd](http://kr.github.com/beanstalkd/).
+Go client for [beanstalkd](https://beanstalkd.github.io).
 
 ## Install
 
-    $ go get github.com/kr/beanstalk
+    $ go get github.com/beanstalkd/go-beanstalk
 
 ## Use
 
