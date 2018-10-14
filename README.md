@@ -2,7 +2,7 @@
 
 # aurora
 
-[![Build Status](https://travis-ci.org/xuri/aurora.svg?branch=master)](https://travis-ci.org/xuri/aurora)
+[![Build Status](https://travis-ci.com/xuri/aurora.svg?branch=master)](https://travis-ci.com/xuri/aurora)
 [![Code Coverage](https://codecov.io/gh/xuri/aurora/branch/master/graph/badge.svg)](https://codecov.io/gh/xuri/aurora)
 [![Downloads](https://img.shields.io/github/downloads/xuri/aurora/total.svg)](https://github.com/xuri/aurora/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xuri/aurora)](https://goreportcard.com/report/github.com/xuri/aurora)
