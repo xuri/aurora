@@ -3,7 +3,7 @@
 # aurora
 
 [![Build Status](https://travis-ci.com/xuri/aurora.svg?branch=master)](https://travis-ci.com/xuri/aurora)
-[![Code Coverage](https://codecov.io/gh/xuri/aurora/branch/master/graph/badge.svg)](https://codecov.io/gh/xuri/aurora)
+[![Backers on Open Collective](https://opencollective.com/aurora/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/aurora/sponsors/badge.svg)](#sponsors) [![Code Coverage](https://codecov.io/gh/xuri/aurora/branch/master/graph/badge.svg)](https://codecov.io/gh/xuri/aurora)
 [![Downloads](https://img.shields.io/github/downloads/xuri/aurora/total.svg)](https://github.com/xuri/aurora/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xuri/aurora)](https://goreportcard.com/report/github.com/xuri/aurora)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/xuri/aurora/blob/master/LICENSE)
@@ -55,6 +55,36 @@ Contributions are welcome! Open a pull request to fix a bug, or open an issue to
 - TOML parser use [BurntSushi/toml](https://github.com/BurntSushi/toml)
 - Web UI originally by [ptrofimov/beanstalk_console](https://github.com/ptrofimov/beanstalk_console)
 - The logo is originally by [Ali Irawan](http://www.solusiteknologi.co.id/using-supervisord-beanstalkd-laravel/). This artwork is an adaptation.
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/undefined/undefinedgraphs/contributors"><img src="https://opencollective.com/aurora/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/aurora#backer)]
+
+<a href="https://opencollective.com/aurora#backers" target="_blank"><img src="https://opencollective.com/aurora/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/aurora#sponsor)]
+
+<a href="https://opencollective.com/aurora/sponsor/0/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/aurora/sponsor/1/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/aurora/sponsor/2/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/aurora/sponsor/3/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/aurora/sponsor/4/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/aurora/sponsor/5/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/aurora/sponsor/6/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/aurora/sponsor/7/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/aurora/sponsor/8/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/aurora/sponsor/9/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/9/avatar.svg"></a>
+
+
 
 ## Licenses
 
