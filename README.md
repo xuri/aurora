@@ -59,32 +59,18 @@ Contributions are welcome! Open a pull request to fix a bug, or open an issue to
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/undefined/undefinedgraphs/contributors"><img src="https://opencollective.com/aurora/contributors.svg?width=890&button=false" /></a>
 
+[![Contributors](https://opencollective.com/aurora/contributors.svg?width=890&button=false)](https://github.com/xuri/aurora/graphs/contributors)
 
 ## Backers
 
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/aurora#backer)]
 
-<a href="https://opencollective.com/aurora#backers" target="_blank"><img src="https://opencollective.com/aurora/backers.svg?width=890"></a>
-
+[![Backers](https://opencollective.com/aurora/backers.svg?width=890)](https://opencollective.com/aurora#backers)
 
 ## Sponsors
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/aurora#sponsor)]
-
-<a href="https://opencollective.com/aurora/sponsor/0/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/aurora/sponsor/1/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/aurora/sponsor/2/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/aurora/sponsor/3/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/aurora/sponsor/4/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/aurora/sponsor/5/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/aurora/sponsor/6/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/aurora/sponsor/7/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/aurora/sponsor/8/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/aurora/sponsor/9/website" target="_blank"><img src="https://opencollective.com/aurora/sponsor/9/avatar.svg"></a>
-
-
 
 ## Licenses
 
