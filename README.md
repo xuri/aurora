@@ -3,9 +3,10 @@
 # aurora
 
 [![Build Status](https://travis-ci.com/xuri/aurora.svg?branch=master)](https://travis-ci.com/xuri/aurora)
-[![Backers on Open Collective](https://opencollective.com/aurora/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/aurora/sponsors/badge.svg)](#sponsors) [![Code Coverage](https://codecov.io/gh/xuri/aurora/branch/master/graph/badge.svg)](https://codecov.io/gh/xuri/aurora)
-[![Downloads](https://img.shields.io/github/downloads/xuri/aurora/total.svg)](https://github.com/xuri/aurora/releases)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2366/badge)](https://bestpractices.coreinfrastructure.org/projects/2366)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xuri/aurora)](https://goreportcard.com/report/github.com/xuri/aurora)
+[![Code Coverage](https://codecov.io/gh/xuri/aurora/branch/master/graph/badge.svg)](https://codecov.io/gh/xuri/aurora)
+[![Downloads](https://img.shields.io/github/downloads/xuri/aurora/total.svg)](https://github.com/xuri/aurora/releases)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/xuri/aurora/blob/master/LICENSE)
 [![Release](https://img.shields.io/github/release/xuri/aurora.svg?label=Release)](https://github.com/xuri/aurora/releases)
 
