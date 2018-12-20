@@ -113,7 +113,7 @@ func (c *Conn) adjustTubes(t *Tube, ts *TubeSet) error {
 	return nil
 }
 
-// does not flush
+// printLine does not flush
 func (c *Conn) printLine(cmd string, args ...interface{}) {
 	io.WriteString(c.c.W, cmd)
 	for _, a := range args {
