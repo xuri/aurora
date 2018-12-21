@@ -17,7 +17,7 @@ import (
 	"net/url"
 )
 
-// tplStatistics render a statistics overview graphs with Flot by given server
+// tplStatistic renders a statistics overview graphs with Flot by given server
 // and tube.
 func tplStatistic(server string, tube string) string {
 	buf := bytes.Buffer{}
