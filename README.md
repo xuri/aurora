@@ -9,6 +9,7 @@
 [![Downloads](https://img.shields.io/github/downloads/xuri/aurora/total.svg)](https://github.com/xuri/aurora/releases)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/xuri/aurora/blob/master/LICENSE)
 [![Release](https://img.shields.io/github/release/xuri/aurora.svg?label=Release)](https://github.com/xuri/aurora/releases)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fxuri%2Faurora.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fxuri%2Faurora?ref=badge_shield)
 
 ## Overview
 
@@ -76,3 +77,5 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 ## Licenses
 
 This program is under the terms of the MIT License. See [LICENSE](https://github.com/xuri/aurora/blob/master/LICENSE) for the full license text.
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fxuri%2Faurora.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fxuri%2Faurora?ref=badge_large)
