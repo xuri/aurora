@@ -264,10 +264,16 @@ func clearTubes(server string, data url.Values) {
 // searchTube search job by given search string in ready, delayed and buried
 // stats.
 func searchTube(server string, tube string, limit string, searchStr string) string {
-	var err error
-	var bstkConn *beanstalk.Conn
-	var searchLimit int
-	var table = currentTubeJobsSummaryTable(server, tube)
+	var (
+		bstkConn      *beanstalk.Conn
+		bstkConnStats map[string]string
+		err           error
+		result        = []SearchResult{}
+		searchLimit   int
+		statsFilter   = []string{"ready", "delayed", "buried"}
+		table         = currentTubeJobsSummaryTable(server, tube)
+		totalJobs, id uint64
+	)
 	if table == `` {
 		return `Tube "` + tube + `" not found or it is empty <br><br><a href="./server?server=` + server + `"> &lt;&lt; back </a>`
 	}
@@ -278,32 +284,24 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return table
 	}
-	result := []SearchResult{}
-	bstkTube := &beanstalk.Tube{
-		Conn: bstkConn,
-		Name: tube,
+	if bstkConnStats, err = bstkConn.Stats(); err != nil {
+		return table
 	}
-	tubeStat, err := bstkTube.Stats()
-	if err != nil {
-		bstkConn.Close()
+	if totalJobs, err = strconv.ParseUint(bstkConnStats["total-jobs"], 10, 64); err != nil {
 		return table
 	}
 	// Get ready stat job total
-	statsFilter := []string{"ready", "delayed", "buried"}
-	jobsFilter := []string{"current-jobs-ready", "current-jobs-delayed", "current-jobs-buried"}
-	peek := []func() (id uint64, body []byte, err error){bstkTube.PeekReady, bstkTube.PeekDelayed, bstkTube.PeekBuried}
-	for k, v := range statsFilter {
-		s, err := strconv.Atoi(tubeStat[jobsFilter[k]])
-		if err != nil {
-			continue
-		}
-		var b uint64
-		if s > 0 {
-			b, _, err = peek[k]()
-			if err != nil {
+	for _, state := range statsFilter {
+		var cnt int
+		for id = totalJobs; id > 0; id-- {
+			if cnt >= searchLimit {
 				continue
 			}
-			result = searchTubeInStats(tube, searchLimit, searchStr, bstkConn, result, b, s, v)
+			ret := searchTubeInStats(tube, searchStr, state, bstkConn, id)
+			if ret != nil {
+				result = append(result, *ret)
+				cnt++
+			}
 		}
 	}
 	bstkConn.Close()
@@ -311,41 +309,25 @@ func searchTube(server string, tube string, limit string, searchStr string) stri
 }
 
 // searchTubeInStats search job in tube by given stats.
-func searchTubeInStats(tube string, limit int, searchStr string, bstkConn *beanstalk.Conn, result []SearchResult, id uint64, cnt int, stat string) []SearchResult {
-	if cnt > limit {
-		cnt = limit
+func searchTubeInStats(tube, searchStr, stat string, bstkConn *beanstalk.Conn, id uint64) *SearchResult {
+	jobStats, err := bstkConn.StatsJob(id)
+	if err != nil {
+		return nil
 	}
-	resultCnt := 0
-	for {
-		if resultCnt == cnt {
-			break
-		}
-		jobStats, err := bstkConn.StatsJob(id)
-		if err != nil {
-			break
-		}
-		if jobStats["tube"] != tube {
-			id++
-			continue
-		}
-		readyBody, err := bstkConn.Peek(id)
-		if err != nil {
-			continue
-		}
-		body := string(readyBody)
-		if !strings.Contains(body, searchStr) {
-			id++
-			resultCnt++
-			continue
-		}
-		job := SearchResult{
-			ID:    id,
-			State: stat,
-			Data:  string(readyBody),
-		}
-		result = append(result, job)
-		id++
-		resultCnt++
+	if jobStats["tube"] != tube || jobStats["state"] != stat {
+		return nil
 	}
-	return result
+	readyBody, err := bstkConn.Peek(id)
+	if err != nil {
+		return nil
+	}
+	body := string(readyBody)
+	if !strings.Contains(body, searchStr) {
+		return nil
+	}
+	return &SearchResult{
+		ID:    id,
+		State: stat,
+		Data:  string(readyBody),
+	}
 }
