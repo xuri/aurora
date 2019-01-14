@@ -1,13 +1,13 @@
-// Copyright 2016 - 2018 The aurora Authors. All rights reserved. Use of this
+// Copyright 2016 - 2019 The aurora Authors. All rights reserved. Use of this
 // source code is governed by a MIT license that can be found in the LICENSE
 // file.
 //
-// The aurora is a web-based Beanstalk queue server console written in Go
+// The aurora is a web-based beanstalkd queue server console written in Go
 // and works on macOS, Linux and Windows machines. Main idea behind using Go
 // for backend development is to utilize ability of the compiler to produce
 // zero-dependency binaries for multiple platforms. aurora was created as an
 // attempt to build very simple and portable application to work with local or
-// remote Beanstalk server.
+// remote beanstalkd server.
 
 package main
 
@@ -26,9 +26,9 @@ const (
 	DefaultPriority         = 1024 // most urgent: 0, least urgent: 4294967295.
 	DefaultTTR              = 60   // 1 minute
 	DefaultTubePauseSeconds = 3600
-	TplHead                 = `<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]--><meta name="description" content="Beanstalk Console"><meta name="keywords" content="Beanstalk Console, beanstalk, console"><meta content="always" name="referrer"><meta name="language" content="en-US"><meta name="category" content="Tools"><meta name="summary" content="Beanstalk Console"><meta name="apple-mobile-web-app-capable" content="yes"/><link rel="copyright" href="http://www.opensource.org/licenses/mit-license.php"/><link rel="icon" sizes="32x32" href="./images/aurora-32x32.ico"><link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon-180x180-precomposed.png"><link rel="apple-touch-icon" sizes="152x152" href="./images/apple-touch-icon-152x152-precomposed.png"><link rel="apple-touch-icon" sizes="144x144" href="./images/apple-touch-icon-144x144-precomposed.png"><link rel="apple-touch-icon" sizes="120x120" href="./images/apple-touch-icon-120x120-precomposed.png"><link rel="apple-touch-icon" sizes="114x114" href="./images/apple-touch-icon-114x114-precomposed.png"><link rel="apple-touch-icon" sizes="76x76" href="./images/apple-touch-icon-76x76-precomposed.png"><link rel="apple-touch-icon" sizes="72x72" href="./images/apple-touch-icon-72x72-precomposed.png"><link rel="apple-touch-icon" href="./images/apple-touch-icon-precomposed-57x57.png"><title>Beanstalk Console</title><!-- Bootstrap core CSS --><link href="./assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"><link href="./css/customer.css" rel="stylesheet"><link href="./highlight/styles/magula.css" rel="stylesheet"><!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries --><!--[if lt IE 9]><script src="./js/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="./js/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--></head>`
-	TplLinks                = `<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Links <span class="caret"></span></a><ul class="dropdown-menu"><li><a href="https://github.com/beanstalkd" target="_blank">Beanstalk (GitHub)</a></li><li><a href="https://github.com/xuri/aurora" target="_blank">Aurora (GitHub)</a></li></ul></li>`
-	TplNoScript             = `<noscript><div class="container"><div class="alert alert-danger" role="alert">Aurora beanstalk console requires JavaScript supports, please refresh after enable browser JavaScript support.</div></div></noscript>`
+	TplHead                 = `<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]--><meta name="description" content="Beanstalkd Console"><meta name="keywords" content="Beanstalkd Console, beanstalk, console"><meta content="always" name="referrer"><meta name="language" content="en-US"><meta name="category" content="Tools"><meta name="summary" content="Beanstalkd Console"><meta name="apple-mobile-web-app-capable" content="yes"/><link rel="copyright" href="http://www.opensource.org/licenses/mit-license.php"/><link rel="icon" sizes="32x32" href="./images/aurora-32x32.ico"><link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon-180x180-precomposed.png"><link rel="apple-touch-icon" sizes="152x152" href="./images/apple-touch-icon-152x152-precomposed.png"><link rel="apple-touch-icon" sizes="144x144" href="./images/apple-touch-icon-144x144-precomposed.png"><link rel="apple-touch-icon" sizes="120x120" href="./images/apple-touch-icon-120x120-precomposed.png"><link rel="apple-touch-icon" sizes="114x114" href="./images/apple-touch-icon-114x114-precomposed.png"><link rel="apple-touch-icon" sizes="76x76" href="./images/apple-touch-icon-76x76-precomposed.png"><link rel="apple-touch-icon" sizes="72x72" href="./images/apple-touch-icon-72x72-precomposed.png"><link rel="apple-touch-icon" href="./images/apple-touch-icon-precomposed-57x57.png"><title>Beanstalkd Console</title><!-- Bootstrap core CSS --><link href="./assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"><link href="./css/customer.css" rel="stylesheet"><link href="./highlight/styles/magula.css" rel="stylesheet"><!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries --><!--[if lt IE 9]><script src="./js/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="./js/libs/respond.js/1.4.2/respond.min.js"></script><![endif]--></head>`
+	TplLinks                = `<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> Links <span class="caret"></span></a><ul class="dropdown-menu"><li><a href="https://github.com/beanstalkd" target="_blank">Beanstalkd (GitHub)</a></li><li><a href="https://github.com/xuri/aurora" target="_blank">Aurora (GitHub)</a></li></ul></li>`
+	TplNoScript             = `<noscript><div class="container"><div class="alert alert-danger" role="alert">Aurora Beanstalkd Console requires JavaScript supports, please refresh after enable browser JavaScript support.</div></div></noscript>`
 	UpdateURL               = `https://api.github.com/repos/xuri/aurora/tags`
 	Version                 = 2.2
 )
@@ -146,13 +146,13 @@ type PubConfig struct {
 	} `toml:"sample"`
 }
 
-// SampleJobs define beanstalk sample jobs storage struct.
+// SampleJobs define beanstalkd sample jobs storage struct.
 type SampleJobs struct {
 	Jobs  []SampleJob  `json:"jobs"`
 	Tubes []SampleTube `json:"tubes"`
 }
 
-// SampleJob define beanstalk sample job storage struct.
+// SampleJob define beanstalkd sample job storage struct.
 type SampleJob struct {
 	Key   string   `json:"key"`
 	Name  string   `json:"name"`
@@ -161,7 +161,7 @@ type SampleJob struct {
 	TTR   int      `json:"ttr"`
 }
 
-// SampleTube define beanstalk sample job's tube storage struct.
+// SampleTube define beanstalkd sample job's tube storage struct.
 type SampleTube struct {
 	Name string   `json:"name"`
 	Keys []string `json:"keys"`

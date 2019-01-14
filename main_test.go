@@ -74,7 +74,7 @@ var (
 )
 
 func testSetup() {
-	time.Sleep(1 * time.Second) // Wait Beanstalk server ready.
+	time.Sleep(1 * time.Second) // Wait Beanstalkd server ready.
 	selfDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		return

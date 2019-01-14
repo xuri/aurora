@@ -1,13 +1,13 @@
-// Copyright 2016 - 2018 The aurora Authors. All rights reserved. Use of this
+// Copyright 2016 - 2019 The aurora Authors. All rights reserved. Use of this
 // source code is governed by a MIT license that can be found in the LICENSE
 // file.
 //
-// The aurora is a web-based Beanstalk queue server console written in Go
+// The aurora is a web-based beanstalkd queue server console written in Go
 // and works on macOS, Linux and Windows machines. Main idea behind using Go
 // for backend development is to utilize ability of the compiler to produce
 // zero-dependency binaries for multiple platforms. aurora was created as an
 // attempt to build very simple and portable application to work with local or
-// remote Beanstalk server.
+// remote beanstalkd server.
 
 package main
 
@@ -96,8 +96,8 @@ func sampleValidate(server string, data url.Values, w http.ResponseWriter) (stri
 	}
 	jobID, err := strconv.Atoi(ID)
 	if err != nil {
-		_, _ = io.WriteString(w, `{"result":false,"error":"Retrieve beanstalk job ID error"}`)
-		return sampleName, sampleTTR, string(body), errors.New("Retrieve beanstalk job ID error")
+		_, _ = io.WriteString(w, `{"result":false,"error":"Retrieve beanstalkd job ID error"}`)
+		return sampleName, sampleTTR, string(body), errors.New("Retrieve beanstalkd job ID error")
 	}
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		_, _ = io.WriteString(w, `{"result":false,"error":"Connect to beanstal server fail"}`)
@@ -105,19 +105,19 @@ func sampleValidate(server string, data url.Values, w http.ResponseWriter) (stri
 	}
 	body, err = bstkConn.Peek(uint64(jobID))
 	if err != nil {
-		_, _ = io.WriteString(w, `{"result":false,"error":"Read beanstalk job content fail"}`)
-		return sampleName, sampleTTR, string(body), errors.New("Read beanstalk job content fail")
+		_, _ = io.WriteString(w, `{"result":false,"error":"Read beanstalkd job content fail"}`)
+		return sampleName, sampleTTR, string(body), errors.New("Read beanstalkd job content fail")
 	}
-	// Read beanstalk job TTR in job ID.
+	// Read beanstalkd job TTR in job ID.
 	jobStats, err := bstkConn.StatsJob(uint64(jobID))
 	if err != nil {
-		_, _ = io.WriteString(w, `{"result":false,"error":"Read beanstalk job stats fail"}`)
-		return sampleName, sampleTTR, string(body), errors.New("Read beanstalk job stats fail")
+		_, _ = io.WriteString(w, `{"result":false,"error":"Read beanstalkd job stats fail"}`)
+		return sampleName, sampleTTR, string(body), errors.New("Read beanstalkd job stats fail")
 	}
 	sampleTTR, err = strconv.Atoi(jobStats["ttr"])
 	if err != nil {
-		_, _ = io.WriteString(w, `{"result":false,"error":"Read beanstalk job TTR fail"}`)
-		return sampleName, sampleTTR, string(body), errors.New("Read beanstalk job TTR fail")
+		_, _ = io.WriteString(w, `{"result":false,"error":"Read beanstalkd job TTR fail"}`)
+		return sampleName, sampleTTR, string(body), errors.New("Read beanstalkd job TTR fail")
 	}
 	bstkConn.Close()
 	return sampleName, sampleTTR, string(body), nil

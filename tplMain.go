@@ -1,13 +1,13 @@
-// Copyright 2016 - 2018 The aurora Authors. All rights reserved. Use of this
+// Copyright 2016 - 2019 The aurora Authors. All rights reserved. Use of this
 // source code is governed by a MIT license that can be found in the LICENSE
 // file.
 //
-// The aurora is a web-based Beanstalk queue server console written in Go
+// The aurora is a web-based beanstalkd queue server console written in Go
 // and works on macOS, Linux and Windows machines. Main idea behind using Go
 // for backend development is to utilize ability of the compiler to produce
 // zero-dependency binaries for multiple platforms. aurora was created as an
 // attempt to build very simple and portable application to work with local or
-// remote Beanstalk server.
+// remote beanstalkd server.
 
 package main
 
@@ -24,7 +24,7 @@ func tplMain(serverList string, currentServer string) string {
 	buf.WriteString(TplHead)
 	buf.WriteString(`<body>`)
 	buf.WriteString(TplNoScript)
-	buf.WriteString(`<div class="navbar navbar-fixed-top navbar-default" role="navigation"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="/">Beanstalk Console</a></div><div class="collapse navbar-collapse"><ul class="nav navbar-nav">`)
+	buf.WriteString(`<div class="navbar navbar-fixed-top navbar-default" role="navigation"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="/">Beanstalkd console</a></div><div class="collapse navbar-collapse"><ul class="nav navbar-nav">`)
 	buf.WriteString(`</ul><ul class="nav navbar-nav navbar-right"><li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Toolbox <span class="caret"></span></a><ul class="dropdown-menu"><li><a href="#filterServer" role="button" data-toggle="modal">Filter columns</a></li><li><a href="./sample?action=manageSamples" role="button">Manage samples</a></li><li><a href="./statistics?action=preference" role="button">Statistics preference</a></li><li class="divider"></li><li><a href="#settings" role="button" data-toggle="modal">Edit settings</a></li></ul></li>`)
 	buf.WriteString(TplLinks)
 	buf.WriteString(`<li><button type="button" id="autoRefreshSummary" class="btn btn-default btn-small"><span class="glyphicon glyphicon-refresh"></span></button></li></ul></div><!--/.nav-collapse --></div></div><div class="container"><div id="idServers">`)
