@@ -20,9 +20,10 @@ func tplServer(content string, server string) string {
 		isDisabledJobDataHighlight = `<script src="./highlight/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script>`
 	}
 	buf := bytes.Buffer{}
-	buf.WriteString(`<!DOCTYPE html><html lang="en-US">`)
-	buf.WriteString(TplHead)
-	buf.WriteString(`<body>`)
+	buf.WriteString(TplHeaderBegin)
+	buf.WriteString(server)
+	buf.WriteString(` -`)
+	buf.WriteString(TplHeaderEnd)
 	buf.WriteString(TplNoScript)
 	buf.WriteString(`<div class="navbar navbar-fixed-top navbar-default" role="navigation"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="/">Beanstalkd console</a></div><div class="collapse navbar-collapse"><ul class="nav navbar-nav">`)
 	buf.WriteString(dropDownServer(server))

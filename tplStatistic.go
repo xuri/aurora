@@ -21,9 +21,11 @@ import (
 // and tube.
 func tplStatistic(server string, tube string) string {
 	buf := bytes.Buffer{}
-	buf.WriteString(`<!DOCTYPE html><html lang="en-US">`)
-	buf.WriteString(TplHead)
-	buf.WriteString(`<body>`)
+	buf.WriteString(TplHeaderBegin)
+	buf.WriteString(`Statistics overview - `)
+	buf.WriteString(tube)
+	buf.WriteString(` -`)
+	buf.WriteString(TplHeaderEnd)
 	buf.WriteString(TplNoScript)
 	buf.WriteString(`<div class="navbar navbar-fixed-top navbar-default" role="navigation"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="/">Beanstalkd console</a></div><div class="collapse navbar-collapse"><ul class="nav navbar-nav">`)
 	buf.WriteString(dropDownServer(""))
@@ -42,7 +44,7 @@ func tplStatistic(server string, tube string) string {
 	buf.WriteString(tplTubeFilter())
 	buf.WriteString(dropEditSettings())
 	buf.WriteString(`</div><script>function getParameterByName(name,url){if(!url){url=window.location.href}name=name.replace(/[\[\]]/g,"\\$&");var regex=new RegExp("[?&]"+name+"(=([^&#]*)|&|#|$)"),results=regex.exec(url);if(!results){return null}if(!results[2]){return""}return decodeURIComponent(results[2].replace(/\+/g," "))}var url="./tube?server="+getParameterByName("server");var contentType="";</script><script src='./assets/vendor/jquery/jquery.js'></script><script src="./js/jquery.color.js"></script><script src="./js/jquery.cookie.js"></script><script src="./js/jquery.regexp.js"></script><script src="./assets/vendor/bootstrap/js/bootstrap.min.js"></script>`)
-	buf.WriteString(`<script src="./js/libs/flot/jquery.flot.js"></script><script src="./js/libs/flot/jquery.flot.resize.js"></script><script src="./js/libs/flot/jquery.flot.tooltip.min.js"></script><script type="text/javascript">var options={series: {shadowSize:4,lines:{show:true},points:{show:true,radius:1}},colors:["#00C851","#ffbb33","#33b5e5","#ff4444"],grid:{hoverable:true},xaxis:{mode:"time",timeformat:"%y-%m-%d %H:%M:%S"},yaxis:{min:0,tickDecimals:0},tooltip:true,tooltipOpts:{content:"%x.1 %s jobs: %y.4"}};function getRandomData(){$.get("./statistics?action=reloader&server=`)
+	buf.WriteString(`<script src="./js/libs/flot/jquery.flot.js"></script><script src="./js/libs/flot/jquery.flot.resize.js"></script><script src="./js/libs/flot/jquery.flot.tooltip.min.js"></script><script type="text/javascript">var options={series: {shadowSize:4,lines:{show:true},points:{show:false,radius:1}},colors:["#00C851","#ffbb33","#33b5e5","#ff4444"],grid:{hoverable:true},xaxis:{mode:"time",timeformat:"%y-%m-%d %H:%M:%S"},yaxis:{min:0,tickDecimals:0},tooltip:true,tooltipOpts:{content:"%x.1 %s jobs: %y.4"}};function getRandomData(){$.get("./statistics?action=reloader&server=`)
 	buf.WriteString(server)
 	buf.WriteString(`&tube=`)
 	buf.WriteString(url.QueryEscape(tube))
