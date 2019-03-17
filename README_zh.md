@@ -1,4 +1,4 @@
-<p align="center"><img width="650" src="./aurora.png" alt="aurora"></p>
+<p align="center"><a href="https://xuri.me/aurora" target="_blank" alt="Aurora Beanstalkd Console"><img width="440" src="./aurora.png" alt="aurora"></a></p>
 
 <p align="center">
     <a href="https://travis-ci.com/xuri/aurora"><img src="https://travis-ci.com/xuri/aurora.svg?branch=master" alt="Build Status"></a>
