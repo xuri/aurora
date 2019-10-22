@@ -12,8 +12,8 @@
 package main
 
 import (
-	"bytes"
 	"html"
+	"strings"
 
 	"github.com/xuri/aurora/beanstalk"
 )
@@ -21,7 +21,7 @@ import (
 // modalClearTubes render modal popup for delete job in tubes.
 func modalClearTubes(server string) string {
 	var err error
-	var buf, tubeList bytes.Buffer
+	var buf, tubeList strings.Builder
 	var bstkConn *beanstalk.Conn
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return ``

@@ -12,10 +12,10 @@
 package main
 
 import (
-	"bytes"
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 // handlerMain handle request on router: /
@@ -91,7 +91,7 @@ func handlerTube(w http.ResponseWriter, r *http.Request) {
 
 // handleRedirect handle request with redirect response.
 func handleRedirect(w http.ResponseWriter, r *http.Request, server string, tube string, action string, count string) {
-	var link bytes.Buffer
+	var link strings.Builder
 	link.WriteString(`/tube?server=`)
 	link.WriteString(server)
 	link.WriteString(`&tube=`)

@@ -12,10 +12,10 @@
 package main
 
 import (
-	"bytes"
 	"net/url"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/xuri/aurora/beanstalk"
 )
@@ -23,7 +23,7 @@ import (
 // getServerStatus render a server stats table.
 func getServerStatus() string {
 	var err error
-	var buf, td, th bytes.Buffer
+	var buf, td, th strings.Builder
 	for _, addr := range selfConf.Servers {
 		var bstkConn *beanstalk.Conn
 		if bstkConn, err = beanstalk.Dial("tcp", addr); err != nil {
@@ -68,7 +68,7 @@ func getServerStatus() string {
 // getServerTubes render a tubes stats table by given server.
 func getServerTubes(server string) string {
 	var err error
-	var buf, th, tr, td bytes.Buffer
+	var buf, th, tr, td strings.Builder
 	var bstkConn *beanstalk.Conn
 	for _, v := range selfConf.TubeFilters {
 		th.WriteString(`<th>`)
@@ -119,7 +119,7 @@ func getServerTubes(server string) string {
 
 // dropDownServer render a navigation dropdown menu for server list.
 func dropDownServer(currentServer string) string {
-	var ul bytes.Buffer
+	var ul strings.Builder
 	if currentServer == "" {
 		currentServer = `All servers`
 	}
@@ -145,7 +145,7 @@ func dropDownServer(currentServer string) string {
 
 // dropDownTube render a navigation dropdown menu for tube list.
 func dropDownTube(server string, currentTube string) string {
-	var ul bytes.Buffer
+	var ul strings.Builder
 	if currentTube == "" {
 		currentTube = `All tubes`
 	}
@@ -184,7 +184,7 @@ func dropDownTube(server string, currentTube string) string {
 
 // dropEditSettings render a navigation dropdown menu for set preference.
 func dropEditSettings() string {
-	var buf bytes.Buffer
+	var buf strings.Builder
 	var isDisabledJSONDecode, isDisabledJobDataHighlight, isEnabledBase64Decode string
 	if selfConf.IsDisabledJSONDecode != 1 {
 		isDisabledJSONDecode = `checked="checked"`

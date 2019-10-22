@@ -11,11 +11,11 @@
 
 package main
 
-import "bytes"
+import "strings"
 
 // tplStatisticSetting statistic preferences page.
 func tplStatisticSetting(content string) string {
-	buf := bytes.Buffer{}
+	buf := strings.Builder{}
 	buf.WriteString(TplHeaderBegin)
 	buf.WriteString(`Statistics preference -`)
 	buf.WriteString(TplHeaderEnd)

@@ -12,8 +12,8 @@
 package main
 
 import (
-	"bytes"
 	"net/url"
+	"strings"
 
 	"github.com/xuri/aurora/beanstalk"
 )
@@ -22,7 +22,7 @@ import (
 // server and tube conf.
 func currentTubeJobsSummaryTable(server string, tube string) string {
 	var err error
-	var th, tr, td, template bytes.Buffer
+	var th, tr, td, template strings.Builder
 	var bstkConn *beanstalk.Conn
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		for _, v := range selfConf.TubeFilters {
@@ -33,7 +33,7 @@ func currentTubeJobsSummaryTable(server string, tube string) string {
 		if currentTubeStatisticCheck(server, tube) {
 			th.WriteString(`<th> </th>`)
 		}
-		buf := bytes.Buffer{}
+		buf := strings.Builder{}
 		buf.WriteString(`<section id="summaryTable"><div class="row"><div class="col-sm-12"><table class="table table-striped table-hover"><thead><tr><th>name</th>`)
 		buf.WriteString(th.String())
 		buf.WriteString(`</tr></thead><tbody></tbody></table></div></div></section>`)

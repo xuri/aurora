@@ -11,7 +11,7 @@
 
 package main
 
-import "bytes"
+import "strings"
 
 // tplSampleJobsManage render sample job manage list page.
 func tplSampleJobsManage(sampleList string, currentServer string) string {
@@ -19,7 +19,7 @@ func tplSampleJobsManage(sampleList string, currentServer string) string {
 	if selfConf.IsDisabledJobDataHighlight != 1 {
 		isDisabledJobDataHighlight = `<script src="./highlight/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script>`
 	}
-	buf := bytes.Buffer{}
+	buf := strings.Builder{}
 	buf.WriteString(TplHeaderBegin)
 	buf.WriteString(`Manage samples -`)
 	buf.WriteString(TplHeaderEnd)

@@ -12,15 +12,15 @@
 package main
 
 import (
-	"bytes"
 	"html"
 	"net/url"
+	"strings"
 )
 
 // tplStatistic renders a statistics overview graphs with Flot by given server
 // and tube.
 func tplStatistic(server string, tube string) string {
-	buf := bytes.Buffer{}
+	buf := strings.Builder{}
 	buf.WriteString(TplHeaderBegin)
 	buf.WriteString(`Statistics overview - `)
 	buf.WriteString(tube)

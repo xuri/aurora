@@ -12,7 +12,6 @@
 package main
 
 import (
-	"bytes"
 	"container/list"
 	"io"
 	"net/http"
@@ -172,7 +171,7 @@ func statisticAgent(server string, tube string) error {
 
 // statisticWaitress return real-time statistics data by given server and tube.
 func statisticWaitress(server string, tube string) string {
-	var buf, b, s, l bytes.Buffer
+	var buf, b, s, l strings.Builder
 	b.WriteString(`{`)
 	statisticsData.RLock()
 	for _, field := range statisticsFields {

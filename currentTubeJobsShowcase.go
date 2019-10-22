@@ -12,10 +12,10 @@
 package main
 
 import (
-	"bytes"
 	"html"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/xuri/aurora/beanstalk"
 )
@@ -24,7 +24,7 @@ import (
 // currentTubeJobsShowcaseSections function and get that return value based on
 // the given server and tube config.
 func currentTubeJobsShowcase(server string, tube string) string {
-	var buf bytes.Buffer
+	var buf strings.Builder
 	buf.WriteString(`<section class="jobsShowcase">`)
 	buf.WriteString(currentTubeJobsShowcaseSections(server, tube))
 	buf.WriteString(`</section>`)
@@ -36,7 +36,7 @@ func currentTubeJobsShowcase(server string, tube string) string {
 func currentTubeJobsShowcaseSections(server string, tube string) string {
 	stats := []string{"ready", "delayed", "buried"}
 	var err error
-	var buf, s, j, b, m, r bytes.Buffer
+	var buf, s, j, b, m, r strings.Builder
 	var bstkConn *beanstalk.Conn
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return `<hr><div class="pull-left"><h3>Next job in "ready" state</h3></div><div class="clearfix"></div><i>empty</i><hr><div class="pull-left"><h3>Next job in "delayed" state</h3></div><div class="clearfix"></div><i>empty</i><hr><div class="pull-left"><h3>Next job in "buried" state</h3></div><div class="clearfix"></div><i>empty</i>`

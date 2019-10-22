@@ -12,10 +12,10 @@
 package main
 
 import (
-	"bytes"
 	"html"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/xuri/aurora/beanstalk"
 )
@@ -25,7 +25,7 @@ import (
 func currentTubeJobsActionsRow(server string, tube string) string {
 	var err error
 	var bstkConn *beanstalk.Conn
-	var buf, pauseTimeLeft bytes.Buffer
+	var buf, pauseTimeLeft strings.Builder
 	var pause = strconv.Itoa(selfConf.TubePauseSeconds)
 	if pause == "-1" {
 		pause = "3600"
@@ -75,7 +75,7 @@ func currentTubeJobsActionsRow(server string, tube string) string {
 // currentTubeJobsActionsRowSample render a dropdown sample list by given server
 // and tube.
 func currentTubeJobsActionsRowSample(server string, tube string) string {
-	sample := bytes.Buffer{}
+	sample := strings.Builder{}
 	for _, v := range sampleJobs.Tubes {
 		if v.Name != tube {
 			continue

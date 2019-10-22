@@ -12,9 +12,9 @@
 package main
 
 import (
-	"bytes"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/xuri/aurora/beanstalk"
 )
@@ -22,7 +22,7 @@ import (
 // tplStatisticEdit provide method to render the statistics preference page.
 func tplStatisticEdit(alert string) string {
 	var err error
-	var buf, savedTo, ST, tubeList bytes.Buffer
+	var buf, savedTo, ST, tubeList strings.Builder
 	frequency := selfConf.StatisticsFrequency
 	if frequency < 1 {
 		frequency = 300

@@ -12,8 +12,8 @@
 package main
 
 import (
-	"bytes"
 	"html"
+	"strings"
 
 	"github.com/xuri/aurora/beanstalk"
 )
@@ -21,7 +21,7 @@ import (
 // modalAddSample render add sample popup window.
 func modalAddSample(server string, tube string) string {
 	var err error
-	var tubeList, buf bytes.Buffer
+	var tubeList, buf strings.Builder
 	var bstkConn *beanstalk.Conn
 	if bstkConn, err = beanstalk.Dial("tcp", server); err != nil {
 		return ``

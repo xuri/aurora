@@ -319,7 +319,7 @@ func getSampleJobList() string {
 	if len(sampleJobs.Jobs) == 0 {
 		return `<div class="clearfix"><div class="pull-left">There are no saved jobs.</div><div class="pull-right"><a href="?action=newSample" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"></i> Add job to samples</a></div></div>`
 	}
-	var tr, td, serverList, buf bytes.Buffer
+	var tr, td, serverList, buf strings.Builder
 	for _, j := range sampleJobs.Jobs {
 		for _, v := range j.Tubes {
 			for _, s := range selfConf.Servers {

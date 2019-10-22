@@ -11,14 +11,14 @@
 
 package main
 
-import "bytes"
+import "strings"
 
 // currentTubeJobs call currentTubeJobsSummaryTable, currentTubeJobsActionsRow
 // and currentTubeJobsShowcase functions by given server and tube config, and
 // merge these functions return value.
 func currentTubeJobs(server string, tube string) string {
 	var table = currentTubeJobsSummaryTable(server, tube)
-	buf := bytes.Buffer{}
+	buf := strings.Builder{}
 	if table == `` {
 		buf.WriteString(`Tube "`)
 		buf.WriteString(tube)

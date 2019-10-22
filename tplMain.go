@@ -11,7 +11,7 @@
 
 package main
 
-import "bytes"
+import "strings"
 
 // tplMain render server list.
 func tplMain(serverList string, currentServer string) string {
@@ -19,7 +19,7 @@ func tplMain(serverList string, currentServer string) string {
 	if selfConf.IsDisabledJobDataHighlight != 1 {
 		isDisabledJobDataHighlight = `<script src="./highlight/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script>`
 	}
-	buf := bytes.Buffer{}
+	buf := strings.Builder{}
 	buf.WriteString(TplHeaderBegin)
 	buf.WriteString(`All servers -`)
 	buf.WriteString(TplHeaderEnd)

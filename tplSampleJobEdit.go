@@ -12,10 +12,10 @@
 package main
 
 import (
-	"bytes"
 	"html"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/xuri/aurora/beanstalk"
 )
@@ -23,7 +23,7 @@ import (
 // tplSampleJobEdit render a sample job edit form.
 func tplSampleJobEdit(key string, alert string) string {
 	var err error
-	var buf, action, title, name, savedTo, saveTo, data, ST, tubeList, TTR bytes.Buffer
+	var buf, action, title, name, savedTo, saveTo, data, ST, tubeList, TTR strings.Builder
 	if key == "" {
 		action.WriteString(`?action=actionNewSample`)
 		title.WriteString(`<h4 class="text-info">New sample job</h4>`)

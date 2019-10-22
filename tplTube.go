@@ -11,7 +11,7 @@
 
 package main
 
-import "bytes"
+import "strings"
 
 // tplTube render job stats page in tube by given server.
 func tplTube(content string, server string, tube string) string {
@@ -19,7 +19,7 @@ func tplTube(content string, server string, tube string) string {
 	if selfConf.IsDisabledJobDataHighlight != 1 {
 		isDisabledJobDataHighlight = `<script src="./highlight/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script>`
 	}
-	buf := bytes.Buffer{}
+	buf := strings.Builder{}
 	buf.WriteString(TplHeaderBegin)
 	buf.WriteString(tube)
 	buf.WriteString(` - `)
