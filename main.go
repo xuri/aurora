@@ -1,6 +1,6 @@
 //go:generate statik -src=./public
 
-// Copyright 2016 - 2019 The aurora Authors. All rights reserved. Use of this
+// Copyright 2016 - 2020 The aurora Authors. All rights reserved. Use of this
 // source code is governed by a MIT license that can be found in the LICENSE
 // file.
 //
