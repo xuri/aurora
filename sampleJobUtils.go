@@ -305,7 +305,8 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 		_, _ = io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Save sample job error</span></div>`), server))
 		return
 	}
-	http.Redirect(w, r, "/sample?action=manageSamples", 301)
+	w.Header().Set("Location", "./sample?action=manageSamples")
+	w.WriteHeader(307)
 }
 
 // editSample provide method to update a sample job.
@@ -323,9 +324,11 @@ func getSampleJobList() string {
 	for _, j := range sampleJobs.Jobs {
 		for _, v := range j.Tubes {
 			for _, s := range selfConf.Servers {
+				serverList.Reset()
 				serverList.WriteString(`<li><a href="./tube?server=`)
 				serverList.WriteString(s)
 				serverList.WriteString(`&tube=`)
+				serverList.WriteString(v)
 				serverList.WriteString(`&action=loadSample&key=`)
 				serverList.WriteString(j.Key)
 				serverList.WriteString(`&redirect=`)

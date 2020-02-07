@@ -41,7 +41,8 @@ func serversRemove(w http.ResponseWriter, r *http.Request) {
 	server := r.URL.Query().Get("removeServer")
 	removeServerInCookie(server, w, r)
 	removeServerInConfig(server)
-	http.Redirect(w, r, "/public", 301)
+	w.Header().Set("Location", "./public")
+	w.WriteHeader(307)
 }
 
 // handlerServer handle request on router: /server
@@ -92,22 +93,25 @@ func handlerTube(w http.ResponseWriter, r *http.Request) {
 // handleRedirect handle request with redirect response.
 func handleRedirect(w http.ResponseWriter, r *http.Request, server string, tube string, action string, count string) {
 	var link strings.Builder
-	link.WriteString(`/tube?server=`)
+	link.WriteString(`./tube?server=`)
 	link.WriteString(server)
 	link.WriteString(`&tube=`)
 	switch action {
 	case "kick":
 		kick(server, tube, count)
 		link.WriteString(url.QueryEscape(tube))
-		http.Redirect(w, r, link.String(), 302)
+		w.Header().Set("Location", link.String())
+		w.WriteHeader(307)
 	case "kickJob":
 		kickJob(server, tube, r.URL.Query().Get("jobid"))
 		link.WriteString(url.QueryEscape(tube))
-		http.Redirect(w, r, link.String(), 302)
+		w.Header().Set("Location", link.String())
+		w.WriteHeader(307)
 	case "pause":
 		pause(server, tube, count)
 		link.WriteString(url.QueryEscape(tube))
-		http.Redirect(w, r, link.String(), 302)
+		w.Header().Set("Location", link.String())
+		w.WriteHeader(307)
 	case "moveJobsTo":
 		destTube := tube
 		if r.URL.Query().Get("destTube") != "" {
@@ -115,19 +119,23 @@ func handleRedirect(w http.ResponseWriter, r *http.Request, server string, tube 
 		}
 		moveJobsTo(server, tube, destTube, r.URL.Query().Get("state"), r.URL.Query().Get("destState"))
 		link.WriteString(url.QueryEscape(destTube))
-		http.Redirect(w, r, link.String(), 302)
+		w.Header().Set("Location", link.String())
+		w.WriteHeader(307)
 	case "deleteAll":
 		deleteAll(server, tube)
 		link.WriteString(url.QueryEscape(tube))
-		http.Redirect(w, r, link.String(), 302)
+		w.Header().Set("Location", link.String())
+		w.WriteHeader(307)
 	case "deleteJob":
 		deleteJob(server, tube, r.URL.Query().Get("jobid"))
 		link.WriteString(url.QueryEscape(tube))
-		http.Redirect(w, r, link.String(), 302)
+		w.Header().Set("Location", link.String())
+		w.WriteHeader(307)
 	case "loadSample":
 		loadSample(server, tube, r.URL.Query().Get("key"))
 		link.WriteString(url.QueryEscape(tube))
-		http.Redirect(w, r, link.String(), 302)
+		w.Header().Set("Location", link.String())
+		w.WriteHeader(307)
 	}
 	_, _ = io.WriteString(w, tplTube(currentTube(server, tube), server, tube))
 }
@@ -158,7 +166,8 @@ func handlerSample(w http.ResponseWriter, r *http.Request) {
 		return
 	case "deleteSample":
 		deleteSamples(r.URL.Query().Get("key"))
-		http.Redirect(w, r, "/sample?action=manageSamples", 301)
+		w.Header().Set("Location", "./sample?action=manageSamples")
+		w.WriteHeader(307)
 		return
 	}
 }
