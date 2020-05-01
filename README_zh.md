@@ -34,7 +34,13 @@ aurora 是 Go 语言编写的一个基于 Web 的 Beanstalkd 消息队列服务�
 
 ## 安装
 
-下载针对不同操作系统的 [安装程序](https://github.com/xuri/aurora/releases)。
+- 通过 [Homebrew](https://brew.sh) 在 macOS 上进行安装:
+
+```bash
+brew install aurora
+```
+
+- 下载针对不同操作系统的 [安装程序](https://github.com/xuri/aurora/releases)。
 
 ## Todo
 

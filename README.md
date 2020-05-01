@@ -35,6 +35,12 @@ aurora is a web-based Beanstalkd queue server console written in Go and works on
 
 ## Installation
 
+Installing aurora using [Homebrew](https://brew.sh) on macOS:
+
+```bash
+brew install aurora
+```
+
 [Precompiled binaries](https://github.com/xuri/aurora/releases) for supported operating systems are available.
 
 ## Contributing
