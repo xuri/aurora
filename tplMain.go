@@ -35,6 +35,8 @@ func tplMain(serverList string, currentServer string) string {
 	buf.WriteString(tplServerFilter())
 	buf.WriteString(dropEditSettings())
 	buf.WriteString(`</div><script>var url = "./index?server="; var contentType = "";</script><script src='./assets/vendor/jquery/jquery.js'></script><script src="./js/jquery.color.js"></script><script src="./js/jquery.cookie.js"></script><script src="./js/jquery.regexp.js"></script><script src="./assets/vendor/bootstrap/js/bootstrap.min.js"></script>`)
+	buf.WriteString(`<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>`)
+	buf.WriteString(`<script>$(document).ready( function () {$('.table').DataTable({"order": [[ 4, "desc" ]],"paging":false,"searching": false,"info": false,stateSave: true});} );</script>`)
 	buf.WriteString(isDisabledJobDataHighlight)
 	buf.WriteString(`<script src="./js/customer.js"></script></body></html>`)
 	return buf.String()
