@@ -41,6 +41,13 @@ Installing aurora using [Homebrew](https://brew.sh) on macOS:
 brew install aurora
 ```
 
+Building aurora using Docker:
+
+```bash
+docker build -t aurora:latest .
+docker run --rm --detach -p 3000:3000 aurora:latest
+```
+
 [Precompiled binaries](https://github.com/xuri/aurora/releases) for supported operating systems are available.
 
 ## Contributing
