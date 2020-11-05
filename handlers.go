@@ -78,7 +78,7 @@ func handlerTube(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.WriteString(w, `{"result":true}`)
 		return
 	case "search":
-		content := searchTube(server, tube, r.URL.Query().Get("limit"), r.URL.Query().Get("searchStr"))
+		content := searchTube(server, tube, r.URL.Query().Get("limit"), r.URL.Query().Get("id"), r.URL.Query().Get("state"), r.URL.Query().Get("searchStr"))
 		_, _ = io.WriteString(w, tplTube(content, server, tube))
 		return
 	case "addSample":

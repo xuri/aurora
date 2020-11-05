@@ -29,7 +29,7 @@ enabled = true
   username = "admin"
 
 [sample]
-  storage = "{\"jobs\":[{\"key\":\"97ec882fd75855dfa1b4bd00d4a367d4\",\"name\":\"sample_1\",\"tubes\":[\"default\"],\"data\":\"aurora_test_sample_job\",\"ttr\":60},{\"key\":\"d44782912092260cec11275b73f78434\",\"name\":\"sample_2\",\"tubes\":[\"aurora_test\"],\"data\":\"aurora_test_sample_job\",\"ttr\":60},{\"key\":\"5def7a2daf5e0292bed42db9f0017c94\",\"name\":\"sample_3\",\"tubes\":[\"default\",\"aurora_test\"],\"data\":\"aurora_test_sample_job\",\"ttr\":60}],\"tubes\":[{\"name\":\"default\",\"keys\":[\"97ec882fd75855dfa1b4bd00d4a367d4\",\"5def7a2daf5e0292bed42db9f0017c94\"]},{\"name\":\"aurora_test\",\"keys\":[\"d44782912092260cec11275b73f78434\",\"5def7a2daf5e0292bed42db9f0017c94\"]}]}"`
+  storage = "{\"jobs\":[{\"id\": 1, \"state\": ready, \"key\":\"97ec882fd75855dfa1b4bd00d4a367d4\",\"name\":\"sample_1\",\"tubes\":[\"default\"],\"data\":\"aurora_test_sample_job\",\"ttr\":60},{\"id\": 2, \"state\": ready, \"key\":\"d44782912092260cec11275b73f78434\",\"name\":\"sample_2\",\"tubes\":[\"aurora_test\"],\"data\":\"aurora_test_sample_job\",\"ttr\":60},{\"id\": 3, \"state\": ready, \"key\":\"5def7a2daf5e0292bed42db9f0017c94\",\"name\":\"sample_3\",\"tubes\":[\"default\",\"aurora_test\"],\"data\":\"aurora_test_sample_job\",\"ttr\":60}],\"tubes\":[{\"name\":\"default\",\"keys\":[\"97ec882fd75855dfa1b4bd00d4a367d4\",\"5def7a2daf5e0292bed42db9f0017c94\"]},{\"name\":\"aurora_test\",\"keys\":[\"d44782912092260cec11275b73f78434\",\"5def7a2daf5e0292bed42db9f0017c94\"]}]}"`
 )
 
 var (
@@ -53,7 +53,10 @@ var (
 		"/tube?server=" + bstk + "&tube=default&state=ready&action=kickJob&jobid=badID",                                                    // Kick job by given ID with no exits ID
 		"/tube?server=not_exist_server_addr&tube=default&state=ready&action=kickJob&jobid=1",                                               // Kick job by given ID with no exits server
 		"/tube?server=" + bstk + "&tube=default&action=loadSample&key=97ec882fd75855dfa1b4bd00d4a367d4&redirect=tube&action=manageSamples", // Load sample job by given key
-		"/tube?server=" + bstk + "&tube=aurora_test&state=&action=search&limit=25&searchStr=t",                                             // Search job
+		"/tube?server=" + bstk + "&tube=aurora_test&state=&action=search&limit=25&searchStr=t&id=",                                         // Search job
+		"/tube?server=" + bstk + "&tube=aurora_test&state=delayed&action=search&limit=25&searchStr=t&id=",                                  // Search job by state
+		"/tube?server=" + bstk + "&tube=aurora_test&state=&action=search&limit=25&searchStr=t&id=1",                                        // Search job by id
+		"/tube?server=" + bstk + "&tube=aurora_test&state=&action=search&limit=25&searchStr=t&id=test",                                     // Search job by id that is not number
 		"/tube?server=" + bstk + "&tube=aurora_test&state=&action=search&limit=25&searchStr=match",                                         // Search job with not match string
 		"/tube?server=" + bstk + "&tube=aurora_test&action=moveJobsTo&destState=buried&state=ready",                                        // Move job from ready to buried state
 		"/tube?server=not_exist_server_addr&tube=aurora_test&action=moveJobsTo&destState=buried&state=ready",                               // Move job from ready to buried state with no exits server
@@ -296,8 +299,13 @@ func TestMoveReadyJobsTo(t *testing.T) {
 
 func TestSearchTube(t *testing.T) {
 	once.Do(testSetup)
-	searchTube(bstk, `default`, `not_int`, `ready`)
-	searchTube(bstk, `aurora_test_2`, `1`, `ready`)
+	searchTube(bstk, `default`, `not_int`, ``, ``, `ready`)
+	searchTube(bstk, `aurora_test_2`, `1`, ``, ``, `ready`)
+	searchTube(bstk, `aurora_test`, `1`, `not_int`, ``, `ready`)
+	searchTube(bstk, `aurora_test`, `1`, `1`, ``, `ready`)
+	searchTube(bstk, `aurora_test`, `1`, `100`, ``, `ready`)
+	searchTube(bstk, `aurora_test`, `1`, ``, `delayed`, `ready`)
+	searchTube(bstk, `aurora_test`, `1`, ``, `ready`, `ready`)
 }
 
 func TestAddSample(t *testing.T) {
