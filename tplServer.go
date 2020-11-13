@@ -39,6 +39,8 @@ func tplServer(content string, server string) string {
 	buf.WriteString(checkUpdate())
 	buf.WriteString(`</div><script>function getParameterByName(name,url){if(!url){url=window.location.href}name=name.replace(/[\[\]]/g,"\\$&");var regex=new RegExp("[?&]"+name+"(=([^&#]*)|&|#|$)"),results=regex.exec(url);if(!results){return null}if(!results[2]){return""}return decodeURIComponent(results[2].replace(/\+/g," "))}var url="./server?server="+getParameterByName("server");var contentType="";</script><script src='./assets/vendor/jquery/jquery.js'></script><script src="./js/jquery.color.js"></script><script src="./js/jquery.cookie.js"></script><script src="./js/jquery.regexp.js"></script><script src="./assets/vendor/bootstrap/js/bootstrap.min.js"></script>`)
 	buf.WriteString(isDisabledJobDataHighlight)
+	buf.WriteString(`<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>`)
+	buf.WriteString(`<script>$(document).ready( function () {$('.table').DataTable({stateSave: true, "order": [[ 2, "desc" ]]});} );</script>`)
 	buf.WriteString(`<script src="./js/customer.js"></script></body></html>`)
 	return buf.String()
 }
