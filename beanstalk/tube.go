@@ -11,6 +11,11 @@ type Tube struct {
 	Name string
 }
 
+// NewTube returns a new Tube representing the given name.
+func NewTube(c *Conn, name string) *Tube {
+	return &Tube{c, name}
+}
+
 // Put puts a job into tube t with priority pri and TTR ttr, and returns
 // the id of the newly-created job. If delay is nonzero, the server will
 // wait the given amount of time after returning to the client and before
@@ -100,5 +105,8 @@ func (t *Tube) Pause(d time.Duration) error {
 		return err
 	}
 	_, err = t.Conn.readResp(r, false, "PAUSED")
-	return err
+	if err != nil {
+		return err
+	}
+	return nil
 }

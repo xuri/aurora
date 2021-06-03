@@ -14,6 +14,10 @@ func (e ConnError) Error() string {
 	return e.Op + ": " + e.Err.Error()
 }
 
+func (e ConnError) Unwrap() error {
+	return e.Err
+}
+
 // Error messages returned by the server.
 var (
 	ErrBadFormat  = errors.New("bad command format")

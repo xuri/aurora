@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// DefaultDialTimeout is the time to wait for a connection to the beanstalkd server.
+// DefaultDialTimeout is the time to wait for a connection to the beanstalk server.
 const DefaultDialTimeout = 2 * time.Second
 
 // DefaultKeepAlivePeriod is the default period between TCP keepalive messages.
@@ -40,7 +40,7 @@ var (
 func NewConn(conn io.ReadWriteCloser) *Conn {
 	c := new(Conn)
 	c.c = textproto.NewConn(conn)
-	c.Tube = Tube{c, "default"}
+	c.Tube = *NewTube(c, "default")
 	c.TubeSet = *NewTubeSet(c, "default")
 	c.used = "default"
 	c.watched = map[string]bool{"default": true}
@@ -73,8 +73,16 @@ func (c *Conn) Close() error {
 }
 
 func (c *Conn) cmd(t *Tube, ts *TubeSet, body []byte, op string, args ...interface{}) (req, error) {
+	// negative dur checking
+	for _, arg := range args {
+		if d, _ := arg.(dur); d < 0 {
+			return req{}, fmt.Errorf("duration must be non-negative, got %v", time.Duration(d))
+		}
+	}
+
 	r := req{c.c.Next(), op}
 	c.c.StartRequest(r.id)
+	defer c.c.EndRequest(r.id)
 	err := c.adjustTubes(t, ts)
 	if err != nil {
 		return req{}, err
@@ -82,7 +90,7 @@ func (c *Conn) cmd(t *Tube, ts *TubeSet, body []byte, op string, args ...interfa
 	if body != nil {
 		args = append(args, len(body))
 	}
-	c.printLine(string(op), args...)
+	c.printLine(op, args...)
 	if body != nil {
 		c.c.W.Write(body)
 		c.c.W.Write(crnl)
@@ -91,7 +99,6 @@ func (c *Conn) cmd(t *Tube, ts *TubeSet, body []byte, op string, args ...interfa
 	if err != nil {
 		return req{}, ConnError{c, op, err}
 	}
-	c.c.EndRequest(r.id)
 	return r, nil
 }
 
@@ -125,7 +132,7 @@ func (c *Conn) adjustTubes(t *Tube, ts *TubeSet) error {
 	return nil
 }
 
-// printLine does not flush
+// does not flush
 func (c *Conn) printLine(cmd string, args ...interface{}) {
 	io.WriteString(c.c.W, cmd)
 	for _, a := range args {
