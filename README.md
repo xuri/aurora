@@ -31,6 +31,7 @@ aurora is a web-based Beanstalkd queue server console written in Go and works on
 - You can move jobs between tubes
 - Ability to Pause tubes
 - Search jobs data field
+- Search jobs by ID
 - Customizable UI (code highlighter, choose columns, edit auto refresh seconds, pause tube seconds)
 
 ## Installation
