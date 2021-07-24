@@ -1,4 +1,4 @@
-// Copyright 2016 - 2020 The aurora Authors. All rights reserved. Use of this
+// Copyright 2016 - 2021 The aurora Authors. All rights reserved. Use of this
 // source code is governed by a MIT license that can be found in the LICENSE
 // file.
 //
@@ -12,6 +12,7 @@
 package main
 
 import (
+	"math"
 	"net/url"
 	"strconv"
 	"strings"
@@ -22,11 +23,14 @@ import (
 
 // addJob puts a job into tube by given config.
 func addJob(server string, tube string, data string, priority string, delay string, TTR string) {
-	var err error
-	var tubePriority, tubeDelay, tubeTTR int
-	var bstkConn *beanstalk.Conn
-	tubePriority, err = strconv.Atoi(priority)
-	if err != nil {
+	var (
+		err                error
+		tubeDelay, tubeTTR int
+		tubePriority       uint64
+		bstkConn           *beanstalk.Conn
+	)
+	tubePriority, err = strconv.ParseUint(priority, 10, 32)
+	if err != nil || tubePriority > math.MaxUint32 {
 		tubePriority = DefaultPriority
 	}
 	tubeDelay, err = strconv.Atoi(delay)

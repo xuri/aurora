@@ -1,4 +1,4 @@
-// Copyright 2016 - 2020 The aurora Authors. All rights reserved. Use of this
+// Copyright 2016 - 2021 The aurora Authors. All rights reserved. Use of this
 // source code is governed by a MIT license that can be found in the LICENSE
 // file.
 //
@@ -12,6 +12,7 @@
 package main
 
 import (
+	"html"
 	"io"
 	"net/http"
 	"net/url"
@@ -53,7 +54,7 @@ func handlerServer(w http.ResponseWriter, r *http.Request) {
 	action := r.URL.Query().Get("action")
 	switch action {
 	case "reloader":
-		_, _ = io.WriteString(w, getServerTubes(server))
+		_, _ = io.WriteString(w, html.EscapeString(getServerTubes(server)))
 		return
 	case "clearTubes":
 		_ = r.ParseForm()
@@ -61,7 +62,7 @@ func handlerServer(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.WriteString(w, `{"result":true}`)
 		return
 	}
-	_, _ = io.WriteString(w, tplServer(getServerTubes(server), server))
+	_, _ = io.WriteString(w, html.EscapeString(tplServer(getServerTubes(server), server)))
 }
 
 // handlerTube handle request on router: /tube
@@ -79,7 +80,7 @@ func handlerTube(w http.ResponseWriter, r *http.Request) {
 		return
 	case "search":
 		content := searchTube(server, tube, r.URL.Query().Get("limit"), r.URL.Query().Get("searchStr"))
-		_, _ = io.WriteString(w, tplTube(content, server, tube))
+		_, _ = io.WriteString(w, html.EscapeString(tplTube(content, server, tube)))
 		return
 	case "addSample":
 		_ = r.ParseForm()
@@ -137,7 +138,7 @@ func handleRedirect(w http.ResponseWriter, r *http.Request, server string, tube 
 		w.Header().Set("Location", link.String())
 		w.WriteHeader(307)
 	}
-	_, _ = io.WriteString(w, tplTube(currentTube(server, tube), server, tube))
+	_, _ = io.WriteString(w, html.EscapeString(tplTube(currentTube(server, tube), server, tube)))
 }
 
 // handlerSample handle request on router: /sample
@@ -148,13 +149,13 @@ func handlerSample(w http.ResponseWriter, r *http.Request) {
 	server := r.URL.Query().Get("server")
 	switch action {
 	case "manageSamples":
-		_, _ = io.WriteString(w, tplSampleJobsManage(getSampleJobList(), server))
+		_, _ = io.WriteString(w, html.EscapeString(tplSampleJobsManage(getSampleJobList(), server)))
 		return
 	case "newSample":
-		_, _ = io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", ""), server))
+		_, _ = io.WriteString(w, html.EscapeString(tplSampleJobsManage(tplSampleJobEdit("", ""), server)))
 		return
 	case "editSample":
-		_, _ = io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit(r.URL.Query().Get("key"), ""), server))
+		_, _ = io.WriteString(w, html.EscapeString(tplSampleJobsManage(tplSampleJobEdit(r.URL.Query().Get("key"), ""), server)))
 		return
 	case "actionNewSample":
 		_ = r.ParseForm()
@@ -191,5 +192,5 @@ func handlerStatistics(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.WriteString(w, statisticWaitress(server, tube))
 		return
 	}
-	_, _ = io.WriteString(w, tplStatistic(server, tube))
+	_, _ = io.WriteString(w, html.EscapeString(tplStatistic(server, tube)))
 }
