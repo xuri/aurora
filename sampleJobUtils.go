@@ -261,7 +261,7 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 	alert := `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Required fields are not set</span></div>`
 	err = readConf()
 	if err != nil {
-		_, _ = io.WriteString(w, html.EscapeString(tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Read config error</span></div>`), server)))
+		_, _ = io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Read config error</span></div>`), server))
 		return
 	}
 	for k, v := range f {
@@ -281,16 +281,16 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 		}
 	}
 	if len(tubes) == 0 || name == "" || body == "" || ttr == "" {
-		_, _ = io.WriteString(w, html.EscapeString(tplSampleJobsManage(tplSampleJobEdit("", alert), server)))
+		_, _ = io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", alert), server))
 		return
 	}
 	if checkSampleJobs(name) {
-		_, _ = io.WriteString(w, html.EscapeString(tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> You already have a job with this name</span></div>`), server)))
+		_, _ = io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> You already have a job with this name</span></div>`), server))
 		return
 	}
 	sampleTTR, err = strconv.Atoi(ttr)
 	if err != nil {
-		_, _ = io.WriteString(w, html.EscapeString(tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> You should give a correct TTR with this sample</span></div>`), server)))
+		_, _ = io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> You should give a correct TTR with this sample</span></div>`), server))
 		return
 	}
 	sampleJobs.Jobs = append(sampleJobs.Jobs, SampleJob{
@@ -302,7 +302,7 @@ func newSample(server string, f url.Values, w http.ResponseWriter, r *http.Reque
 	})
 	err = saveSample()
 	if err != nil {
-		_, _ = io.WriteString(w, html.EscapeString(tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Save sample job error</span></div>`), server)))
+		_, _ = io.WriteString(w, tplSampleJobsManage(tplSampleJobEdit("", `<div class="alert alert-danger" id="sjsa"><button type="button" class="close" onclick="$('#sjsa').fadeOut('fast');">×</button><span> Save sample job error</span></div>`), server))
 		return
 	}
 	w.Header().Set("Location", "./sample?action=manageSamples")
