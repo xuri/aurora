@@ -1,5 +1,3 @@
-//go:generate statik -src=./public
-
 // Copyright 2016 - 2021 The aurora Authors. All rights reserved. Use of this
 // source code is governed by a MIT license that can be found in the LICENSE
 // file.
@@ -15,17 +13,19 @@
 package main
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"os"
 	"os/signal"
 	"runtime"
 	"strings"
 	"syscall"
-
-	"github.com/rakyll/statik/fs"
-	_ "github.com/xuri/aurora/statik"
 )
+
+//go:embed public
+var staticFiles embed.FS
 
 // main function defines the entry point for the program if read config file or
 // init failed, the application will be exit.
@@ -36,16 +36,9 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	statikFS, err := fs.New()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	http.FileServer(statikFS)
-
+	public, _ := fs.Sub(staticFiles, "public")
 	// handle static files include HTML, CSS and JavaScripts.
-	http.Handle("/", http.StripPrefix("/", http.FileServer(statikFS)))
+	http.Handle("/", http.FileServer(http.FS(public)))
 	http.HandleFunc("/public", basicAuth(handlerMain))
 	http.HandleFunc("/index", basicAuth(handlerServerList))
 	http.HandleFunc("/serversRemove", basicAuth(serversRemove))

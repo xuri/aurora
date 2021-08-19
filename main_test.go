@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/fs"
 	"net/http"
 	"net/url"
 	"os"
@@ -9,8 +10,6 @@ import (
 	"sync"
 	"testing"
 	"time"
-
-	"github.com/rakyll/statik/fs"
 )
 
 const (
@@ -86,12 +85,9 @@ func testSetup() {
 	writeFile(selfConf, ConfigFileTemplate)
 	parseFlags()
 	readConf()
-	statikFS, err := fs.New()
-	if err != nil {
-		return
-	}
-	http.FileServer(statikFS)
-	http.Handle("/", http.StripPrefix("/", http.FileServer(statikFS)))
+	public, _ := fs.Sub(staticFiles, "public")
+	// handle static files include HTML, CSS and JavaScripts.
+	http.Handle("/", http.FileServer(http.FS(public)))
 	http.HandleFunc("/public", basicAuth(handlerMain))
 	http.HandleFunc("/index", basicAuth(handlerServerList))
 	http.HandleFunc("/serversRemove", basicAuth(serversRemove))
@@ -109,47 +105,47 @@ func TestIndex(t *testing.T) {
 	once.Do(testSetup)
 	var resp *http.Response
 	var err error
-	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addjob",
+	_, err = http.PostForm(server+"/tube?server="+bstk+"&action=addjob",
 		url.Values{"tubeName": {"aurora_test"}, "tubeData": {"test"}})
 	if err != nil {
 		t.Log(err)
 	}
-	resp, err = http.PostForm(server+"/tube?server=not_exist_server_addr&action=addjob",
+	_, err = http.PostForm(server+"/tube?server=not_exist_server_addr&action=addjob",
 		url.Values{"tubeName": {"aurora_test"}, "tubeData": {"test"}})
 	if err != nil {
 		t.Log(err)
 	}
-	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+	_, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
 		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {"test_sample_1"}, "tubes[aurora_test]": {"1"}})
 	if err != nil {
 		t.Log(err)
 	}
-	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+	_, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
 		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {"test_sample_1"}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
-	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+	_, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
 		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {""}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
-	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+	_, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
 		url.Values{"tube": {"default"}, "addsamplejobid": {"1"}, "addsamplename": {"sample_1"}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
-	resp, err = http.PostForm(server+"/tube?server=not_exist_server_addr&action=addSample",
+	_, err = http.PostForm(server+"/tube?server=not_exist_server_addr&action=addSample",
 		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"1"}, "addsamplename": {"sample_2"}, "tubes[default]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
-	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+	_, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
 		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {""}, "addsamplename": {"sample_2"}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
 	}
-	resp, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
+	_, err = http.PostForm(server+"/tube?server="+bstk+"&action=addSample",
 		url.Values{"tube": {"aurora_test"}, "addsamplejobid": {"not_int"}, "addsamplename": {"sample_2"}, "tubes[aurora_test]": {"1"}, "addsamplettr": {"60"}})
 	if err != nil {
 		t.Log(err)
@@ -173,7 +169,6 @@ func TestIndex(t *testing.T) {
 		t.Log(err)
 	}
 	defer resp.Body.Close()
-	return
 }
 
 func TestCookie(t *testing.T) {
@@ -250,7 +245,6 @@ func TestCookie(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-	return
 }
 
 func TestCurrentTubeJobsActionsRow(t *testing.T) {
@@ -286,7 +280,6 @@ func TestCurrentTubeJobsActionsRow(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-	return
 }
 
 func TestMoveReadyJobsTo(t *testing.T) {
@@ -443,7 +436,7 @@ func TestStatistic(t *testing.T) {
 	var resp *http.Response
 	var err error
 	var testURLs = []string{"/statistics?action=preference", "/statistics", "/statistics?action=reloader"}
-	resp, err = http.PostForm(server+"/statistics?action=save",
+	_, err = http.PostForm(server+"/statistics?action=save",
 		url.Values{"frequency": {"1"}, "collection": {"10"}, "tubes[" + bstk + ":default]": {"1"}})
 	if err != nil {
 		t.Log(err)
